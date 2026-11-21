@@ -1,0 +1,60 @@
+# The public API of @mark1russell7/guidebook-topics
+#
+# The names of each entry of the exports field, and the declaration of each name, without comments
+# and private members. The command `api-report check` compares this file with the built .d.ts files.
+# To accept a change of the API, start the build, then `api-report update`, and review the diff.
+
+## . (build/index.d.ts): names
+
+TOPIC_CODES: build/index.d.ts#TOPIC_CODES
+type Topic: build/index.d.ts#Topic
+type TopicCode: build/index.d.ts#TopicCode
+type TopicFinding: build/index.d.ts#TopicFinding
+type TopicOptions: build/index.d.ts#TopicOptions
+checkTopics: build/index.d.ts#checkTopics
+cyclesOf: build/index.d.ts#cyclesOf
+prerequisitesOf: build/index.d.ts#prerequisitesOf
+printOrder: build/index.d.ts#printOrder
+
+## Declarations
+
+### build/index.d.ts#TOPIC_CODES
+export declare const TOPIC_CODES: readonly ["duplicate-id", "empty-title", "unknown-area", "missing-topic", "self-require", "cycle", "missing-unit", "missing-bundle", "unknown-serve", "no-content", "bad-pages"];
+
+### build/index.d.ts#Topic
+interface Topic {
+  readonly id: string;
+  readonly title: string;
+  readonly area: string;
+  readonly requires: readonly string[];
+  readonly units: readonly string[];
+  readonly bundles: readonly string[];
+  readonly serves?: readonly string[];
+  readonly pages?: number;
+}
+
+### build/index.d.ts#TopicCode
+type TopicCode = (typeof TOPIC_CODES)[number];
+
+### build/index.d.ts#TopicFinding
+type TopicFinding = Finding<TopicCode, "topic">;
+
+### build/index.d.ts#TopicOptions
+interface TopicOptions {
+  readonly areas?: readonly string[];
+  readonly units?: readonly string[];
+  readonly bundles?: readonly string[];
+  readonly serves?: readonly string[];
+}
+
+### build/index.d.ts#checkTopics
+export declare function checkTopics(topics: readonly Topic[], options?: TopicOptions): readonly TopicFinding[];
+
+### build/index.d.ts#cyclesOf
+export declare function cyclesOf(topics: readonly Topic[]): readonly (readonly string[])[];
+
+### build/index.d.ts#prerequisitesOf
+export declare function prerequisitesOf(topics: readonly Topic[], id: string): readonly Topic[];
+
+### build/index.d.ts#printOrder
+export declare function printOrder(topics: readonly Topic[]): readonly Topic[];

@@ -1,0 +1,152 @@
+# The public API of @mark1russell7/guidebook-library
+#
+# The names of each entry of the exports field, and the declaration of each name, without comments
+# and private members. The command `api-report check` compares this file with the built .d.ts files.
+# To accept a change of the API, start the build, then `api-report update`, and review the diff.
+
+## . (build/index.d.ts): names
+
+type Bundle: build/index.d.ts#Bundle
+type CatalogOptions: build/index.d.ts#CatalogOptions
+type CopiesOptions: build/index.d.ts#CopiesOptions
+type Copy: build/index.d.ts#Copy
+type CopyRule: build/index.d.ts#CopyRule
+type CopyState: build/index.d.ts#CopyState
+type CopyStates: build/index.d.ts#CopyStates
+type CopyStatus: build/index.d.ts#CopyStatus
+type DueCheck: build/index.d.ts#DueCheck
+GAP_CODES: build/index.d.ts#GAP_CODES
+type GapCode: build/index.d.ts#GapCode
+type GapFinding: build/index.d.ts#GapFinding
+LIBRARY_CODES: build/index.d.ts#LIBRARY_CODES
+type LibraryCode: build/index.d.ts#LibraryCode
+type LibraryFinding: build/index.d.ts#LibraryFinding
+MEDIUM_KINDS: build/index.d.ts#MEDIUM_KINDS
+type MediumKind: build/index.d.ts#MediumKind
+bytesOf: build/index.d.ts#bytesOf
+checkCatalog: build/index.d.ts#checkCatalog
+checkCopies: build/index.d.ts#checkCopies
+checksDue: build/index.d.ts#checksDue
+copyStates: build/index.d.ts#copyStates
+
+## Declarations
+
+### build/index.d.ts#Bundle
+interface Bundle {
+  readonly id: string;
+  readonly title: string;
+  readonly bytes: number;
+  readonly license: License;
+  readonly level: string;
+  readonly source: SourceId;
+  readonly version?: string;
+  readonly sha256?: string;
+  readonly url?: string;
+}
+
+### build/index.d.ts#CatalogOptions
+interface CatalogOptions extends UseContext {
+  readonly sources?: readonly Source[];
+  readonly rules?: readonly CopyRule[];
+}
+
+### build/index.d.ts#CopiesOptions
+interface CopiesOptions {
+  readonly at?: string;
+}
+
+### build/index.d.ts#Copy
+interface Copy {
+  readonly bundle: string;
+  readonly medium: string;
+  readonly kind: MediumKind;
+  readonly place: string;
+  readonly checked: IsoDate;
+  readonly version?: string;
+  readonly sha256?: string;
+}
+
+### build/index.d.ts#CopyRule
+interface CopyRule {
+  readonly level: string;
+  readonly copies: number;
+  readonly kinds: number;
+  readonly places: number;
+  readonly everyDays: number;
+}
+
+### build/index.d.ts#CopyState
+interface CopyState {
+  readonly bundle: string;
+  readonly level: string;
+  readonly rule: CopyRule | undefined;
+  readonly copies: readonly {
+    readonly copy: Copy;
+    readonly status: CopyStatus;
+  }[];
+  readonly good: number;
+  readonly kinds: readonly MediumKind[];
+  readonly places: readonly string[];
+  readonly ok: boolean;
+}
+
+### build/index.d.ts#CopyStates
+interface CopyStates {
+  readonly states: readonly CopyState[];
+  readonly findings: readonly GapFinding[];
+}
+
+### build/index.d.ts#CopyStatus
+type CopyStatus = "good" | "old" | "due" | "bad";
+
+### build/index.d.ts#DueCheck
+interface DueCheck {
+  readonly bundle: string;
+  readonly medium: string;
+  readonly place: string;
+  readonly due: IsoDate;
+}
+
+### build/index.d.ts#GAP_CODES
+export declare const GAP_CODES: readonly ["few-copies", "few-kinds", "few-places", "no-rule", "check-due", "bad-hash", "old-version"];
+
+### build/index.d.ts#GapCode
+type GapCode = (typeof GAP_CODES)[number];
+
+### build/index.d.ts#GapFinding
+type GapFinding = Finding<GapCode, "bundle" | "copy">;
+
+### build/index.d.ts#LIBRARY_CODES
+export declare const LIBRARY_CODES: readonly ["duplicate-id", "empty-title", "bad-bytes", "bad-sha256", "bad-url", "unknown-license", "missing-source", "unknown-level", "use-refused", "missing-bundle", "bad-kind", "bad-date", "checked-in-future", "duplicate-copy"];
+
+### build/index.d.ts#LibraryCode
+type LibraryCode = (typeof LIBRARY_CODES)[number];
+
+### build/index.d.ts#LibraryFinding
+type LibraryFinding = Finding<LibraryCode, "bundle" | "copy">;
+
+### build/index.d.ts#MEDIUM_KINDS
+export declare const MEDIUM_KINDS: readonly ["flash", "ssd", "hdd", "optical", "paper"];
+
+### build/index.d.ts#MediumKind
+type MediumKind = (typeof MEDIUM_KINDS)[number];
+
+### build/index.d.ts#bytesOf
+export declare function bytesOf(bundles: readonly Bundle[], ids: readonly string[]): number;
+
+### build/index.d.ts#checkCatalog
+export declare function checkCatalog(bundles: readonly Bundle[], options?: CatalogOptions): readonly LibraryFinding[];
+
+### build/index.d.ts#checkCopies
+export declare function checkCopies(copies: readonly Copy[], bundles: readonly Bundle[], options?: CopiesOptions): readonly LibraryFinding[];
+
+### build/index.d.ts#checksDue
+export declare function checksDue(bundles: readonly Bundle[], copies: readonly Copy[], rules: readonly CopyRule[], options: {
+  readonly at: IsoDate;
+  readonly withinDays?: number;
+}): readonly DueCheck[];
+
+### build/index.d.ts#copyStates
+export declare function copyStates(bundles: readonly Bundle[], copies: readonly Copy[], rules: readonly CopyRule[], options: {
+  readonly at: IsoDate;
+}): CopyStates;

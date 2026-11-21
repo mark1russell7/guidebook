@@ -45,7 +45,8 @@ function isLicense(value: unknown): value is License {
 
 /**
  * This function gives the findings of the bundles of a catalog.
- * A bundle needs a unique id, a title, a whole positive size, a license that permits a bundle, and a correct hash and address when it has them.
+ * A bundle must have a unique id, a title, a whole positive size and a license that permits a bundle.
+ * Its hash and its address must be correct when it has them.
  */
 export function checkCatalog(bundles: readonly Bundle[], options: CatalogOptions = {}): readonly LibraryFinding[] {
   const out: LibraryFinding[] = [];

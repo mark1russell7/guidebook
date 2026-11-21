@@ -39,8 +39,8 @@ The gate examines only the lists that the caller gives.
 | `empty-title` | A topic has no title. |
 | `unknown-area` | The area is not in `areas`. |
 | `missing-topic` | A prerequisite is not a topic of the list. |
-| `self-require` | A topic requires itself. |
-| `cycle` | Some topics require each other in a cycle. One finding names all the topics of the cycle. |
+| `self-require` | A topic is a prerequisite of itself. |
+| `cycle` | Some topics are prerequisites of each other in a cycle. One finding names all the topics of the cycle. |
 | `missing-unit`, `missing-bundle` | A unit or a bundle is not in the list of the caller. |
 | `unknown-serve` | A code of `serves` is not in `serves`. |
 | `no-content` | A topic has no unit and no bundle. |

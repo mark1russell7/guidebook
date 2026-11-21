@@ -113,7 +113,7 @@ function nodesOf(topics: readonly Topic[]): Map<string, DAGNode<Topic>> {
 }
 
 /**
- * This function gives the topics in the print order: each topic comes after each topic that it requires.
+ * This function gives the topics in the print order: each topic comes after each of its prerequisites.
  * The topics of one level keep the order of the input. A prerequisite that is not in the list is not an edge.
  * A cycle throws a `RangeError`: start `checkTopics` first.
  */

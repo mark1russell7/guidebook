@@ -128,7 +128,7 @@ export function checksDue(bundles: readonly Bundle[], copies: readonly Copy[], r
   return out.sort((a, b) => (a.due < b.due ? -1 : a.due > b.due ? 1 : a.bundle < b.bundle ? -1 : a.bundle > b.bundle ? 1 : a.medium < b.medium ? -1 : a.medium > b.medium ? 1 : 0));
 }
 
-/** This function gives the bytes that one medium needs to hold each bundle of a list. */
+/** This function gives the bytes that are necessary on one medium for each bundle of a list. */
 export function bytesOf(bundles: readonly Bundle[], ids: readonly string[]): number {
   const sizeOf = new Map(bundles.map((bundle) => [bundle.id, bundle.bytes]));
   let total = 0;
