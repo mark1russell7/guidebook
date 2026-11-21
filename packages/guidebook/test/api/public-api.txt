@@ -1,0 +1,155 @@
+# The public API of @mark1russell7/guidebook
+#
+# The names of each entry of the exports field, and the declaration of each name, without comments
+# and private members. The command `api-report check` compares this file with the built .d.ts files.
+# To accept a change of the API, start the build, then `api-report update`, and review the diff.
+
+## . (build/index.d.ts): names
+
+type CitedUnit: build/index.d.ts#CitedUnit
+FINDING_CODES: build/index.d.ts#FINDING_CODES
+type Finding: build/index.d.ts#Finding
+type FindingCode: build/index.d.ts#FindingCode
+type GateOptions: build/index.d.ts#GateOptions
+type GateResult: build/index.d.ts#GateResult
+type IsoDate: build/index.d.ts#IsoDate
+LICENSES: build/index.d.ts#LICENSES
+LICENSE_RULES: build/index.d.ts#LICENSE_RULES
+type Layer: build/index.d.ts#Layer
+type License: build/index.d.ts#License
+type LicenseRule: build/index.d.ts#LicenseRule
+type Source: build/index.d.ts#Source
+type SourceId: build/index.d.ts#SourceId
+USES: build/index.d.ts#USES
+type UnitUse: build/index.d.ts#UnitUse
+type Use: build/index.d.ts#Use
+type UseContext: build/index.d.ts#UseContext
+assertGate: build/index.d.ts#assertGate
+checkSources: build/index.d.ts#checkSources
+checkUnits: build/index.d.ts#checkUnits
+creditOf: build/index.d.ts#creditOf
+gate: build/index.d.ts#gate
+layerOf: build/index.d.ts#layerOf
+permits: build/index.d.ts#permits
+resultOf: build/index.d.ts#resultOf
+throwOnErrors: build/index.d.ts#throwOnErrors
+
+## Declarations
+
+### build/index.d.ts#CitedUnit
+interface CitedUnit {
+  readonly id: string;
+  readonly use: UnitUse;
+  readonly text: string;
+  readonly source: SourceId;
+  readonly locator?: string;
+}
+
+### build/index.d.ts#FINDING_CODES
+export declare const FINDING_CODES: readonly ["duplicate-id", "empty-title", "empty-text", "bad-url", "bad-date", "unknown-license", "checked-in-future", "stale", "missing-source", "use-refused"];
+
+### build/index.d.ts#Finding
+interface Finding<C extends string = FindingCode, R extends string = "source" | "unit"> {
+  readonly level: "error" | "warning";
+  readonly code: C;
+  readonly record: R;
+  readonly id: string;
+  readonly message: string;
+}
+
+### build/index.d.ts#FindingCode
+type FindingCode = (typeof FINDING_CODES)[number];
+
+### build/index.d.ts#GateOptions
+interface GateOptions extends UseContext {
+  readonly at?: IsoDate;
+  readonly maxAgeDays?: number;
+}
+
+### build/index.d.ts#GateResult
+interface GateResult<F extends Finding<string, string> = Finding> {
+  readonly ok: boolean;
+  readonly findings: readonly F[];
+}
+
+### build/index.d.ts#IsoDate
+type IsoDate = string;
+
+### build/index.d.ts#LICENSES
+export declare const LICENSES: readonly ["us-public-domain", "public-domain", "cc0", "cc-by-4.0", "cc-by-sa-4.0", "cc-by-sa-3.0", "cc-by-nc-sa-3.0", "all-rights-reserved", "invented"];
+
+### build/index.d.ts#LICENSE_RULES
+export declare const LICENSE_RULES: Readonly<Record<License, LicenseRule>>;
+
+### build/index.d.ts#Layer
+type Layer = "main" | "share-alike";
+
+### build/index.d.ts#License
+type License = (typeof LICENSES)[number];
+
+### build/index.d.ts#LicenseRule
+interface LicenseRule {
+  readonly title: string;
+  readonly url: string;
+  readonly quote: boolean;
+  readonly bundle: boolean;
+  readonly nonCommercial: boolean;
+  readonly layer: Layer;
+  readonly credit: boolean;
+  readonly real: boolean;
+}
+
+### build/index.d.ts#Source
+interface Source {
+  readonly id: SourceId;
+  readonly title: string;
+  readonly url: string;
+  readonly license: License;
+  readonly checked: IsoDate;
+  readonly by?: string;
+}
+
+### build/index.d.ts#SourceId
+type SourceId = string;
+
+### build/index.d.ts#USES
+export declare const USES: readonly ["quote", "summary", "fact", "bundle"];
+
+### build/index.d.ts#UnitUse
+type UnitUse = Exclude<Use, "bundle">;
+
+### build/index.d.ts#Use
+type Use = (typeof USES)[number];
+
+### build/index.d.ts#UseContext
+interface UseContext {
+  readonly commercial?: boolean;
+  readonly fixture?: boolean;
+}
+
+### build/index.d.ts#assertGate
+export declare function assertGate(units: readonly CitedUnit[], sources: readonly Source[], options?: GateOptions): void;
+
+### build/index.d.ts#checkSources
+export declare function checkSources(sources: readonly Source[], options?: GateOptions): readonly Finding[];
+
+### build/index.d.ts#checkUnits
+export declare function checkUnits(units: readonly CitedUnit[], sources: readonly Source[], options?: UseContext): readonly Finding[];
+
+### build/index.d.ts#creditOf
+export declare function creditOf(source: Source): string;
+
+### build/index.d.ts#gate
+export declare function gate(units: readonly CitedUnit[], sources: readonly Source[], options?: GateOptions): GateResult;
+
+### build/index.d.ts#layerOf
+export declare function layerOf(unit: CitedUnit, source: Source): Layer;
+
+### build/index.d.ts#permits
+export declare function permits(license: License, use: Use, context?: UseContext): boolean;
+
+### build/index.d.ts#resultOf
+export declare function resultOf<F extends Finding<string, string>>(findings: readonly F[]): GateResult<F>;
+
+### build/index.d.ts#throwOnErrors
+export declare function throwOnErrors(name: string, findings: readonly Finding<string, string>[]): void;
