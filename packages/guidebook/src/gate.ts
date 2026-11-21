@@ -59,9 +59,7 @@ export function resultOf<F extends Finding<string, string>>(findings: readonly F
 /** This function throws an error with each finding of the level `error`. The name of the gate starts the message. */
 export function throwOnErrors(name: string, findings: readonly Finding<string, string>[]): void {
   const lines = findings.filter((finding) => finding.level === "error").map((finding) => `- ${finding.code}: ${finding.message}`);
-  if (lines.length > 0) throw new Error(`The ${name} found ${lines.length} errors:
-${lines.join("
-")}`);
+  if (lines.length > 0) throw new Error(`The ${name} found ${lines.length} errors:\n${lines.join("\n")}`);
 }
 
 const DAY_MS = 86_400_000;
@@ -79,13 +77,11 @@ function isLicense(value: unknown): value is License {
   return typeof value === "string" && (LICENSES as readonly string[]).includes(value);
 }
 
+/** An address with `https:` or `http:`, a host, and no space. The core uses no platform type, so it does not use `URL`. */
+const WEB_ADDRESS = /^https?:\/\/[a-z0-9.-]+(?::\d+)?(?:[/?#]\S*)?$/iu;
+
 function isWebAddress(url: string): boolean {
-  try {
-    const parsed = new URL(url);
-    return parsed.protocol === "https:" || parsed.protocol === "http:";
-  } catch {
-    return false;
-  }
+  return WEB_ADDRESS.test(url);
 }
 
 /** This function gives the findings of the sources: duplicate ids, empty titles, bad addresses, bad dates, unknown licenses and old checks. */

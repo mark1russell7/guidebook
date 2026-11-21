@@ -1,0 +1,125 @@
+# The public API of @mark1russell7/guidebook-plans
+#
+# The names of each entry of the exports field, and the declaration of each name, without comments
+# and private members. The command `api-report check` compares this file with the built .d.ts files.
+# To accept a change of the API, start the build, then `api-report update`, and review the diff.
+
+## . (build/index.d.ts): names
+
+type Cell: build/index.d.ts#Cell
+type Gap: build/index.d.ts#Gap
+LADDER: build/index.d.ts#LADDER
+type Ladder: build/index.d.ts#Ladder
+PHASES: build/index.d.ts#PHASES
+PHASE_BOUNDS: build/index.d.ts#PHASE_BOUNDS
+PHASE_TITLES: build/index.d.ts#PHASE_TITLES
+type Phase: build/index.d.ts#Phase
+SECONDS_PER_DAY: build/index.d.ts#SECONDS_PER_DAY
+STEP_FINDING_CODES: build/index.d.ts#STEP_FINDING_CODES
+type Step: build/index.d.ts#Step
+type StepFinding: build/index.d.ts#StepFinding
+type StepFindingCode: build/index.d.ts#StepFindingCode
+type StepGateOptions: build/index.d.ts#StepGateOptions
+checkSteps: build/index.d.ts#checkSteps
+phaseIn: build/index.d.ts#phaseIn
+phaseOf: build/index.d.ts#phaseOf
+phasesOf: build/index.d.ts#phasesOf
+planMatrix: build/index.d.ts#planMatrix
+stepsFor: build/index.d.ts#stepsFor
+unitsOf: build/index.d.ts#unitsOf
+
+## Declarations
+
+### build/index.d.ts#Cell
+interface Cell<P extends string = Phase> {
+  readonly on: string;
+  readonly phase: P;
+  readonly steps: readonly Step<P>[];
+  readonly gap?: Gap<P>;
+}
+
+### build/index.d.ts#Gap
+interface Gap<P extends string = Phase> {
+  readonly on: string;
+  readonly phase: P;
+  readonly why: string;
+}
+
+### build/index.d.ts#LADDER
+export declare const LADDER: Ladder<Phase>;
+
+### build/index.d.ts#Ladder
+interface Ladder<P extends string = string> {
+  readonly ready: P;
+  readonly warned: P;
+  readonly timed: readonly {
+    readonly phase: P;
+    readonly from: number;
+  }[];
+  readonly titles: Readonly<Record<P, string>>;
+}
+
+### build/index.d.ts#PHASES
+export declare const PHASES: readonly ["ready", "warned", "P0", "P1", "P2", "P3", "P4", "P5"];
+
+### build/index.d.ts#PHASE_BOUNDS
+export declare const PHASE_BOUNDS: readonly number[];
+
+### build/index.d.ts#PHASE_TITLES
+export declare const PHASE_TITLES: Readonly<Record<Phase, string>>;
+
+### build/index.d.ts#Phase
+type Phase = (typeof PHASES)[number];
+
+### build/index.d.ts#SECONDS_PER_DAY
+export declare const SECONDS_PER_DAY: number;
+
+### build/index.d.ts#STEP_FINDING_CODES
+export declare const STEP_FINDING_CODES: readonly ["duplicate-id", "empty-text", "no-source", "missing-source", "use-refused", "unknown-phase", "bad-order", "duplicate-order", "unmarked-gap", "gap-with-steps", "duplicate-gap", "empty-reason"];
+
+### build/index.d.ts#Step
+interface Step<P extends string = Phase> {
+  readonly id: string;
+  readonly on: string;
+  readonly phase: P;
+  readonly needs: readonly string[];
+  readonly when?: string;
+  readonly do: string;
+  readonly uses?: readonly string[];
+  readonly order: number;
+  readonly sources: readonly SourceId[];
+}
+
+### build/index.d.ts#StepFinding
+type StepFinding = Finding<StepFindingCode, "step" | "gap" | "cell">;
+
+### build/index.d.ts#StepFindingCode
+type StepFindingCode = (typeof STEP_FINDING_CODES)[number];
+
+### build/index.d.ts#StepGateOptions
+interface StepGateOptions<P extends string> extends UseContext {
+  readonly phases: readonly P[];
+  readonly on?: readonly string[];
+  readonly gaps?: readonly Gap<P>[];
+}
+
+### build/index.d.ts#checkSteps
+export declare function checkSteps<P extends string>(steps: readonly Step<P>[], sources: readonly Source[], options: StepGateOptions<P>): GateResult<StepFinding>;
+
+### build/index.d.ts#phaseIn
+export declare function phaseIn<P extends string>(ladder: Ladder<P>, seconds: number, warned?: boolean): P;
+
+### build/index.d.ts#phaseOf
+export declare function phaseOf(seconds: number, warned?: boolean): Phase;
+
+### build/index.d.ts#phasesOf
+export declare function phasesOf<P extends string>(ladder: Ladder<P>): readonly P[];
+
+### build/index.d.ts#planMatrix
+export declare function planMatrix<P extends string>(library: readonly Step<P>[], gaps: readonly Gap<P>[], on: readonly string[], phases: readonly P[]): readonly (readonly Cell<P>[])[];
+
+### build/index.d.ts#stepsFor
+export declare function stepsFor<P extends string>(library: readonly Step<P>[], on: readonly string[], phases: readonly P[]): readonly Step<P>[];
+
+### build/index.d.ts#unitsOf
+export declare function unitsOf<P extends string>(steps: readonly Step<P>[]): readonly CitedUnit[];
