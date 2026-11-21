@@ -7,6 +7,7 @@
 ## . (build/index.d.ts): names
 
 type CitedUnit: build/index.d.ts#CitedUnit
+DAY_MS: build/index.d.ts#DAY_MS
 FINDING_CODES: build/index.d.ts#FINDING_CODES
 type Finding: build/index.d.ts#Finding
 type FindingCode: build/index.d.ts#FindingCode
@@ -29,10 +30,12 @@ checkSources: build/index.d.ts#checkSources
 checkUnits: build/index.d.ts#checkUnits
 creditOf: build/index.d.ts#creditOf
 gate: build/index.d.ts#gate
+isWebAddress: build/index.d.ts#isWebAddress
 layerOf: build/index.d.ts#layerOf
 permits: build/index.d.ts#permits
 resultOf: build/index.d.ts#resultOf
 throwOnErrors: build/index.d.ts#throwOnErrors
+timeOf: build/index.d.ts#timeOf
 
 ## Declarations
 
@@ -44,6 +47,9 @@ interface CitedUnit {
   readonly source: SourceId;
   readonly locator?: string;
 }
+
+### build/index.d.ts#DAY_MS
+export declare const DAY_MS = 864e5;
 
 ### build/index.d.ts#FINDING_CODES
 export declare const FINDING_CODES: readonly ["duplicate-id", "empty-title", "empty-text", "bad-url", "bad-date", "unknown-license", "checked-in-future", "stale", "missing-source", "use-refused"];
@@ -142,6 +148,9 @@ export declare function creditOf(source: Source): string;
 ### build/index.d.ts#gate
 export declare function gate(units: readonly CitedUnit[], sources: readonly Source[], options?: GateOptions): GateResult;
 
+### build/index.d.ts#isWebAddress
+export declare function isWebAddress(url: string): boolean;
+
 ### build/index.d.ts#layerOf
 export declare function layerOf(unit: CitedUnit, source: Source): Layer;
 
@@ -153,3 +162,6 @@ export declare function resultOf<F extends Finding<string, string>>(findings: re
 
 ### build/index.d.ts#throwOnErrors
 export declare function throwOnErrors(name: string, findings: readonly Finding<string, string>[]): void;
+
+### build/index.d.ts#timeOf
+export declare function timeOf(date: string): number | undefined;

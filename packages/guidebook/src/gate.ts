@@ -62,11 +62,12 @@ export function throwOnErrors(name: string, findings: readonly Finding<string, s
   if (lines.length > 0) throw new Error(`The ${name} found ${lines.length} errors:\n${lines.join("\n")}`);
 }
 
-const DAY_MS = 86_400_000;
+/** The number of milliseconds in one day. */
+export const DAY_MS = 86_400_000;
 const ISO_DATE = /^\d{4}-\d{2}-\d{2}$/;
 
 /** This function gives the time of a date `YYYY-MM-DD` in milliseconds, or `undefined` when the date is not a real date. */
-function timeOf(date: string): number | undefined {
+export function timeOf(date: string): number | undefined {
   if (!ISO_DATE.test(date)) return undefined;
   const time = Date.parse(`${date}T00:00:00Z`);
   if (Number.isNaN(time)) return undefined;
@@ -80,7 +81,8 @@ function isLicense(value: unknown): value is License {
 /** An address with `https:` or `http:`, a host, and no space. The core uses no platform type, so it does not use `URL`. */
 const WEB_ADDRESS = /^https?:\/\/[a-z0-9.-]+(?::\d+)?(?:[/?#]\S*)?$/iu;
 
-function isWebAddress(url: string): boolean {
+/** This function tells if a text is a web address that the gate accepts. */
+export function isWebAddress(url: string): boolean {
   return WEB_ADDRESS.test(url);
 }
 
