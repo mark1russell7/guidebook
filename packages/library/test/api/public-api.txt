@@ -8,8 +8,11 @@
 
 type Bundle: build/index.d.ts#Bundle
 type CatalogOptions: build/index.d.ts#CatalogOptions
+type CopiesInput: build/index.d.ts#CopiesInput
 type CopiesOptions: build/index.d.ts#CopiesOptions
+type CopiesQuery: build/index.d.ts#CopiesQuery
 type Copy: build/index.d.ts#Copy
+type CopyPlace: build/index.d.ts#CopyPlace
 type CopyRule: build/index.d.ts#CopyRule
 type CopyState: build/index.d.ts#CopyState
 type CopyStates: build/index.d.ts#CopyStates
@@ -20,13 +23,16 @@ GAP_CODES: build/index.d.ts#GAP_CODES
 type GapCode: build/index.d.ts#GapCode
 type GapFinding: build/index.d.ts#GapFinding
 KIWIX_CATALOG: build/index.d.ts#KIWIX_CATALOG
+type KindLoss: build/index.d.ts#KindLoss
 type KiwixEntry: build/index.d.ts#KiwixEntry
 LIBRARY_CODES: build/index.d.ts#LIBRARY_CODES
 type LibraryCode: build/index.d.ts#LibraryCode
 type LibraryFinding: build/index.d.ts#LibraryFinding
 MEDIUM_KINDS: build/index.d.ts#MEDIUM_KINDS
 type MediumKind: build/index.d.ts#MediumKind
+type MediumOffer: build/index.d.ts#MediumOffer
 type Meta4: build/index.d.ts#Meta4
+type PlanCopiesOptions: build/index.d.ts#PlanCopiesOptions
 RELEASE_CODES: build/index.d.ts#RELEASE_CODES
 type ReleaseCode: build/index.d.ts#ReleaseCode
 type ReleaseFinding: build/index.d.ts#ReleaseFinding
@@ -36,12 +42,16 @@ checkCatalog: build/index.d.ts#checkCatalog
 checkCopies: build/index.d.ts#checkCopies
 checkReleases: build/index.d.ts#checkReleases
 checksDue: build/index.d.ts#checksDue
+copiesLayer: build/index.d.ts#copiesLayer
 copyStates: build/index.d.ts#copyStates
+keepChance: build/index.d.ts#keepChance
 kiwixFeedUrl: build/index.d.ts#kiwixFeedUrl
 kiwixKeyOf: build/index.d.ts#kiwixKeyOf
 latestReleases: build/index.d.ts#latestReleases
+libraryPartOf: build/index.d.ts#libraryPartOf
 parseKiwixFeed: build/index.d.ts#parseKiwixFeed
 parseMeta4: build/index.d.ts#parseMeta4
+planCopies: build/index.d.ts#planCopies
 withRelease: build/index.d.ts#withRelease
 zimUrlOf: build/index.d.ts#zimUrlOf
 
@@ -66,9 +76,30 @@ interface CatalogOptions extends UseContext {
   readonly rules?: readonly CopyRule[];
 }
 
+### build/index.d.ts#CopiesInput
+interface CopiesInput {
+  readonly rule: CopyRule;
+  readonly bytes: number;
+  readonly offers: readonly MediumOffer[];
+  readonly places: readonly CopyPlace[];
+  readonly kindLosses?: readonly KindLoss[];
+  readonly extra?: number;
+  readonly currency: string;
+  readonly limits?: {
+    readonly cost?: number;
+    readonly chance?: number;
+  };
+}
+
 ### build/index.d.ts#CopiesOptions
 interface CopiesOptions {
   readonly at?: string;
+}
+
+### build/index.d.ts#CopiesQuery
+interface CopiesQuery {
+  readonly layer: PlacementLayer;
+  readonly base: Stack;
 }
 
 ### build/index.d.ts#Copy
@@ -80,6 +111,14 @@ interface Copy {
   readonly checked: IsoDate;
   readonly version?: string;
   readonly sha256?: string;
+}
+
+### build/index.d.ts#CopyPlace
+interface CopyPlace {
+  readonly id: string;
+  readonly yearlyLoss: number;
+  readonly source: string;
+  readonly monthly?: number;
 }
 
 ### build/index.d.ts#CopyRule
@@ -143,6 +182,13 @@ type GapFinding = Finding<GapCode, "bundle" | "copy">;
 ### build/index.d.ts#KIWIX_CATALOG
 export declare const KIWIX_CATALOG = "https://opds.library.kiwix.org/catalog/v2";
 
+### build/index.d.ts#KindLoss
+interface KindLoss {
+  readonly kind: MediumKind;
+  readonly yearlyLoss: number;
+  readonly source: string;
+}
+
 ### build/index.d.ts#KiwixEntry
 interface KiwixEntry {
   readonly key: string;
@@ -170,11 +216,29 @@ export declare const MEDIUM_KINDS: readonly ["flash", "ssd", "hdd", "optical", "
 ### build/index.d.ts#MediumKind
 type MediumKind = (typeof MEDIUM_KINDS)[number];
 
+### build/index.d.ts#MediumOffer
+interface MediumOffer {
+  readonly id: string;
+  readonly kind: MediumKind;
+  readonly bytes: number;
+  readonly price: number;
+  readonly lifeYears: number;
+  readonly yearlyLoss: number;
+  readonly source: string;
+}
+
 ### build/index.d.ts#Meta4
 interface Meta4 {
   readonly file: string;
   readonly bytes: number;
   readonly sha256: string;
+}
+
+### build/index.d.ts#PlanCopiesOptions
+interface PlanCopiesOptions {
+  readonly today: string;
+  readonly evaluations?: number;
+  readonly seed?: number | string;
 }
 
 ### build/index.d.ts#RELEASE_CODES
@@ -210,10 +274,16 @@ export declare function checksDue(bundles: readonly Bundle[], copies: readonly C
   readonly withinDays?: number;
 }): readonly DueCheck[];
 
+### build/index.d.ts#copiesLayer
+export declare function copiesLayer(input: CopiesInput): CopiesQuery;
+
 ### build/index.d.ts#copyStates
 export declare function copyStates(bundles: readonly Bundle[], copies: readonly Copy[], rules: readonly CopyRule[], options: {
   readonly at: IsoDate;
 }): CopyStates;
+
+### build/index.d.ts#keepChance
+export declare function keepChance(yearlyLoss: number, days: number): number;
 
 ### build/index.d.ts#kiwixFeedUrl
 export declare function kiwixFeedUrl(query?: FeedQuery): string;
@@ -227,11 +297,17 @@ export declare function kiwixKeyOf(fileOrUrl: string): {
 ### build/index.d.ts#latestReleases
 export declare function latestReleases(entries: readonly KiwixEntry[]): ReadonlyMap<string, KiwixEntry>;
 
+### build/index.d.ts#libraryPartOf
+export declare const libraryPartOf: (level: string) => string;
+
 ### build/index.d.ts#parseKiwixFeed
 export declare function parseKiwixFeed(xml: string): readonly KiwixEntry[];
 
 ### build/index.d.ts#parseMeta4
 export declare function parseMeta4(xml: string): Meta4;
+
+### build/index.d.ts#planCopies
+export declare function planCopies(query: CopiesQuery, rule: CopyRule, options: PlanCopiesOptions): PlacementPlan;
 
 ### build/index.d.ts#withRelease
 export declare function withRelease(bundle: Bundle, entry: KiwixEntry, meta4: Meta4): Bundle;
