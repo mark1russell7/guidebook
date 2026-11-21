@@ -6,6 +6,10 @@
 
 ## . (build/index.d.ts): names
 
+AREAS: build/index.d.ts#AREAS
+BUNDLES: build/index.d.ts#BUNDLES
+BUNDLES_CHECKED: build/index.d.ts#BUNDLES_CHECKED
+BUNDLE_LEVELS: build/index.d.ts#BUNDLE_LEVELS
 CASES: build/index.d.ts#CASES
 CASE_STEPS: build/index.d.ts#CASE_STEPS
 CHECKED: build/index.d.ts#CHECKED
@@ -15,8 +19,21 @@ GAPS: build/index.d.ts#GAPS
 NEEDS: build/index.d.ts#NEEDS
 SOURCES: build/index.d.ts#SOURCES
 STEPS: build/index.d.ts#STEPS
+TOPICS: build/index.d.ts#TOPICS
 
 ## Declarations
+
+### build/index.d.ts#AREAS
+export declare const AREAS: readonly ["water", "food", "farming", "medicine", "sanitation", "shelter", "energy", "electronics", "metals", "tools", "chemistry", "communication"];
+
+### build/index.d.ts#BUNDLES
+export declare const BUNDLES: readonly Bundle[];
+
+### build/index.d.ts#BUNDLES_CHECKED
+export declare const BUNDLES_CHECKED = "2026-11-21";
+
+### build/index.d.ts#BUNDLE_LEVELS
+export declare const BUNDLE_LEVELS: readonly ["pocket", "shelf"];
 
 ### build/index.d.ts#CASES
 export declare const CASES: readonly ["met.winter.storm", "met.tropical.hurricane", "met.flood", "met.heat.extreme", "met.tornado", "geo.earthquake", "fire.structure", "fire.wildfire", "cbrne.hazardous-materials", "cbrne.radiological", "health.outbreak", "safety.evacuation"];
@@ -44,3 +61,6 @@ export declare const SOURCES: readonly Source[];
 
 ### build/index.d.ts#STEPS
 export declare const STEPS: readonly Step[];
+
+### build/index.d.ts#TOPICS
+export declare const TOPICS: readonly Topic[];
