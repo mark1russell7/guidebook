@@ -1,6 +1,6 @@
 import { fileURLToPath } from "node:url";
 import { checkSources } from "@mark1russell7/guidebook";
-import { bytesOf, checkCatalog } from "@mark1russell7/guidebook-library";
+import { bytesOf, checkCatalog, kiwixKeyOf } from "@mark1russell7/guidebook-library";
 import { checkTopics, printOrder } from "@mark1russell7/guidebook-topics";
 import { PHASES, checkSteps, planMatrix, stepsFor } from "@mark1russell7/guidebook-plans";
 import { Linter, loadConfig } from "@mark1russell7/ste-lint";
@@ -37,6 +37,11 @@ describe("the bundle catalog", () => {
   it("fits the pocket bundles on one flash drive of 32 GB", () => {
     const pocket = BUNDLES.filter((bundle) => bundle.level === "pocket").map((bundle) => bundle.id);
     expect(bytesOf(BUNDLES, pocket)).toBeLessThan(32e9);
+  });
+
+  it("gives each bundle a SHA-256, and a version that agrees with the release of its address", () => {
+    expect(BUNDLES.filter((bundle) => !/^[0-9a-f]{64}$/u.test(bundle.sha256 ?? "")).map((bundle) => bundle.id)).toEqual([]);
+    expect(BUNDLES.filter((bundle) => kiwixKeyOf(bundle.url ?? "")?.release !== bundle.version).map((bundle) => bundle.id)).toEqual([]);
   });
 });
 

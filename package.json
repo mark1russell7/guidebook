@@ -17,7 +17,8 @@
     "lint:ste": "ste-lint",
     "check:boundaries": "depcruise --config .dependency-cruiser.ts packages",
     "check:api": "api-report check",
-    "check:conventions": "conventions check"
+    "check:conventions": "conventions check",
+    "check:bundles": "node scripts/check-bundles.ts"
   },
   "devDependencies": {
     "@mark1russell7/api-report": "^0.5.17",
@@ -31,6 +32,7 @@
     "@swc/core": "^1.15.0",
     "@types/node": "^26.6.5",
     "dependency-cruiser": "^18.7.0",
+    "polite-crawler": "^0.7.10",
     "publint": "^0.3.25",
     "tsx": "^4.23.15",
     "typescript": "^7.0.2"
