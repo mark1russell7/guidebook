@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { LICENSES, LICENSE_RULES, USES, assertGate, checkSources, checkUnits, creditOf, gate, layerOf, permits } from "./index.ts";
+import { DAY_MS, LICENSES, LICENSE_RULES, USES, assertGate, checkSources, checkUnits, creditOf, gate, isWebAddress, layerOf, permits, timeOf } from "./index.ts";
 import type { CitedUnit, License, Source } from "./index.ts";
 
 const source = (id: string, license: License, extra: Partial<Source> = {}): Source => ({
@@ -136,5 +136,21 @@ describe("layerOf and creditOf", () => {
       "Wikipedia: Title of wiki. https://example.org/wiki. CC BY-SA 4.0 (https://creativecommons.org/licenses/by-sa/4.0/). Checked 2026-11-01.",
     );
     expect(creditOf(source("arr", "all-rights-reserved"))).toBe("Title of arr. https://example.org/arr. All rights reserved. Checked 2026-11-01.");
+  });
+});
+
+describe("timeOf and isWebAddress", () => {
+  it("gives the time of a real date and undefined for a false date", () => {
+    expect(timeOf("2026-01-02")).toBe(Date.UTC(2026, 0, 2));
+    expect(timeOf("2026-01-02")! - timeOf("2026-01-01")!).toBe(DAY_MS);
+    expect(timeOf("2026-02-30")).toBeUndefined();
+    expect(timeOf("2026-1-2")).toBeUndefined();
+  });
+
+  it("accepts http and https addresses with a host and refuses others", () => {
+    expect(isWebAddress("https://www.ready.gov/kit")).toBe(true);
+    expect(isWebAddress("http://example.org:8080/a?b#c")).toBe(true);
+    expect(isWebAddress("ftp://example.org")).toBe(false);
+    expect(isWebAddress("https://exa mple.org")).toBe(false);
   });
 });
