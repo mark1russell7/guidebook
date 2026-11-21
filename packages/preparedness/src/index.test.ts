@@ -5,9 +5,10 @@ import { checkTopics, printOrder } from "@mark1russell7/guidebook-topics";
 import { PHASES, checkSteps, planMatrix, stepsFor } from "@mark1russell7/guidebook-plans";
 import { Linter, loadConfig } from "@mark1russell7/ste-lint";
 import { describe, expect, it } from "vitest";
-import { AREAS, BUNDLES, BUNDLE_LEVELS, CASES, CUTS, GAPS, NEEDS, SOURCES, STEPS, TOPICS } from "./index.ts";
+import { AREAS, BUNDLES, BUNDLE_LEVELS, CASES, CUTS, MORE_CASES, GAPS, NEEDS, SOURCES, STEPS, TOPICS } from "./index.ts";
 
-const KEYS = [...CASES, ...CUTS];
+const ALL_CASES = [...CASES, ...MORE_CASES];
+const KEYS = [...ALL_CASES, ...CUTS];
 const AT = "2026-11-21";
 const FULL = ["ready", "warned", "P0", "P1", "P2", "P3"] as const;
 
@@ -63,6 +64,12 @@ describe("the topics", () => {
 });
 
 describe("the step gate", () => {
+  it("has the 12 cases of v1 and the 6 cuts", () => {
+    expect(new Set(CASES).size).toBe(12);
+    expect(new Set(CUTS).size).toBe(6);
+    expect(CASES.filter((key) => (MORE_CASES as readonly string[]).includes(key))).toEqual([]);
+  });
+
   const result = checkSteps(STEPS, SOURCES, { phases: PHASES, on: KEYS, gaps: GAPS, commercial: true });
 
   it("finds no finding over all the keys and the phases", () => {
@@ -77,7 +84,7 @@ describe("the step gate", () => {
   });
 
   it("gives each case a step in each phase from ready to P3, or a marked gap", () => {
-    for (const key of CASES) {
+    for (const key of ALL_CASES) {
       for (const phase of FULL) {
         const steps = stepsFor(STEPS, [key], [phase]);
         const gap = GAPS.find((entry) => entry.on === key && entry.phase === phase);
@@ -92,7 +99,7 @@ describe("the step gate", () => {
   });
 
   it("gives no step of a plan two times when a case and its cuts share a text", () => {
-    for (const key of CASES) {
+    for (const key of ALL_CASES) {
       const texts = stepsFor(STEPS, [key, ...CUTS], PHASES).map((step) => step.do);
       expect(texts.filter((text, index) => texts.indexOf(text) !== index), key).toEqual([]);
     }

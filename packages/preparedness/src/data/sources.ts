@@ -37,4 +37,6 @@ export const SOURCES: readonly Source[] = [
   { id: "appropedia", title: "Appropedia", url: "https://www.appropedia.org/", license: "cc-by-sa-4.0", checked: CHECKED, by: "Appropedia contributors" },
   // The footer of each page of energypedia gives CC BY-SA 4.0.
   { id: "energypedia", title: "energypedia", url: "https://energypedia.info/", license: "cc-by-sa-4.0", checked: CHECKED, by: "energypedia contributors" },
+  federal("cdc-heart", "CDC", "About Heart Attack Symptoms, Risk, and Recovery", "https://www.cdc.gov/heart-disease/about/heart-attack.html"),
+  federal("cdc-stroke", "CDC", "Signs and Symptoms of Stroke", "https://www.cdc.gov/stroke/signs-symptoms/index.html"),
 ];

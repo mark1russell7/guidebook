@@ -1,4 +1,4 @@
-// The steps of the 12 cases and the 6 cuts. Each step is in the words of the guidebook, and each step cites the page that tells it.
+// The steps of the 12 cases of v1, the 2 more cases and the 6 cuts. Each step is in the words of the guidebook, and each step cites the page that tells it.
 // The steps are full from `ready` to `P3`. `P4` and `P5` are an outline. Each cell with no step has a marked gap in `gaps.ts`.
 
 import type { Phase, Step } from "@mark1russell7/guidebook-plans";
@@ -25,6 +25,29 @@ const POWER = "power.electric";
 const RECOVERY: readonly Row[] = [
   ["P4", "restock", "Replace the items of the kit that you used, and the items that are past their dates.", ["ready-kit"], [DRINK, FOOD, MEDICINE]],
   ["P5", "review", "Each year, examine the needs of your household, and change the kit to agree with them.", ["ready-kit"]],
+];
+
+/**
+ * The evacuation steps that each case with an evacuation shares. An evacuation is a set of steps of a case, not a case.
+ */
+const EVACUATION: readonly Row[] = [
+  ["ready", "evac-places", "Choose several places to go in different directions, for example the home of a friend or a motel.", ["ready-evacuation"]],
+  ["ready", "evac-pets", "Find a place that accepts pets. Most public shelters accept only service animals.", ["ready-evacuation"]],
+  ["ready", "evac-go-bag", "Prepare a go-bag that you can carry on foot or on public transport.", ["ready-evacuation"], [DRINK, FOOD, MEDICINE]],
+  ["ready", "evac-half-tank", "Keep the fuel tank of the car at least half full.", ["ready-evacuation"]],
+  ["ready", "evac-no-car", "If you have no car, make a plan with family, friends or local emergency management.", ["ready-evacuation"]],
+  ["warned", "evac-early", "Leave early, so that the weather does not trap you.", ["ready-evacuation"]],
+  ["P0", "evac-kit", "Take your emergency kit and your pets.", ["ready-evacuation"], [DRINK, FOOD, MEDICINE]],
+  ["P0", "evac-lock", "Close and lock the doors and windows.", ["ready-evacuation"]],
+  ["P0", "evac-utilities", "If officials tell you to, turn off the water, gas and electricity before you go.", ["ready-evacuation"]],
+  ["P0", "evac-note", "Leave a note that tells when you left and where you will go.", ["ready-evacuation"]],
+  ["P0", "evac-neighbors", "Ask your neighbors if they need a ride.", ["ready-evacuation"]],
+  ["P1", "evac-routes", "Use the recommended routes. Do not take shortcuts.", ["ready-evacuation"]],
+  ["P1", "evac-hazards", "On the road, look for washed-out roads and fallen power lines.", ["ready-evacuation"]],
+  ["P2", "evac-check", "Before you travel back, speak to the local officials where you stay and at home.", ["ready-evacuation"]],
+  ["P2", "evac-tell", "Tell your friends and family when you leave and when you arrive.", ["ready-evacuation"]],
+  ["P3", "evac-debris", "Do not go back before the debris is clear.", ["ready-evacuation"]],
+  ["P3", "evac-lines", "Stay away from fallen power lines, and tell the power company about them.", ["ready-evacuation"]],
 ];
 
 /** The steps of the cases. A case is a kind of event. */
@@ -56,6 +79,7 @@ export const CASE_STEPS: readonly Step[] = [
     ["P2", "electric", "Do not touch wet electrical equipment. If it is safe, turn off the power at the main breaker.", ["ready-hurricanes"]],
     ["P2", "photos", "Make photos of the damage, and speak to your insurance company.", ["ready-hurricanes"]],
     ["P3", "mold", "Wear protective clothes and a mask when you clean mold or debris. Do not let children help.", ["ready-hurricanes"]],
+    ...EVACUATION,
     ...RECOVERY,
   ]),
   ...stepsOf("met.flood", [
@@ -74,6 +98,7 @@ export const CASE_STEPS: readonly Step[] = [
     ["P2", "animals", "Look for snakes and other animals in the water and near it.", ["ready-floods"]],
     ["P3", "clean", "When you clean, wear heavy gloves, boots and protective clothes. Wear a mask near mold.", ["ready-floods"]],
     ["P3", "mold", "Keep persons with asthma, lung disease or a weak immune system out of buildings with mold.", ["ready-floods"]],
+    ...EVACUATION,
     ...RECOVERY,
   ]),
   ...stepsOf("met.heat.extreme", [
@@ -159,6 +184,7 @@ export const CASE_STEPS: readonly Step[] = [
     ["P2", "ash", "Stay away from hot ash, burned trees, smoking debris and live embers.", ["ready-wildfires"]],
     ["P3", "clean", "Wear a respirator when you clean, and make the debris wet to decrease the dust.", ["ready-wildfires"]],
     ["P3", "photos", "Make photos and a list of the damage, and speak to your insurance company.", ["ready-wildfires"]],
+    ...EVACUATION,
     ...RECOVERY,
   ]),
   ...stepsOf("cbrne.hazardous-materials", [
@@ -216,25 +242,17 @@ export const CASE_STEPS: readonly Step[] = [
     ["P5", "plan", "After the outbreak, examine your emergency plan, and change it.", ["ready-pandemic"]],
     ...RECOVERY,
   ]),
-  ...stepsOf("safety.evacuation", [
-    ["ready", "places", "Choose several places to go in different directions, for example the home of a friend or a motel.", ["ready-evacuation"]],
-    ["ready", "pets", "Find a place that accepts pets. Most public shelters accept only service animals.", ["ready-evacuation"]],
-    ["ready", "go-bag", "Prepare a go-bag that you can carry on foot or on public transport.", ["ready-evacuation"], [DRINK, FOOD, MEDICINE]],
-    ["ready", "half-tank", "Keep the fuel tank of the car at least half full.", ["ready-evacuation"]],
-    ["ready", "no-car", "If you have no car, make a plan with family, friends or local emergency management.", ["ready-evacuation"]],
-    ["warned", "fuel", "If an evacuation is likely, fill the fuel tank.", ["ready-evacuation"]],
-    ["warned", "early", "Leave early, so that the weather does not trap you.", ["ready-evacuation"]],
-    ["P0", "kit", "Take your emergency kit and your pets.", ["ready-evacuation"], [DRINK, FOOD, MEDICINE]],
-    ["P0", "lock", "Close and lock the doors and windows.", ["ready-evacuation"]],
-    ["P0", "utilities", "If officials tell you to, turn off the water, gas and electricity before you go.", ["ready-evacuation"]],
-    ["P0", "note", "Leave a note that tells when you left and where you will go.", ["ready-evacuation"]],
-    ["P0", "neighbors", "Ask your neighbors if they need a ride.", ["ready-evacuation"]],
-    ["P1", "routes", "Use the recommended routes. Do not take shortcuts.", ["ready-evacuation"]],
-    ["P1", "hazards", "Do not drive into flood water. Look for washed-out roads and fallen power lines.", ["ready-evacuation"]],
-    ["P2", "check", "Before you travel back, speak to the local officials where you stay and at home.", ["ready-evacuation"]],
-    ["P2", "tell", "Tell your friends and family when you leave and when you arrive.", ["ready-evacuation"]],
-    ["P3", "debris", "Do not go back before the storm debris is clear.", ["ready-evacuation"]],
-    ["P3", "lines", "Stay away from fallen power lines, and tell the power company about them.", ["ready-evacuation"]],
+  ...stepsOf("infra.power.outage", [...RECOVERY]),
+  ...stepsOf("infra.water.outage", [...RECOVERY]),
+  ...stepsOf("health.medical-emergency", [
+    ["ready", "class", "Take a first aid and CPR class. Ask your local Red Cross chapter for the training.", ["ready-safety"]],
+    ["ready", "first-aid-kit", "Keep a first aid kit at home, at work and in the car.", ["ready-kit"], [MEDICINE]],
+    ["ready", "befast", "Learn the signs of a stroke with B.E. F.A.S.T.: balance, eyes, face, arms, speech and time.", ["cdc-stroke"]],
+    ["P0", "heart", "Chest discomfort for more than a few minutes can be a heart attack. Call 9-1-1 immediately.", ["cdc-heart"]],
+    ["P0", "stroke", "For a sudden droop of the face, a weak arm or strange speech, call 9-1-1 immediately.", ["cdc-stroke"]],
+    ["P0", "time", "Write down the time of the first signs of a stroke.", ["cdc-stroke"]],
+    ["P0", "ambulance", "Do not drive a person with the signs of a stroke to the hospital. Call for an ambulance.", ["cdc-stroke"]],
+    ["P0", "cpr", "If you know CPR, give it until the emergency team arrives.", ["cdc-heart"]],
     ...RECOVERY,
   ]),
 ];

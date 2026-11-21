@@ -2,6 +2,10 @@
 
 import type { Gap } from "@mark1russell7/guidebook-plans";
 
+const OF_GRID = "This case is the power cut itself. The steps of the cut `energy.grid` apply.";
+const OF_WATER = "This case is the water cut itself. The steps of the cut `water.main` apply.";
+const NO_HOME_STEP = "The emergency team and the hospital give the care after the first minutes. The sources give no household step.";
+
 const NO_LONG_STEP = "The sources give no step for a cut of this length. The steps of the earlier phases continue.";
 
 /** The marked gaps of the cases and the cuts. */
@@ -35,4 +39,20 @@ export const GAPS: readonly Gap[] = [
   { on: "store.pharmacy", phase: "P0", why: "A closed pharmacy does not change the first minutes. The steps of the case apply." },
   { on: "store.pharmacy", phase: "P1", why: "A closed pharmacy does not change the first hours. The medicines of the ready phase are the protection." },
   { on: "store.pharmacy", phase: "P5", why: NO_LONG_STEP },
+  { on: "infra.power.outage", phase: "ready", why: OF_GRID },
+  { on: "infra.power.outage", phase: "warned", why: OF_GRID },
+  { on: "infra.power.outage", phase: "P0", why: OF_GRID },
+  { on: "infra.power.outage", phase: "P1", why: OF_GRID },
+  { on: "infra.power.outage", phase: "P2", why: OF_GRID },
+  { on: "infra.power.outage", phase: "P3", why: OF_GRID },
+  { on: "infra.water.outage", phase: "ready", why: OF_WATER },
+  { on: "infra.water.outage", phase: "warned", why: OF_WATER },
+  { on: "infra.water.outage", phase: "P0", why: OF_WATER },
+  { on: "infra.water.outage", phase: "P1", why: OF_WATER },
+  { on: "infra.water.outage", phase: "P2", why: OF_WATER },
+  { on: "infra.water.outage", phase: "P3", why: OF_WATER },
+  { on: "health.medical-emergency", phase: "warned", why: "A medical emergency comes with no warning. The steps of P0 apply." },
+  { on: "health.medical-emergency", phase: "P1", why: NO_HOME_STEP },
+  { on: "health.medical-emergency", phase: "P2", why: NO_HOME_STEP },
+  { on: "health.medical-emergency", phase: "P3", why: NO_HOME_STEP },
 ];
