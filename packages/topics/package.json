@@ -1,14 +1,15 @@
 {
   "$schema": "https://json.schemastore.org/package",
-  "name": "@mark1russell7/guidebook-preparedness",
+  "name": "@mark1russell7/guidebook-topics",
   "version": "0.1.0",
-  "description": "The preparedness content of the guidebook: cited US public-domain sources, and the steps and marked gaps of 12 cases and 6 cuts, for each phase.",
+  "description": "The topics add-on of the guidebook: topics as a graph of prerequisites, the graph gate (no cycle, no unknown topic, unit or bundle) and the print order. The add-on names no topic.",
   "keywords": [
     "guidebook",
-    "preparedness",
-    "emergency",
-    "plan",
-    "steps",
+    "topics",
+    "prerequisites",
+    "dag",
+    "curriculum",
+    "knowledge-graph",
     "typescript"
   ],
   "homepage": "https://github.com/mark1russell7/guidebook#readme",
@@ -18,7 +19,7 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/mark1russell7/guidebook.git",
-    "directory": "packages/preparedness"
+    "directory": "packages/topics"
   },
   "license": "MIT",
   "author": "Mark Russell (https://github.com/mark1russell7)",
@@ -33,7 +34,6 @@
   "files": [
     "build",
     "src",
-    "data",
     "!src/**/*.test.ts"
   ],
   "engines": {
@@ -57,17 +57,16 @@
     "test:watch": "vitest",
     "typecheck": "tsc -p tsconfig.json && tsc -p tsconfig.test.json"
   },
+  "dependencies": {
+    "@mark1russell7/collections": "^0.11.3",
+    "@mark1russell7/guidebook": "workspace:*"
+  },
   "devDependencies": {
     "@mark1russell7/cue": "^2.0.0",
     "@types/node": "^26.6.5",
     "@vitest/coverage-v8": "^5.0.3",
     "typescript": "^7.0.2",
     "vitest": "^5.0.3",
-    "tsdown": "^0.23.7",
-    "@mark1russell7/ste-lint": "^0.4.0"
-  },
-  "dependencies": {
-    "@mark1russell7/guidebook": "workspace:*",
-    "@mark1russell7/guidebook-plans": "workspace:*"
+    "tsdown": "^0.23.7"
   }
 }
