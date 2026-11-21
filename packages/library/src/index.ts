@@ -9,3 +9,5 @@ export { GAP_CODES, bytesOf, checksDue, copyStates } from "./copies.ts";
 export type { CopyState, CopyStates, CopyStatus, DueCheck, GapCode, GapFinding } from "./copies.ts";
 export { KIWIX_CATALOG, RELEASE_CODES, checkReleases, kiwixFeedUrl, kiwixKeyOf, latestReleases, parseKiwixFeed, parseMeta4, withRelease, zimUrlOf } from "./kiwix.ts";
 export type { FeedQuery, KiwixEntry, Meta4, ReleaseCode, ReleaseFinding, ReleaseOptions } from "./kiwix.ts";
+export { copiesLayer, keepChance, libraryPartOf, planCopies } from "./placement.ts";
+export type { CopiesInput, CopiesQuery, CopyPlace, KindLoss, MediumOffer, PlanCopiesOptions } from "./placement.ts";
