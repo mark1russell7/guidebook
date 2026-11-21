@@ -12,12 +12,13 @@ The core and the plans add-on name no topic. This package is the first topic.
 
 | Name | What it is |
 | --- | --- |
-| `SOURCES` | The 23 sources. The 19 sources of the steps are pages of Ready.gov, CDC and FDA in the US public domain. The 4 sources of the bundles are open wikis under CC BY-SA 4.0. |
-| `CASE_STEPS` | The steps of the 12 cases |
+| `SOURCES` | The 25 sources. The 21 sources of the steps are pages of Ready.gov, CDC and FDA in the US public domain. The 4 sources of the bundles are open wikis under CC BY-SA 4.0. |
+| `CASE_STEPS` | The steps of the 12 cases and of the 2 more cases |
 | `CUT_STEPS` | The steps of the 6 cuts |
 | `STEPS` | All the steps |
 | `GAPS` | The marked gaps: each key and phase with no step on purpose, with the reason |
-| `CASES` | The codes of the cases |
+| `CASES` | The codes of the 12 cases |
+| `MORE_CASES` | The codes of 2 more cases, with the same gates |
 | `CUTS` | The ids of the cuts |
 | `NEEDS` | The need codes that the steps protect |
 | `TOPICS` | The 40 topics, as a graph of prerequisites |
@@ -39,7 +40,13 @@ const steps = stepsFor(STEPS, ["met.winter.storm", "energy.grid", "road.local"],
 
 The 12 cases are the codes of an event taxonomy:
 
-`met.winter.storm`, `met.tropical.hurricane`, `met.flood`, `met.heat.extreme`, `met.tornado`, `geo.earthquake`, `fire.structure`, `fire.wildfire`, `cbrne.hazardous-materials`, `cbrne.radiological`, `health.outbreak`, `safety.evacuation`.
+`met.winter.storm`, `met.tropical.hurricane`, `met.flood`, `met.heat.extreme`, `met.tornado`, `geo.earthquake`, `fire.wildfire`, `fire.structure`, `infra.power.outage`, `infra.water.outage`, `health.outbreak`, `health.medical-emergency`.
+
+The code `health.medical-emergency` is new in the taxonomy. A household starts this case, because no feed gives it.
+
+An evacuation is a set of steps of the hurricane, the flood and the wildfire, not a case. The power outage and the water outage use the steps of their cuts.
+
+The 2 more cases are `cbrne.hazardous-materials` and `cbrne.radiological`.
 
 The 6 cuts are the services that an event stops:
 

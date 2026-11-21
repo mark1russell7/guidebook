@@ -16,6 +16,7 @@ CHECKED: build/index.d.ts#CHECKED
 CUTS: build/index.d.ts#CUTS
 CUT_STEPS: build/index.d.ts#CUT_STEPS
 GAPS: build/index.d.ts#GAPS
+MORE_CASES: build/index.d.ts#MORE_CASES
 NEEDS: build/index.d.ts#NEEDS
 SOURCES: build/index.d.ts#SOURCES
 STEPS: build/index.d.ts#STEPS
@@ -36,7 +37,7 @@ export declare const BUNDLES_CHECKED = "2026-11-21";
 export declare const BUNDLE_LEVELS: readonly ["pocket", "shelf"];
 
 ### build/index.d.ts#CASES
-export declare const CASES: readonly ["met.winter.storm", "met.tropical.hurricane", "met.flood", "met.heat.extreme", "met.tornado", "geo.earthquake", "fire.structure", "fire.wildfire", "cbrne.hazardous-materials", "cbrne.radiological", "health.outbreak", "safety.evacuation"];
+export declare const CASES: readonly ["met.winter.storm", "met.tropical.hurricane", "met.flood", "met.heat.extreme", "met.tornado", "geo.earthquake", "fire.wildfire", "fire.structure", "infra.power.outage", "infra.water.outage", "health.outbreak", "health.medical-emergency"];
 
 ### build/index.d.ts#CASE_STEPS
 export declare const CASE_STEPS: readonly Step[];
@@ -52,6 +53,9 @@ export declare const CUT_STEPS: readonly Step[];
 
 ### build/index.d.ts#GAPS
 export declare const GAPS: readonly Gap[];
+
+### build/index.d.ts#MORE_CASES
+export declare const MORE_CASES: readonly ["cbrne.hazardous-materials", "cbrne.radiological"];
 
 ### build/index.d.ts#NEEDS
 export declare const NEEDS: readonly ["hydration.drink", "food.energy", "health.medicine", "power.electric"];

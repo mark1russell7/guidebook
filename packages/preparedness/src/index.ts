@@ -8,7 +8,8 @@ export { AREAS, TOPICS } from "./data/topics.ts";
 export { BUNDLES, BUNDLES_CHECKED, BUNDLE_LEVELS } from "./data/bundles.ts";
 
 /**
- * The cases of the content. A case is a kind of event. The codes come from the event taxonomy of the alerts project.
+ * The 12 cases of v1. A case is a kind of event. The codes come from the event taxonomy of the alerts project.
+ * The code `health.medical-emergency` is new in that taxonomy.
  */
 export const CASES = [
   "met.winter.storm",
@@ -17,13 +18,16 @@ export const CASES = [
   "met.heat.extreme",
   "met.tornado",
   "geo.earthquake",
-  "fire.structure",
   "fire.wildfire",
-  "cbrne.hazardous-materials",
-  "cbrne.radiological",
+  "fire.structure",
+  "infra.power.outage",
+  "infra.water.outage",
   "health.outbreak",
-  "safety.evacuation",
+  "health.medical-emergency",
 ] as const;
+
+/** The cases past v1. Their steps have the same gates as the steps of `CASES`. */
+export const MORE_CASES = ["cbrne.hazardous-materials", "cbrne.radiological"] as const;
 
 /** The cuts of the content. A cut is a service that an event stops. These ids are a proposal until the stack model names them. */
 export const CUTS = ["energy.grid", "water.main", "road.local", "telecom.network", "gas.main", "store.pharmacy"] as const;
