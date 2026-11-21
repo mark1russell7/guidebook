@@ -1,9 +1,11 @@
 import { fileURLToPath } from "node:url";
 import { checkSources } from "@mark1russell7/guidebook";
+import { bytesOf, checkCatalog } from "@mark1russell7/guidebook-library";
+import { checkTopics, printOrder } from "@mark1russell7/guidebook-topics";
 import { PHASES, checkSteps, planMatrix, stepsFor } from "@mark1russell7/guidebook-plans";
 import { Linter, loadConfig } from "@mark1russell7/ste-lint";
 import { describe, expect, it } from "vitest";
-import { CASES, CUTS, GAPS, NEEDS, SOURCES, STEPS } from "./index.ts";
+import { AREAS, BUNDLES, BUNDLE_LEVELS, CASES, CUTS, GAPS, NEEDS, SOURCES, STEPS, TOPICS } from "./index.ts";
 
 const KEYS = [...CASES, ...CUTS];
 const AT = "2026-11-21";
@@ -14,10 +16,44 @@ describe("the source gate", () => {
     expect(checkSources(SOURCES, { at: AT })).toEqual([]);
   });
 
-  it("gives each source a public-domain license and uses each source", () => {
-    expect(SOURCES.every((source) => source.license === "us-public-domain")).toBe(true);
-    const cited = new Set(STEPS.flatMap((step) => step.sources));
+  it("gives each source of a step a public-domain license", () => {
+    const ofSteps = new Set(STEPS.flatMap((step) => step.sources));
+    expect(SOURCES.filter((source) => ofSteps.has(source.id) && source.license !== "us-public-domain")).toEqual([]);
+  });
+
+  it("uses each source in a step or a bundle", () => {
+    const cited = new Set([...STEPS.flatMap((step) => step.sources), ...BUNDLES.map((bundle) => bundle.source)]);
     expect(SOURCES.map((source) => source.id).filter((id) => !cited.has(id))).toEqual([]);
+  });
+});
+
+describe("the bundle catalog", () => {
+  const rules = BUNDLE_LEVELS.map((level) => ({ level, copies: 1, kinds: 1, places: 1, everyDays: 365 }));
+
+  it("finds no finding in a commercial guidebook", () => {
+    expect(checkCatalog(BUNDLES, { sources: SOURCES, rules, commercial: true })).toEqual([]);
+  });
+
+  it("fits the pocket bundles on one flash drive of 32 GB", () => {
+    const pocket = BUNDLES.filter((bundle) => bundle.level === "pocket").map((bundle) => bundle.id);
+    expect(bytesOf(BUNDLES, pocket)).toBeLessThan(32e9);
+  });
+});
+
+describe("the topics", () => {
+  it("finds no finding in the graph of the topics", () => {
+    expect(checkTopics(TOPICS, { areas: AREAS, bundles: BUNDLES.map((bundle) => bundle.id), serves: NEEDS })).toEqual([]);
+  });
+
+  it("has 40 topics in 12 areas, each area with a topic", () => {
+    expect(TOPICS).toHaveLength(40);
+    expect(AREAS.filter((area) => !TOPICS.some((topic) => topic.area === area))).toEqual([]);
+  });
+
+  it("puts each topic after its prerequisites in the print order", () => {
+    const order = printOrder(TOPICS).map((topic) => topic.id);
+    expect(order).toHaveLength(TOPICS.length);
+    for (const topic of TOPICS) for (const need of topic.requires) expect(order.indexOf(need), `${need} before ${topic.id}`).toBeLessThan(order.indexOf(topic.id));
   });
 });
 

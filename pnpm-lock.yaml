@@ -294,9 +294,15 @@ importers:
       '@mark1russell7/guidebook':
         specifier: workspace:*
         version: link:../guidebook
+      '@mark1russell7/guidebook-library':
+        specifier: workspace:*
+        version: link:../library
       '@mark1russell7/guidebook-plans':
         specifier: workspace:*
         version: link:../plans
+      '@mark1russell7/guidebook-topics':
+        specifier: workspace:*
+        version: link:../topics
     devDependencies:
       '@mark1russell7/cue':
         specifier: ^2.0.0

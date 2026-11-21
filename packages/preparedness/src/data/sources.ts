@@ -1,5 +1,6 @@
 // The sources of the preparedness content. This list is shared by all the add-ons of the content. Add a source at the end, and do not change an id.
-// Each source is a page of a US federal agency, so its text is in the US public domain (17 U.S.C. 105).
+// The sources of the steps are pages of US federal agencies, so their text is in the US public domain (17 U.S.C. 105).
+// The sources of the bundles are open wikis under a share-alike license.
 
 import type { Source } from "@mark1russell7/guidebook";
 
@@ -29,4 +30,11 @@ export const SOURCES: readonly Source[] = [
   federal("cdc-co", "CDC", "Carbon Monoxide Poisoning Basics", "https://www.cdc.gov/carbon-monoxide/about/index.html"),
   federal("cdc-water", "CDC", "How to Make Water Safe in an Emergency", "https://www.cdc.gov/water-emergency/about/index.html"),
   federal("fda-drugs", "FDA", "Safe Drug Use After a Natural Disaster", "https://www.fda.gov/drugs/emergency-preparedness-drugs/safe-drug-use-after-natural-disaster"),
+  // The text of the Wikimedia projects is CC BY-SA 4.0 (Terms of Use, section 7, in effect from 2023-06-07).
+  { id: "wikipedia-en", title: "Wikipedia, the English edition", url: "https://en.wikipedia.org/", license: "cc-by-sa-4.0", checked: CHECKED, by: "Wikipedia contributors" },
+  { id: "wikibooks-en", title: "Wikibooks, the English edition", url: "https://en.wikibooks.org/", license: "cc-by-sa-4.0", checked: CHECKED, by: "Wikibooks contributors" },
+  // The page Appropedia:Intellectual_property says that the content "defaults to" CC BY-SA 4.0. Its data table says 3.0. The two permit a bundle.
+  { id: "appropedia", title: "Appropedia", url: "https://www.appropedia.org/", license: "cc-by-sa-4.0", checked: CHECKED, by: "Appropedia contributors" },
+  // The footer of each page of energypedia gives CC BY-SA 4.0.
+  { id: "energypedia", title: "energypedia", url: "https://energypedia.info/", license: "cc-by-sa-4.0", checked: CHECKED, by: "energypedia contributors" },
 ];
