@@ -60,7 +60,8 @@
     "typecheck": "tsc -p tsconfig.json && tsc -p tsconfig.test.json"
   },
   "dependencies": {
-    "@mark1russell7/guidebook": "workspace:*"
+    "@mark1russell7/guidebook": "workspace:*",
+    "@mark1russell7/text": "^0.0.17"
   },
   "devDependencies": {
     "@mark1russell7/cue": "^2.0.0",

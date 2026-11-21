@@ -65,6 +65,30 @@ A bundle with too few good copies, kinds or places gets an error: `few-copies`, 
 
 `checksDue` gives the last good date of each copy, the first due first. `bytesOf(bundles, ids)` gives the bytes that one medium needs for a list of bundles.
 
+## The Kiwix catalog
+
+Kiwix gives offline copies of open sites as ZIM files. Its OPDS feed lists each release, and the `.meta4` file of a release gives its exact size and its SHA-256. The functions are pure: the caller fetches the files, for example with `polite-crawler/api`.
+
+```ts
+import { checkReleases, kiwixFeedUrl, parseKiwixFeed, parseMeta4, withRelease } from "@mark1russell7/guidebook-library";
+
+const entries = parseKiwixFeed(await read(kiwixFeedUrl({ lang: "eng" })));
+const findings = checkReleases(bundles, entries, { at: "2026-11-21" });
+const next = withRelease(bundle, entry, parseMeta4(await read(entry.meta4)));
+```
+
+The feed rounds each size up to whole KiB. Thus a bundle takes its `bytes` from `parseMeta4`, not from the feed.
+
+| Code | Level | When |
+| --- | --- | --- |
+| `not-in-feed` | error | The feed has no file of the bundle. |
+| `old-release` | error | The feed has a newer release, and the bundle is older than `maxAgeDays` (365 by default). |
+| `newer-release` | warning | The feed has a newer release. |
+| `no-hash` | warning | The bundle has no SHA-256. |
+| `not-kiwix` | warning | The address of the bundle is not a ZIM release. |
+
+The decoder of character references comes from `@mark1russell7/text`.
+
 ## Where the copies go
 
 The add-on does not decide where each copy goes. That decision is a query of `@mark1russell7/stack-placement`, over the media, the places, their costs and their failure rates.

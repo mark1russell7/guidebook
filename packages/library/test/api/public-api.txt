@@ -15,19 +15,35 @@ type CopyState: build/index.d.ts#CopyState
 type CopyStates: build/index.d.ts#CopyStates
 type CopyStatus: build/index.d.ts#CopyStatus
 type DueCheck: build/index.d.ts#DueCheck
+type FeedQuery: build/index.d.ts#FeedQuery
 GAP_CODES: build/index.d.ts#GAP_CODES
 type GapCode: build/index.d.ts#GapCode
 type GapFinding: build/index.d.ts#GapFinding
+KIWIX_CATALOG: build/index.d.ts#KIWIX_CATALOG
+type KiwixEntry: build/index.d.ts#KiwixEntry
 LIBRARY_CODES: build/index.d.ts#LIBRARY_CODES
 type LibraryCode: build/index.d.ts#LibraryCode
 type LibraryFinding: build/index.d.ts#LibraryFinding
 MEDIUM_KINDS: build/index.d.ts#MEDIUM_KINDS
 type MediumKind: build/index.d.ts#MediumKind
+type Meta4: build/index.d.ts#Meta4
+RELEASE_CODES: build/index.d.ts#RELEASE_CODES
+type ReleaseCode: build/index.d.ts#ReleaseCode
+type ReleaseFinding: build/index.d.ts#ReleaseFinding
+type ReleaseOptions: build/index.d.ts#ReleaseOptions
 bytesOf: build/index.d.ts#bytesOf
 checkCatalog: build/index.d.ts#checkCatalog
 checkCopies: build/index.d.ts#checkCopies
+checkReleases: build/index.d.ts#checkReleases
 checksDue: build/index.d.ts#checksDue
 copyStates: build/index.d.ts#copyStates
+kiwixFeedUrl: build/index.d.ts#kiwixFeedUrl
+kiwixKeyOf: build/index.d.ts#kiwixKeyOf
+latestReleases: build/index.d.ts#latestReleases
+parseKiwixFeed: build/index.d.ts#parseKiwixFeed
+parseMeta4: build/index.d.ts#parseMeta4
+withRelease: build/index.d.ts#withRelease
+zimUrlOf: build/index.d.ts#zimUrlOf
 
 ## Declarations
 
@@ -107,6 +123,14 @@ interface DueCheck {
   readonly due: IsoDate;
 }
 
+### build/index.d.ts#FeedQuery
+interface FeedQuery {
+  readonly lang?: string;
+  readonly name?: string;
+  readonly count?: number;
+  readonly catalog?: string;
+}
+
 ### build/index.d.ts#GAP_CODES
 export declare const GAP_CODES: readonly ["few-copies", "few-kinds", "few-places", "no-rule", "check-due", "bad-hash", "old-version"];
 
@@ -115,6 +139,21 @@ type GapCode = (typeof GAP_CODES)[number];
 
 ### build/index.d.ts#GapFinding
 type GapFinding = Finding<GapCode, "bundle" | "copy">;
+
+### build/index.d.ts#KIWIX_CATALOG
+export declare const KIWIX_CATALOG = "https://opds.library.kiwix.org/catalog/v2";
+
+### build/index.d.ts#KiwixEntry
+interface KiwixEntry {
+  readonly key: string;
+  readonly name: string;
+  readonly flavour: string;
+  readonly title: string;
+  readonly release: string;
+  readonly issued: IsoDate;
+  readonly meta4: string;
+  readonly approxBytes: number;
+}
 
 ### build/index.d.ts#LIBRARY_CODES
 export declare const LIBRARY_CODES: readonly ["duplicate-id", "empty-title", "bad-bytes", "bad-sha256", "bad-url", "unknown-license", "missing-source", "unknown-level", "use-refused", "missing-bundle", "bad-kind", "bad-date", "checked-in-future", "duplicate-copy"];
@@ -131,6 +170,28 @@ export declare const MEDIUM_KINDS: readonly ["flash", "ssd", "hdd", "optical", "
 ### build/index.d.ts#MediumKind
 type MediumKind = (typeof MEDIUM_KINDS)[number];
 
+### build/index.d.ts#Meta4
+interface Meta4 {
+  readonly file: string;
+  readonly bytes: number;
+  readonly sha256: string;
+}
+
+### build/index.d.ts#RELEASE_CODES
+export declare const RELEASE_CODES: readonly ["not-kiwix", "not-in-feed", "newer-release", "old-release", "no-hash"];
+
+### build/index.d.ts#ReleaseCode
+type ReleaseCode = (typeof RELEASE_CODES)[number];
+
+### build/index.d.ts#ReleaseFinding
+type ReleaseFinding = Finding<ReleaseCode, "bundle">;
+
+### build/index.d.ts#ReleaseOptions
+interface ReleaseOptions {
+  readonly at: IsoDate;
+  readonly maxAgeDays?: number;
+}
+
 ### build/index.d.ts#bytesOf
 export declare function bytesOf(bundles: readonly Bundle[], ids: readonly string[]): number;
 
@@ -139,6 +200,9 @@ export declare function checkCatalog(bundles: readonly Bundle[], options?: Catal
 
 ### build/index.d.ts#checkCopies
 export declare function checkCopies(copies: readonly Copy[], bundles: readonly Bundle[], options?: CopiesOptions): readonly LibraryFinding[];
+
+### build/index.d.ts#checkReleases
+export declare function checkReleases(bundles: readonly Bundle[], entries: readonly KiwixEntry[], options: ReleaseOptions): readonly ReleaseFinding[];
 
 ### build/index.d.ts#checksDue
 export declare function checksDue(bundles: readonly Bundle[], copies: readonly Copy[], rules: readonly CopyRule[], options: {
@@ -150,3 +214,27 @@ export declare function checksDue(bundles: readonly Bundle[], copies: readonly C
 export declare function copyStates(bundles: readonly Bundle[], copies: readonly Copy[], rules: readonly CopyRule[], options: {
   readonly at: IsoDate;
 }): CopyStates;
+
+### build/index.d.ts#kiwixFeedUrl
+export declare function kiwixFeedUrl(query?: FeedQuery): string;
+
+### build/index.d.ts#kiwixKeyOf
+export declare function kiwixKeyOf(fileOrUrl: string): {
+  readonly key: string;
+  readonly release: string;
+} | undefined;
+
+### build/index.d.ts#latestReleases
+export declare function latestReleases(entries: readonly KiwixEntry[]): ReadonlyMap<string, KiwixEntry>;
+
+### build/index.d.ts#parseKiwixFeed
+export declare function parseKiwixFeed(xml: string): readonly KiwixEntry[];
+
+### build/index.d.ts#parseMeta4
+export declare function parseMeta4(xml: string): Meta4;
+
+### build/index.d.ts#withRelease
+export declare function withRelease(bundle: Bundle, entry: KiwixEntry, meta4: Meta4): Bundle;
+
+### build/index.d.ts#zimUrlOf
+export declare function zimUrlOf(meta4: string): string;
