@@ -61,6 +61,9 @@
   },
   "dependencies": {
     "@mark1russell7/guidebook": "workspace:*",
+    "@mark1russell7/stack-placement": "^0.1.1",
+    "@mark1russell7/stack-risk": "^0.2.1",
+    "@mark1russell7/system-stack": "^0.1.6",
     "@mark1russell7/text": "^0.0.17"
   },
   "devDependencies": {

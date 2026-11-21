@@ -91,4 +91,21 @@ The decoder of character references comes from `@mark1russell7/text`.
 
 ## Where the copies go
 
-The add-on does not decide where each copy goes. That decision is a query of `@mark1russell7/stack-placement`, over the media, the places, their costs and their failure rates.
+The plan of the copies of a level is a query of `@mark1russell7/stack-placement`. Nobody picks a place or a medium by hand.
+
+```ts
+import { bytesOf, copiesLayer, planCopies } from "@mark1russell7/guidebook-library";
+
+const query = copiesLayer({ rule, bytes: bytesOf(bundles, ids), offers, places, currency: "USD" });
+const plan = planCopies(query, rule, { today: "2026-11-21" });
+plan.front.map((row) => [row.choice, row.cost, row.chance]);
+```
+
+- Each slot is one copy. The rule gives `rule.copies` slots, and `extra` gives the optional slots after them (1 by default).
+- Each candidate is one medium offer at one place. An offer with less capacity than `bytes` is not a candidate.
+- Each place and each kind of medium is a shared fragment. Thus two copies at one place share the loss of that place.
+- The chance is the chance that one copy or more can be read at the end of one period `rule.everyDays`. `keepChance` scales each yearly loss to that period.
+- The cost is the cost of a month: `price / (lifeYears × 12)` for each copy, plus the `monthly` cost of each place.
+- A plan with fewer places or fewer kinds than the rule gets the break `measure`. Thus it is not on the front.
+
+The offers, the places and their rates of loss are input data of the caller. Each rate has its source.
