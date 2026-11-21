@@ -16,6 +16,9 @@ CHECKED: build/index.d.ts#CHECKED
 CUTS: build/index.d.ts#CUTS
 CUT_STEPS: build/index.d.ts#CUT_STEPS
 GAPS: build/index.d.ts#GAPS
+MEDIA_UNITS: build/index.d.ts#MEDIA_UNITS
+MEDIUM_GAPS: build/index.d.ts#MEDIUM_GAPS
+MEDIUM_LOSSES: build/index.d.ts#MEDIUM_LOSSES
 MORE_CASES: build/index.d.ts#MORE_CASES
 NEEDS: build/index.d.ts#NEEDS
 SOURCES: build/index.d.ts#SOURCES
@@ -53,6 +56,18 @@ export declare const CUT_STEPS: readonly Step[];
 
 ### build/index.d.ts#GAPS
 export declare const GAPS: readonly Gap[];
+
+### build/index.d.ts#MEDIA_UNITS
+export declare const MEDIA_UNITS: readonly CitedUnit[];
+
+### build/index.d.ts#MEDIUM_GAPS
+export declare const MEDIUM_GAPS: readonly MediumKind[];
+
+### build/index.d.ts#MEDIUM_LOSSES
+export declare const MEDIUM_LOSSES: Readonly<Partial<Record<MediumKind, {
+  readonly yearlyLoss: number;
+  readonly unit: string;
+}>>>;
 
 ### build/index.d.ts#MORE_CASES
 export declare const MORE_CASES: readonly ["cbrne.hazardous-materials", "cbrne.radiological"];

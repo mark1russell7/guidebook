@@ -1,11 +1,11 @@
 import { fileURLToPath } from "node:url";
-import { checkSources } from "@mark1russell7/guidebook";
+import { checkSources, checkUnits } from "@mark1russell7/guidebook";
 import { bytesOf, checkCatalog, kiwixKeyOf } from "@mark1russell7/guidebook-library";
 import { checkTopics, printOrder } from "@mark1russell7/guidebook-topics";
 import { PHASES, checkSteps, planMatrix, stepsFor } from "@mark1russell7/guidebook-plans";
 import { Linter, loadConfig } from "@mark1russell7/ste-lint";
 import { describe, expect, it } from "vitest";
-import { AREAS, BUNDLES, BUNDLE_LEVELS, CASES, CUTS, MORE_CASES, GAPS, NEEDS, SOURCES, STEPS, TOPICS } from "./index.ts";
+import { AREAS, BUNDLES, BUNDLE_LEVELS, CASES, CUTS, GAPS, MEDIA_UNITS, MEDIUM_GAPS, MEDIUM_LOSSES, MORE_CASES, NEEDS, SOURCES, STEPS, TOPICS } from "./index.ts";
 
 const ALL_CASES = [...CASES, ...MORE_CASES];
 const KEYS = [...ALL_CASES, ...CUTS];
@@ -22,9 +22,23 @@ describe("the source gate", () => {
     expect(SOURCES.filter((source) => ofSteps.has(source.id) && source.license !== "us-public-domain")).toEqual([]);
   });
 
-  it("uses each source in a step or a bundle", () => {
-    const cited = new Set([...STEPS.flatMap((step) => step.sources), ...BUNDLES.map((bundle) => bundle.source)]);
+  it("uses each source in a step, a bundle or a unit", () => {
+    const cited = new Set([...STEPS.flatMap((step) => step.sources), ...BUNDLES.map((bundle) => bundle.source), ...MEDIA_UNITS.map((unit) => unit.source)]);
     expect(SOURCES.map((source) => source.id).filter((id) => !cited.has(id))).toEqual([]);
+  });
+});
+
+describe("the rates of the media", () => {
+  it("finds no finding in the units of the rates, for a commercial guidebook", () => {
+    expect(checkUnits(MEDIA_UNITS, SOURCES, { commercial: true })).toEqual([]);
+  });
+
+  it("gives each rate a unit with the same percent, and each kind a rate or a gap", () => {
+    for (const [kind, loss] of Object.entries(MEDIUM_LOSSES)) {
+      const unit = MEDIA_UNITS.find((u) => u.id === loss.unit);
+      expect(unit?.text, kind).toContain(`${(loss.yearlyLoss * 100).toFixed(2)}%`);
+    }
+    expect([...Object.keys(MEDIUM_LOSSES), ...MEDIUM_GAPS].sort()).toEqual(["flash", "hdd", "optical", "paper", "ssd"]);
   });
 });
 
