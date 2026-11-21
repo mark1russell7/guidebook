@@ -39,4 +39,7 @@ export const SOURCES: readonly Source[] = [
   { id: "energypedia", title: "energypedia", url: "https://energypedia.info/", license: "cc-by-sa-4.0", checked: CHECKED, by: "energypedia contributors" },
   federal("cdc-heart", "CDC", "About Heart Attack Symptoms, Risk, and Recovery", "https://www.cdc.gov/heart-disease/about/heart-attack.html"),
   federal("cdc-stroke", "CDC", "Signs and Symptoms of Stroke", "https://www.cdc.gov/stroke/signs-symptoms/index.html"),
+  // Backblaze gives the failure rates of the drives of its data centers. The units cite each rate as a fact, so the license permits the use.
+  { id: "backblaze-hdd-2026q2", title: "Backblaze Drive Stats for Q2 2026", url: "https://www.backblaze.com/blog/backblaze-drive-stats-for-q2-2026/", license: "all-rights-reserved", checked: CHECKED, by: "Backblaze" },
+  { id: "backblaze-ssd-2023", title: "SSD Edition: 2023 Drive Stats Mid-Year Review", url: "https://www.backblaze.com/blog/ssd-edition-2023-mid-year-drive-stats-review/", license: "all-rights-reserved", checked: CHECKED, by: "Backblaze" },
 ];
