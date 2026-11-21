@@ -5,7 +5,7 @@ name: Bundles
 
 on:
   schedule:
-    - cron: "17 6 * * 3"
+    - cron: "57 6 * * 3"
   workflow_dispatch:
 
 permissions: {}

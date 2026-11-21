@@ -73,6 +73,19 @@ function textOf(xml: string, tag: string): string | undefined {
   return match === null ? undefined : decodeReferences(match[1] ?? "").trim();
 }
 
+/** This function gives each start tag of the element `name` in the XML, with a scan that is linear in the length of the XML. */
+function tagsOf(xml: string, name: string): string[] {
+  const out: string[] = [];
+  for (let start = xml.indexOf(`<${name}`); start >= 0; start = xml.indexOf(`<${name}`, start + 1)) {
+    const end = xml.indexOf(">", start);
+    if (end < 0) break;
+    out.push(xml.slice(start, end + 1));
+  }
+  return out;
+}
+
+const OPEN_ACCESS = 'rel="http://opds-spec.org/acquisition/open-access"';
+
 function attributeOf(tag: string, name: string): string | undefined {
   const match = new RegExp(`\\s${name}="([^"]*)"`, "u").exec(tag);
   return match === null ? undefined : decodeReferences(match[1] ?? "");
@@ -86,7 +99,7 @@ export function parseKiwixFeed(xml: string): readonly KiwixEntry[] {
   const out: KiwixEntry[] = [];
   for (const part of xml.split("<entry>").slice(1)) {
     const entry = part.split("</entry>")[0] ?? "";
-    const link = /<link\s[^>]*rel="http:\/\/opds-spec\.org\/acquisition\/open-access"[^>]*>/u.exec(entry)?.[0];
+    const link = tagsOf(entry, "link ").find((tag) => tag.includes(OPEN_ACCESS));
     const meta4 = link === undefined ? undefined : attributeOf(link, "href");
     const file = meta4 === undefined ? undefined : kiwixKeyOf(meta4);
     if (link === undefined || meta4 === undefined || file === undefined) continue;
@@ -107,14 +120,17 @@ export function parseKiwixFeed(xml: string): readonly KiwixEntry[] {
 
 /** This function gives the file, the exact size and the SHA-256 of the first file of a `.meta4` file. It throws a `RangeError` when one is missing. */
 export function parseMeta4(xml: string): Meta4 {
-  const block = /<file\s+name="([^"]+)"\s*>([\s\S]*?)<\/file>/u.exec(xml);
-  const file = block?.[1];
-  const bytes = Number(textOf(block?.[2] ?? "", "size") ?? Number.NaN);
-  const sha256 = /<hash\s+type="sha-256"\s*>([0-9a-fA-F]{64})<\/hash>/u.exec(block?.[2] ?? "")?.[1]?.toLowerCase();
-  if (file === undefined || !Number.isSafeInteger(bytes) || bytes < 1 || sha256 === undefined) {
+  const tag = tagsOf(xml, "file ")[0];
+  const start = tag === undefined ? -1 : xml.indexOf(tag) + tag.length;
+  const end = start < 0 ? -1 : xml.indexOf("</file>", start);
+  const block = end < 0 ? "" : xml.slice(start, end);
+  const file = tag === undefined ? undefined : attributeOf(tag, "name");
+  const bytes = Number(textOf(block, "size") ?? Number.NaN);
+  const sha256 = /<hash\s+type="sha-256"\s*>([0-9a-fA-F]{64})<\/hash>/u.exec(block)?.[1]?.toLowerCase();
+  if (file === undefined || file === "" || !Number.isSafeInteger(bytes) || bytes < 1 || sha256 === undefined) {
     throw new RangeError("parseMeta4: the file has no file name, no size or no SHA-256.");
   }
-  return { file: decodeReferences(file), bytes, sha256 };
+  return { file, bytes, sha256 };
 }
 
 /** This function gives the newest release of each key of the entries. */
