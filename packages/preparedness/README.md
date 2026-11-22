@@ -12,7 +12,7 @@ The core and the plans add-on name no topic. This package is the first topic.
 
 | Name | What it is |
 | --- | --- |
-| `SOURCES` | The 25 sources. The 21 sources of the steps are pages of Ready.gov, CDC and FDA in the US public domain. The 4 sources of the bundles are open wikis under CC BY-SA 4.0. |
+| `SOURCES` | The 28 sources. The 21 sources of the steps are pages of Ready.gov, CDC and FDA in the US public domain. The 5 sources of the bundles are 4 open wikis and the Stack Exchange network, under CC BY-SA 4.0. The 2 sources of the media rates are reports of Backblaze. |
 | `CASE_STEPS` | The steps of the 12 cases and of the 2 more cases |
 | `CUT_STEPS` | The steps of the 6 cuts |
 | `STEPS` | All the steps |
@@ -23,9 +23,12 @@ The core and the plans add-on name no topic. This package is the first topic.
 | `NEEDS` | The need codes that the steps protect |
 | `TOPICS` | The 40 topics, as a graph of prerequisites |
 | `AREAS` | The 12 areas of the topics |
-| `BUNDLES` | The 6 offline bundles: Kiwix files of Wikipedia, Wikibooks, Appropedia and energypedia |
+| `BUNDLES` | The 16 offline bundles: Kiwix files of Wikipedia, Wikibooks, Appropedia, energypedia and 10 sites of Stack Exchange |
 | `BUNDLE_LEVELS` | The levels of the bundles: `pocket` fits on one flash drive of 32 GB, and `shelf` needs a larger drive |
 | `BUNDLES_CHECKED` | The date of the last read of the Kiwix catalog |
+| `MEDIA_UNITS` | The cited fact units of the loss rates of the media |
+| `MEDIUM_LOSSES` | The yearly loss of each kind of medium with a cited rate: hard drives and SSDs |
+| `MEDIUM_GAPS` | The kinds of medium with no cited rate: flash, optical and paper |
 
 The steps are full from `ready` to `P3`. `P4` and `P5` are an outline. Each cell of the matrix has a step or a marked gap.
 
@@ -76,7 +79,7 @@ const book = printOrder(TOPICS); // each topic comes after its prerequisites
 
 Each topic names the bundles that hold it. The cited units of the topics are not written yet.
 
-The size, the release and the address of each bundle come from the Kiwix catalog. A share-alike bundle keeps its license and its credit line.
+The size, the release and the address of each bundle come from the Kiwix catalog. A share-alike bundle keeps its license and its credit line. A use of a Stack Exchange bundle shows the network as the source, links each question, and shows and links the name of each author.
 
 ## The limits
 
