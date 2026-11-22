@@ -2,10 +2,10 @@ import { fileURLToPath } from "node:url";
 import { checkSources, checkUnits } from "@mark1russell7/guidebook";
 import { bytesOf, checkCatalog, kiwixKeyOf } from "@mark1russell7/guidebook-library";
 import { checkTopics, printOrder } from "@mark1russell7/guidebook-topics";
-import { PHASES, checkSteps, planMatrix, stepsFor } from "@mark1russell7/guidebook-plans";
+import { HORIZONS, PHASES, checkCoverage, checkSteps, planMatrix, stepsFor } from "@mark1russell7/guidebook-plans";
 import { Linter, loadConfig } from "@mark1russell7/ste-lint";
 import { describe, expect, it } from "vitest";
-import { AREAS, BUNDLES, BUNDLE_LEVELS, CASES, CUTS, GAPS, MEDIA_UNITS, MEDIUM_GAPS, MEDIUM_LOSSES, MORE_CASES, NEEDS, SOURCES, STEPS, TOPICS } from "./index.ts";
+import { AREAS, BUNDLES, BUNDLE_LEVELS, CASES, CUTS, GAPS, MEDIA_UNITS, MEDIUM_GAPS, MEDIUM_LOSSES, MORE_CASES, NEEDS, OPEN_CELLS, SOURCES, STEPS, TOPICS } from "./index.ts";
 
 const ALL_CASES = [...CASES, ...MORE_CASES];
 const KEYS = [...ALL_CASES, ...CUTS];
@@ -117,6 +117,19 @@ describe("the step gate", () => {
       const texts = stepsFor(STEPS, [key, ...CUTS], PHASES).map((step) => step.do);
       expect(texts.filter((text, index) => texts.indexOf(text) !== index), key).toEqual([]);
     }
+  });
+});
+
+describe("the coverage gate", () => {
+  const result = checkCoverage(STEPS, { on: KEYS, phases: HORIZONS, gaps: GAPS });
+
+  it("fails each open cell, and the list of open cells only gets shorter", () => {
+    expect(result.findings.map((finding) => finding.id)).toEqual(OPEN_CELLS);
+    expect(result.ok).toBe(OPEN_CELLS.length === 0);
+  });
+
+  it("gives each open cell a finding with the code no-step or marked-gap", () => {
+    expect(result.findings.filter((finding) => finding.level !== "error" || !["no-step", "marked-gap"].includes(finding.code))).toEqual([]);
   });
 });
 

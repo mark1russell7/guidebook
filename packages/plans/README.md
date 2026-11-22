@@ -43,6 +43,8 @@ Many cases stop the same service. So most steps belong to a cut, and each case t
 | `stepsFor(library, on, phases)` | The steps of the keys in the phases, by key, then by phase, then by order. A step comes one time. |
 | `planMatrix(library, gaps, on, phases)` | One row for each key, with one cell for each phase: its steps, or its marked gap |
 | `checkSteps(steps, sources, options)` | The step gate |
+| `checkCoverage(steps, options)` | The coverage gate: each key has steps in each phase |
+| `coverageOf(steps, on, phases)` | The phases with steps and the phases with no step, for each key |
 
 ```ts
 import { PHASES, checkSteps, phaseOf, stepsFor } from "@mark1russell7/guidebook-plans";
@@ -67,6 +69,22 @@ const result = checkSteps(library, sources, { phases: PHASES, on: keys, gaps });
 | `bad-order`, `duplicate-order` | The order is not an integer from 1, or two steps of a cell have the same order. |
 | `unmarked-gap` | With `on`: a cell has no step and no gap marks it. |
 | `gap-with-steps`, `duplicate-gap`, `empty-reason` | A gap marks a cell with steps, two gaps mark one cell, or a gap gives no reason. |
+
+## The coverage gate
+
+The step gate passes a cell with a marked gap. The coverage gate does not. It examines if each key of `on` has steps in each phase of `phases`. `HORIZONS` is the set of the phases from 5 minutes to 5 years: `P0` to `P5`.
+
+| Code | When |
+| --- | --- |
+| `no-step` | A cell has no step, and no gap marks it. |
+| `marked-gap` | A cell has no step, and a gap marks it. The message gives the reason of the gap. |
+
+```ts
+import { HORIZONS, checkCoverage } from "@mark1russell7/guidebook-plans";
+
+const coverage = checkCoverage(library, { on: keys, phases: HORIZONS, gaps });
+// A key with no step gives one finding for each horizon. It does not pass.
+```
 
 ## Limits
 

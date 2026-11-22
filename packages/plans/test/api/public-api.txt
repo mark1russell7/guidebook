@@ -6,8 +6,14 @@
 
 ## . (build/index.d.ts): names
 
+COVERAGE_FINDING_CODES: build/index.d.ts#COVERAGE_FINDING_CODES
 type Cell: build/index.d.ts#Cell
+type CoverageFinding: build/index.d.ts#CoverageFinding
+type CoverageFindingCode: build/index.d.ts#CoverageFindingCode
+type CoverageOptions: build/index.d.ts#CoverageOptions
 type Gap: build/index.d.ts#Gap
+HORIZONS: build/index.d.ts#HORIZONS
+type KeyCoverage: build/index.d.ts#KeyCoverage
 LADDER: build/index.d.ts#LADDER
 type Ladder: build/index.d.ts#Ladder
 PHASES: build/index.d.ts#PHASES
@@ -20,7 +26,9 @@ type Step: build/index.d.ts#Step
 type StepFinding: build/index.d.ts#StepFinding
 type StepFindingCode: build/index.d.ts#StepFindingCode
 type StepGateOptions: build/index.d.ts#StepGateOptions
+checkCoverage: build/index.d.ts#checkCoverage
 checkSteps: build/index.d.ts#checkSteps
+coverageOf: build/index.d.ts#coverageOf
 phaseIn: build/index.d.ts#phaseIn
 phaseOf: build/index.d.ts#phaseOf
 phasesOf: build/index.d.ts#phasesOf
@@ -30,6 +38,9 @@ unitsOf: build/index.d.ts#unitsOf
 
 ## Declarations
 
+### build/index.d.ts#COVERAGE_FINDING_CODES
+export declare const COVERAGE_FINDING_CODES: readonly ["no-step", "marked-gap"];
+
 ### build/index.d.ts#Cell
 interface Cell<P extends string = Phase> {
   readonly on: string;
@@ -38,11 +49,34 @@ interface Cell<P extends string = Phase> {
   readonly gap?: Gap<P>;
 }
 
+### build/index.d.ts#CoverageFinding
+type CoverageFinding = Finding<CoverageFindingCode, "cell">;
+
+### build/index.d.ts#CoverageFindingCode
+type CoverageFindingCode = (typeof COVERAGE_FINDING_CODES)[number];
+
+### build/index.d.ts#CoverageOptions
+interface CoverageOptions<P extends string> {
+  readonly on: readonly string[];
+  readonly phases: readonly P[];
+  readonly gaps?: readonly Gap<P>[];
+}
+
 ### build/index.d.ts#Gap
 interface Gap<P extends string = Phase> {
   readonly on: string;
   readonly phase: P;
   readonly why: string;
+}
+
+### build/index.d.ts#HORIZONS
+export declare const HORIZONS: readonly ["P0", "P1", "P2", "P3", "P4", "P5"];
+
+### build/index.d.ts#KeyCoverage
+interface KeyCoverage<P extends string> {
+  readonly on: string;
+  readonly covered: readonly P[];
+  readonly missing: readonly P[];
 }
 
 ### build/index.d.ts#LADDER
@@ -103,8 +137,14 @@ interface StepGateOptions<P extends string> extends UseContext {
   readonly gaps?: readonly Gap<P>[];
 }
 
+### build/index.d.ts#checkCoverage
+export declare function checkCoverage<P extends string>(steps: readonly Step<P>[], options: CoverageOptions<P>): GateResult<CoverageFinding>;
+
 ### build/index.d.ts#checkSteps
 export declare function checkSteps<P extends string>(steps: readonly Step<P>[], sources: readonly Source[], options: StepGateOptions<P>): GateResult<StepFinding>;
+
+### build/index.d.ts#coverageOf
+export declare function coverageOf<P extends string>(steps: readonly Step<P>[], on: readonly string[], phases: readonly P[]): readonly KeyCoverage<P>[];
 
 ### build/index.d.ts#phaseIn
 export declare function phaseIn<P extends string>(ladder: Ladder<P>, seconds: number, warned?: boolean): P;
