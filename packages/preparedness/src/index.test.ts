@@ -139,6 +139,8 @@ describe("the words of the steps", () => {
   const texts = [
     ...STEPS.map((step) => [step.id, step.do] as const),
     ...GAPS.map((gap) => [`${gap.on}.${gap.phase}`, gap.why] as const),
+    ...STEPS.flatMap((step) => (step.reasoning === undefined ? [] : [[`${step.id}.reasoning`, step.reasoning] as const])),
+    ...RULES.flatMap((rule) => [[`${rule.id}.when`, rule.when] as const, [`${rule.id}.then`, rule.then] as const]),
     ...MASTER.map((node) => [`chart.${node.id}`, node.text] as const),
     ...MASTER.flatMap((node) => (node.kind === "question" && node.reasoning !== undefined ? [[`chart.${node.id}.reasoning`, node.reasoning] as const] : [])),
   ];
@@ -169,6 +171,32 @@ describe("the decision chart", () => {
   });
 });
 
+// The words of a step that waits for officials. A broadcast is one input of information, never the trigger of a step.
+const DEFERENCE =
+  /\b(obey|officials?|authorit(?:y|ies)|instructions?|guidance|stay tuned|tune in|mandatory|evacuation orders?|order(?:s|ed)? an evacuation|when told|if told|(?:after|until) (?:you hear )?the all clear|wait for (?:an? )?(?:order|signal|word))\b/i;
+
+describe("the no-officials gate", () => {
+  const texts: (readonly [string, string])[] = [
+    ...STEPS.flatMap((step) => [[step.id, step.do] as const, ...(step.reasoning === undefined ? [] : [[`${step.id}.reasoning`, step.reasoning] as const])]),
+    ...RULES.flatMap((rule) => [[`${rule.id}.when`, rule.when] as const, [`${rule.id}.then`, rule.then] as const]),
+    ...MASTER.flatMap((node) => [
+      [node.id, node.text] as const,
+      ...(node.kind === "question" ? [[`${node.id}.reasoning`, node.reasoning ?? ""] as const, ...node.answers.map((answer) => [`${node.id}.answer`, answer.label] as const)] : []),
+    ]),
+  ];
+
+  it("finds no step, rule or chart text that waits for officials or obeys them", () => {
+    expect(texts.filter(([, text]) => DEFERENCE.test(text)).map(([id, text]) => `${id}: ${text}`)).toEqual([]);
+  });
+
+  it("refuses the texts of deference that it is for, and lets a broadcast be an input", () => {
+    for (const text of ["Obey the officials.", "Go back when the authorities say it is safe.", "Stay tuned.", "Follow the instructions on the radio.", "Stay until the all clear."]) {
+      expect(DEFERENCE.test(text), text).toBe(true);
+    }
+    expect(DEFERENCE.test("Listen to a battery radio for news.")).toBe(false);
+  });
+});
+
 describe("the master chart", () => {
   // The catalog of hazards in the stack model has the same 26 cases, and its cuts are the ids of CUTS.
   const cover = [...ALL_CASES, ...CUTS, ...NEEDS];
@@ -182,11 +210,6 @@ describe("the master chart", () => {
   it("asks for the state of society, with an answer for each state", () => {
     const states = MASTER.flatMap((node) => (node.kind === "question" ? node.answers.flatMap((answer) => answer.society ?? []) : []));
     expect([...new Set(states)].sort()).toEqual(["none", "partly", "works"]);
-  });
-
-  it("gives no answer that waits for officials", () => {
-    const words = MASTER.flatMap((node) => [node.text, ...(node.kind === "question" ? [node.reasoning ?? "", ...node.answers.map((answer) => answer.label)] : [])]);
-    expect(words.filter((text) => /(obey|wait for|listen to|follow).*(officials?|authorit|instructions)/i.test(text))).toEqual([]);
   });
 
   it("gives each tab of the binder a page budget, and sends the reader to each tab but the start", () => {
