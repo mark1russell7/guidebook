@@ -24,6 +24,7 @@ MORE_CASES: build/index.d.ts#MORE_CASES
 NEEDS: build/index.d.ts#NEEDS
 OPEN_CELLS: build/index.d.ts#OPEN_CELLS
 RULES: build/index.d.ts#RULES
+SOCIETY_KEY: build/index.d.ts#SOCIETY_KEY
 SOURCES: build/index.d.ts#SOURCES
 START_TAB: build/index.d.ts#START_TAB
 STEPS: build/index.d.ts#STEPS
@@ -88,6 +89,9 @@ export declare const OPEN_CELLS: readonly string[];
 
 ### build/index.d.ts#RULES
 export declare const RULES: readonly Rule[];
+
+### build/index.d.ts#SOCIETY_KEY
+export declare const SOCIETY_KEY = "society.services";
 
 ### build/index.d.ts#SOURCES
 export declare const SOURCES: readonly Source[];

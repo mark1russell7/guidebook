@@ -9,8 +9,9 @@ const ALL: readonly Phase[] = ["ready", "warned", "P0", "P1", "P2", "P3", "P4", 
 /**
  * The tabs of the printed plan, in the sequence of the binder. Each tab is for one need or one subject.
  * Each state of society is a section in each tab. The page budgets come from the print.
+ * The long-term tab has the steps of the cuts by need, not the steps of each case.
  */
-export function tabsOf(cases: readonly string[]): readonly Tab[] {
+export function tabsOf(cases: readonly string[], cuts: readonly string[]): readonly Tab[] {
   return [
     { id: "start", title: "Start: the master chart", keys: [], phases: [], pages: 2 },
     { id: "first-72h", title: "The first 72 hours", keys: cases, phases: ["P0", "P1", "P2"], pages: 4 },
@@ -21,8 +22,8 @@ export function tabsOf(cases: readonly string[]): readonly Tab[] {
     { id: "health", title: "Health and medicine", keys: ["care.local", "health.medicine", "health.medical-emergency"], phases: ALL, pages: 8 },
     { id: "food", title: "Food", keys: ["food.retail", "food.energy"], phases: ALL, pages: 6 },
     { id: "security", title: "The safety of the people", keys: ["security.civil-unrest", "security.armed-conflict"], phases: ALL, pages: 6 },
-    { id: "group", title: "Contact, the group and trade", keys: ["phone.network", "network.access", "cash.retail"], phases: ALL, pages: 6 },
-    { id: "long-term", title: "The long term: 5 weeks to 5 years", keys: cases, phases: ["P3", "P4", "P5"], pages: 10 },
+    { id: "group", title: "Contact, the group and trade", keys: ["phone.network", "network.access", "cash.retail", "society.services"], phases: ALL, pages: 6 },
+    { id: "long-term", title: "The long term: 5 weeks to 5 years", keys: cuts, phases: ["P3", "P4", "P5"], pages: 10 },
     { id: "hazards", title: "The hazards, case by case", keys: cases, phases: ALL, pages: 24 },
     { id: "appendices", title: "The appendices", keys: [], phases: [], pages: 40 },
   ];
@@ -52,7 +53,7 @@ export const MASTER: readonly ChartNode[] = [
     answers: [{ label: "Yes", next: "to-hazards" }, { label: "No", next: "place" }],
   },
   {
-    id: "place", kind: "question", text: "Is your place safe to stay in: no fire, gas, flood water, damage or bad air?", sources: [],
+    id: "place", kind: "question", text: "Is your place safe to stay in: no fire, gas, flood water, damage, bad air, violence or an illness that spreads?", sources: [],
     reasoning: "Your place holds your supplies, so stay when it is safe. Go when the place itself is the danger.",
     answers: [{ label: "Yes", next: "to-stay" }, { label: "No", next: "to-go" }],
   },
@@ -62,7 +63,7 @@ export const MASTER: readonly ChartNode[] = [
     answers: [
       { label: "Yes", next: "need", society: "works" },
       { label: "In part", next: "need", society: "partly" },
-      { label: "No", next: "to-long", society: "none" },
+      { label: "No: no help comes for 24 hours when you call, and the shops stay closed", next: "to-long", society: "none" },
     ],
   },
   {

@@ -45,4 +45,7 @@ export const CUTS = ["power.grid", "water.main", "road.local", "phone.network", 
 export const NEEDS = ["hydration.drink", "food.energy", "health.medicine", "power.electric"] as const;
 
 /** The tabs of the printed plan, in the sequence of the binder. The master chart sends the reader to them. */
-export const TABS: readonly Tab[] = tabsOf([...CASES, ...MORE_CASES]);
+/** The key of the cut of all the services of society: help, shops, care and the law. Its steps are for a society with no service. */
+export const SOCIETY_KEY = "society.services";
+
+export const TABS: readonly Tab[] = tabsOf([...CASES, ...MORE_CASES], [...CUTS, SOCIETY_KEY]);

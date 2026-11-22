@@ -5,10 +5,10 @@ import { checkTopics, printOrder } from "@mark1russell7/guidebook-topics";
 import { HORIZONS, PHASES, checkCoverage, checkSteps, planMatrix, stepsFor, chartOf, checkMasterChart, checkRules, masterChartOf } from "@mark1russell7/guidebook-plans";
 import { Linter, loadConfig } from "@mark1russell7/ste-lint";
 import { describe, expect, it } from "vitest";
-import { AREAS, BUNDLES, BUNDLE_LEVELS, CASES, CUTS, GAPS, MEDIA_UNITS, MEDIUM_GAPS, MEDIUM_LOSSES, MASTER, MORE_CASES, NEEDS, OPEN_CELLS, RULES, SOURCES, START_TAB, STEPS, TABS, TOPICS } from "./index.ts";
+import { AREAS, BUNDLES, BUNDLE_LEVELS, CASES, CUTS, GAPS, MEDIA_UNITS, MEDIUM_GAPS, MEDIUM_LOSSES, MASTER, MORE_CASES, NEEDS, OPEN_CELLS, RULES, SOCIETY_KEY, SOURCES, START_TAB, STEPS, TABS, TOPICS } from "./index.ts";
 
 const ALL_CASES = [...CASES, ...MORE_CASES];
-const KEYS = [...ALL_CASES, ...CUTS];
+const KEYS = [...ALL_CASES, ...CUTS, SOCIETY_KEY];
 const AT = "2026-11-22";
 const FULL = ["ready", "warned", "P0", "P1", "P2", "P3"] as const;
 
@@ -194,6 +194,37 @@ describe("the no-officials gate", () => {
       expect(DEFERENCE.test(text), text).toBe(true);
     }
     expect(DEFERENCE.test("Listen to a battery radio for news.")).toBe(false);
+  });
+});
+
+// The words of a service of a society that works. A step after the start that names one gives the states of society that it is for.
+const SERVICE =
+  /\b(buy|purchase|shops?|pharmac(?:y|ies|ist)|hospitals?|doctors?|911|banks?|insurers?|insurance|apply|FEMA|landlord|(?:power|gas|water|utility) company|emergency services|reception center|public shelter|charit(?:y|ies)|volunteer groups?|employer|credit cards?|debit cards?|ATM|SNAP|unemployment|professional|plumber|electrician|contractors?|poison center|ambulance|fire department)\b/i;
+const LONG = ["P3", "P4", "P5"] as const;
+
+describe("the no-society gate", () => {
+  it("gives the states of society of each step after the start that names a service of society", () => {
+    const open = STEPS.filter((step) => !["ready", "warned"].includes(step.phase) && step.society === undefined && SERVICE.test(step.do));
+    expect(open.map((step) => `${step.id}: ${step.do}`)).toEqual([]);
+  });
+
+  it("gives each key of the long-term tab steps for a society with no service, from 5 days to 5 years", () => {
+    const long = TABS.find((tab) => tab.id === "long-term")?.keys ?? [];
+    expect(long).toEqual([...CUTS, SOCIETY_KEY]);
+    const missing = long.flatMap((key) =>
+      LONG.filter((phase) => !STEPS.some((step) => step.on === key && step.phase === phase && step.society?.includes("none"))).map((phase) => `${key}/${phase}`),
+    );
+    expect(missing).toEqual([]);
+  });
+
+  it("gives each step for a society with no service its reasoning or its sources", () => {
+    const bare = STEPS.filter((step) => step.society?.includes("none") && step.reasoning === undefined && step.sources.length === 0);
+    expect(bare.map((step) => step.id)).toEqual([]);
+  });
+
+  it("gives a plan with no service no step that names a service only a working society has", () => {
+    const plan = stepsFor(STEPS, KEYS, [...LONG], { society: "none" });
+    expect(plan.filter((step) => step.society === undefined && SERVICE.test(step.do)).map((step) => step.id)).toEqual([]);
   });
 });
 
