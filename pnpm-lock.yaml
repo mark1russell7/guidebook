@@ -183,7 +183,7 @@ importers:
         version: 0.3.2(@swc/core@1.16.22)(dependency-cruiser@18.8.0)
       '@mark1russell7/conventions':
         specifier: ^0.50.4
-        version: 0.50.4
+        version: 0.50.7
       '@mark1russell7/cue':
         specifier: ^2.0.0
         version: 2.1.4
@@ -249,13 +249,13 @@ importers:
         version: link:../guidebook
       '@mark1russell7/stack-placement':
         specifier: ^0.1.1
-        version: 0.1.1
+        version: 0.1.3
       '@mark1russell7/stack-risk':
         specifier: ^0.2.1
-        version: 0.2.1
+        version: 0.2.3
       '@mark1russell7/system-stack':
         specifier: ^0.1.6
-        version: 0.1.6
+        version: 0.1.8
       '@mark1russell7/text':
         specifier: ^0.0.17
         version: 0.0.17
@@ -358,7 +358,7 @@ importers:
         version: 2.1.4
       '@mark1russell7/site-pages':
         specifier: ^0.8.1
-        version: 0.8.1
+        version: 0.8.2
       '@types/node':
         specifier: ^26.6.5
         version: 26.6.6
@@ -651,8 +651,8 @@ packages:
     resolution: {integrity: sha512-KKAYIACji5XtOpbE3fIX4D3aVd0oddyM9dU+Pk+lXpgYOh6VTVoa/0yzwDTipZ42RKp+6BG+LSkLjCe/FjCHFA==}
     engines: {node: '>=22.12'}
 
-  '@mark1russell7/conventions@0.50.4':
-    resolution: {integrity: sha512-RjRBOrWE0x87qSv8rqU0NiL+PTHTJPlyh87iONsPxHde1+ECutguWvho+p+6AnqOBF8Oai1roHwF9ELm3j3pkw==}
+  '@mark1russell7/conventions@0.50.7':
+    resolution: {integrity: sha512-1tx4G5JETCH+sccyKiNXi9rVviMEnFJS3RNpPnwI5/3Cp2DFKkyGZCKJpEh+uXJ5BSli5NrgWAV0lWTOnKWHSQ==}
     engines: {node: '>=22'}
     hasBin: true
 
@@ -758,8 +758,8 @@ packages:
       zod:
         optional: true
 
-  '@mark1russell7/site-pages@0.8.1':
-    resolution: {integrity: sha512-R8lPPyDNAbemR2YBrivAIYkXNfQgJDUhggKiUGWHNEZTKwUpLtVGvl/lqD/bkhoSh9IluAhnz5c/5R/A/uFeVA==}
+  '@mark1russell7/site-pages@0.8.2':
+    resolution: {integrity: sha512-WMErq1NBREuaBOn28Vg+7LMJSTou8+O27qNRoaRt11h+r3j9muf4jFmuwGazDOSS+Cf32gxDT1/IpXbAz2h/Vg==}
     engines: {node: '>=22'}
     hasBin: true
 
@@ -767,12 +767,12 @@ packages:
     resolution: {integrity: sha512-LANgtuaGCvL1VGbU61F51sgd3ytmqrgMN3pSihPs5EdD1xq93te7rPllmyPV9mH7QetUabHlcVVUZsf+Ju98cA==}
     engines: {node: '>=22.13'}
 
-  '@mark1russell7/stack-placement@0.1.1':
-    resolution: {integrity: sha512-hHUfpW6d+RYjJZCuqARFMc6uhWlsiP7rLdLv8ha7rn7bh3vfJFFoi3qUpyC97JBMxuOgRvdwBuMGHFE72gT9KQ==}
+  '@mark1russell7/stack-placement@0.1.3':
+    resolution: {integrity: sha512-a+yKc2M80kaiowFC26gUCYYPuNlkbuhb/nUFCI1zuWLDIwfMG/RgK9qbrytEaiL/F6NIY3CzM2uiapAj84ILgg==}
     engines: {node: '>=22'}
 
-  '@mark1russell7/stack-risk@0.2.1':
-    resolution: {integrity: sha512-4InzwWYl+GGTm2iTprvf8OxBNXvmgPVwa3PncxA20Q7faxt1bKsfs7Pr2k5YLog94eXpWNLUCiKGsyNeYXpU9w==}
+  '@mark1russell7/stack-risk@0.2.3':
+    resolution: {integrity: sha512-swUktYvDEkGJynSwT4c3/bcgY0hMlzMdQPRN4Nz6pY5pKldPCSmTnpZZdV3UnJ1+R80CoZP4qiXFYy5GIjIAJg==}
     engines: {node: '>=22'}
 
   '@mark1russell7/ste-lint@0.4.0':
@@ -788,8 +788,8 @@ packages:
     resolution: {integrity: sha512-6AP7wcNFOepPp+/w0Z/b8+a5CKjCP9nmUeGflgWtNvGlzBogVhPQMLM417gqzARTCMH4gc6WtNaIYEhkjkefYA==}
     engines: {node: '>=22'}
 
-  '@mark1russell7/system-stack@0.1.6':
-    resolution: {integrity: sha512-CcxdEO+Zxfpo5w3PRgl8+MkZUVTb2RWNImoQJrg0tdPCOZvjFlF+L/UTLtNmMfnkvy0ol1KYcCHo5PS/pgRxWA==}
+  '@mark1russell7/system-stack@0.1.8':
+    resolution: {integrity: sha512-SiCMcXJMaYEP+xb3sijfLN6Kv73rQ7HTRNoN39UCHPIhkf1NdMDr6htaYOKYZtiVqNf10wdaXeJzRK0Gh4s1Cw==}
     engines: {node: '>=22'}
 
   '@mark1russell7/template-cli@0.1.9':
@@ -2182,7 +2182,7 @@ snapshots:
 
   '@mark1russell7/api-report@0.5.18':
     dependencies:
-      '@mark1russell7/conventions': 0.50.4
+      '@mark1russell7/conventions': 0.50.7
 
   '@mark1russell7/boundaries@0.3.2(@swc/core@1.16.22)(dependency-cruiser@18.8.0)':
     optionalDependencies:
@@ -2204,7 +2204,7 @@ snapshots:
     transitivePeerDependencies:
       - zod
 
-  '@mark1russell7/conventions@0.50.4':
+  '@mark1russell7/conventions@0.50.7':
     dependencies:
       '@mark1russell7/text': 0.0.17
       yaml: 2.9.1
@@ -2256,23 +2256,23 @@ snapshots:
     optionalDependencies:
       zod: 4.6.7
 
-  '@mark1russell7/site-pages@0.8.1':
+  '@mark1russell7/site-pages@0.8.2':
     dependencies:
       '@mark1russell7/rigor-statistics': 0.2.17
 
   '@mark1russell7/sqlite@0.3.12': {}
 
-  '@mark1russell7/stack-placement@0.1.1':
+  '@mark1russell7/stack-placement@0.1.3':
     dependencies:
       '@mark1russell7/strategy-search': 0.1.2
       '@mark1russell7/strategy-space': 0.1.1
-      '@mark1russell7/system-stack': 0.1.6
+      '@mark1russell7/system-stack': 0.1.8
       zod: 4.6.7
 
-  '@mark1russell7/stack-risk@0.2.1':
+  '@mark1russell7/stack-risk@0.2.3':
     dependencies:
       '@mark1russell7/collections': 0.11.3(zod@4.6.7)
-      '@mark1russell7/system-stack': 0.1.6
+      '@mark1russell7/system-stack': 0.1.8
       zod: 4.6.7
 
   '@mark1russell7/ste-lint@0.4.0':
@@ -2290,7 +2290,7 @@ snapshots:
       '@mark1russell7/rigor-generators': 0.2.0
       '@mark1russell7/rigor-statistics': 0.2.17
 
-  '@mark1russell7/system-stack@0.1.6':
+  '@mark1russell7/system-stack@0.1.8':
     dependencies:
       '@mark1russell7/coeval': 0.38.1(zod@4.6.7)
       '@mark1russell7/collections': 0.11.3(zod@4.6.7)
