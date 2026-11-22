@@ -1,3 +1,5 @@
+@import "@mark1russell7/site-pages/scroll-cue.css";
+
 :root {
   --page: #fbfbfa;
   --panel: #f0f0ed;
@@ -5,6 +7,12 @@
   --quiet: #5c5c57;
   --line: #d6d6d0;
   --link: #1f5fbf;
+  --ok: #1e7a46;
+  --ok-bg: #dcf1e3;
+  --gap-bg: #ecebe4;
+  --bad: #b3261e;
+  --bad-bg: #fbe2df;
+  --accent: #2346c4;
   color-scheme: light dark;
 }
 
@@ -16,6 +24,12 @@
     --quiet: #a9a9a3;
     --line: #3b3b38;
     --link: #8ab8ff;
+  --ok: #7fd6a0;
+  --ok-bg: #1d3a28;
+  --gap-bg: #2c2c29;
+  --bad: #ff9a8f;
+  --bad-bg: #4a1f1b;
+  --accent: #8ea6ff;
   }
 }
 
@@ -26,6 +40,12 @@
   --quiet: #a9a9a3;
   --line: #3b3b38;
   --link: #8ab8ff;
+  --ok: #7fd6a0;
+  --ok-bg: #1d3a28;
+  --gap-bg: #2c2c29;
+  --bad: #ff9a8f;
+  --bad-bg: #4a1f1b;
+  --accent: #8ea6ff;
   color-scheme: dark;
 }
 
@@ -54,7 +74,7 @@ a {
   align-items: center;
   justify-content: space-between;
   gap: 0.5rem 1rem;
-  max-width: 44rem;
+  max-width: 60rem;
   margin: 0 auto;
   padding: 1rem;
 }
@@ -73,7 +93,7 @@ nav {
 }
 
 main {
-  max-width: 44rem;
+  max-width: 60rem;
   margin: 0 auto;
   padding: 1rem 1rem 3rem;
 }
@@ -124,4 +144,355 @@ button {
   color: var(--ink);
   font: inherit;
   cursor: pointer;
+}
+
+section {
+  margin-top: 2.5rem;
+}
+
+h3 {
+  margin: 0 0 0.5rem;
+  font-size: 1.05rem;
+}
+
+.code {
+  display: inline-block;
+  min-width: 3.2rem;
+  padding: 0 0.4rem;
+  border-radius: 0.3rem;
+  background: var(--panel);
+  font: 600 0.85rem/1.6 ui-monospace, monospace;
+  text-align: center;
+}
+
+/* The facts at a glance */
+
+.facts {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(8.5rem, 1fr));
+  gap: 0.6rem;
+  margin: 1.5rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.facts li {
+  display: flex;
+  flex-direction: column;
+  padding: 0.7rem 0.9rem;
+  border: 1px solid var(--line);
+  border-radius: 0.6rem;
+  background: var(--panel);
+}
+
+.facts strong {
+  font-size: 1.5rem;
+  line-height: 1.2;
+}
+
+.facts span {
+  color: var(--quiet);
+  font-size: 0.9rem;
+}
+
+.facts .pass {
+  border-color: var(--ok);
+  background: var(--ok-bg);
+}
+
+.facts .pass strong {
+  color: var(--ok);
+}
+
+.facts .fail {
+  border-color: var(--bad);
+  background: var(--bad-bg);
+}
+
+.facts .fail strong {
+  color: var(--bad);
+}
+
+/* The plan builder */
+
+.controls {
+  display: grid;
+  gap: 1rem;
+  padding: 1rem;
+  border: 1px solid var(--line);
+  border-radius: 0.6rem;
+  background: var(--panel);
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  font-weight: 600;
+}
+
+select {
+  max-width: 24rem;
+  padding: 0.5rem;
+  border: 1px solid var(--line);
+  border-radius: 0.4rem;
+  background: var(--page);
+  color: var(--ink);
+  font: inherit;
+  font-weight: 400;
+}
+
+.chips {
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.chips legend {
+  margin-bottom: 0.3rem;
+  padding: 0;
+  font-weight: 600;
+}
+
+.chips div {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.chip,
+.segmented button {
+  min-height: 2.25rem;
+  padding: 0.3rem 0.8rem;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--page);
+  color: var(--ink);
+  font: inherit;
+  font-size: 0.92rem;
+  cursor: pointer;
+}
+
+.chip[aria-pressed="true"],
+.segmented button[aria-pressed="true"] {
+  border-color: var(--accent);
+  background: var(--accent);
+  color: var(--page);
+}
+
+.chip:focus-visible,
+.segmented button:focus-visible,
+.cell:focus-visible {
+  outline: 2px solid var(--link);
+  outline-offset: 2px;
+}
+
+.count {
+  color: var(--quiet);
+}
+
+.plan {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.phase {
+  margin-bottom: 1.25rem;
+  padding-left: 0.9rem;
+  border-left: 3px solid var(--accent);
+}
+
+.step-list {
+  margin: 0;
+  padding-left: 1.4rem;
+}
+
+.step {
+  margin-bottom: 0.6rem;
+}
+
+.step .do {
+  margin: 0;
+}
+
+.meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem 0.6rem;
+  margin: 0.15rem 0 0;
+  font-size: 0.85rem;
+}
+
+.tag {
+  padding: 0 0.45rem;
+  border-radius: 0.3rem;
+  background: var(--panel);
+  color: var(--quiet);
+}
+
+.need {
+  font-family: ui-monospace, monospace;
+}
+
+.gap-note {
+  margin: 0.3rem 0;
+  color: var(--quiet);
+  font-style: italic;
+}
+
+/* The matrix */
+
+.matrix-tools {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.segmented {
+  display: flex;
+  gap: 0.3rem;
+}
+
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem 1rem;
+  margin: 0;
+  padding: 0;
+  color: var(--quiet);
+  font-size: 0.88rem;
+  list-style: none;
+}
+
+.legend li {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.swatch {
+  width: 0.9rem;
+  height: 0.9rem;
+  border-radius: 0.2rem;
+}
+
+.matrix-wrap {
+  --scroll-cue-bg: var(--page);
+  border: 1px solid var(--line);
+  border-radius: 0.6rem;
+}
+
+.matrix {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+.matrix th,
+.matrix td {
+  padding: 0.2rem;
+  border-bottom: 1px solid var(--line);
+  text-align: center;
+}
+
+.matrix thead th {
+  font-family: ui-monospace, monospace;
+}
+
+.matrix tbody th {
+  position: sticky;
+  left: 0;
+  min-width: 9rem;
+  padding: 0.2rem 0.6rem;
+  background: var(--page);
+  font-weight: 500;
+  text-align: left;
+  white-space: nowrap;
+}
+
+.matrix .corner {
+  position: sticky;
+  left: 0;
+  background: var(--page);
+  text-align: left;
+}
+
+.matrix .first-cut > * {
+  border-top: 2px solid var(--quiet);
+}
+
+.cell {
+  width: 100%;
+  min-width: 2.4rem;
+  min-height: 2.25rem;
+  border: 2px solid transparent;
+  border-radius: 0.35rem;
+  font: 600 0.9rem/1 ui-monospace, monospace;
+  cursor: pointer;
+}
+
+.steps.swatch,
+.cell.steps {
+  background: var(--ok-bg);
+  color: var(--ok);
+}
+
+.gap.swatch,
+.cell.gap {
+  background: var(--gap-bg);
+  background-image: repeating-linear-gradient(135deg, transparent 0 4px, var(--line) 4px 6px);
+  color: var(--quiet);
+}
+
+.empty.swatch,
+.cell.empty {
+  background: var(--bad-bg);
+  color: var(--bad);
+}
+
+.cell[aria-pressed="true"] {
+  border-color: var(--ink);
+}
+
+.cell-detail {
+  margin-top: 1rem;
+  padding: 1rem;
+  border: 1px solid var(--line);
+  border-radius: 0.6rem;
+  background: var(--panel);
+}
+
+/* The gates */
+
+.verdict {
+  padding: 0.7rem 0.9rem;
+  border-radius: 0.6rem;
+  font-weight: 600;
+}
+
+.verdict.pass {
+  background: var(--ok-bg);
+  color: var(--ok);
+}
+
+.verdict.fail {
+  background: var(--bad-bg);
+  color: var(--bad);
+}
+
+.findings .error {
+  color: var(--bad);
+}
+
+@media (max-width: 40rem) {
+  .matrix tbody th {
+    min-width: 6.5rem;
+    max-width: 8rem;
+    white-space: normal;
+    line-height: 1.25;
+  }
 }
