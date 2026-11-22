@@ -5,7 +5,7 @@ import { checkTopics, printOrder } from "@mark1russell7/guidebook-topics";
 import { HORIZONS, PHASES, checkCoverage, checkSteps, planMatrix, stepsFor, chartOf, checkMasterGraph, checkRules, masterChartOf } from "@mark1russell7/guidebook-plans";
 import { Linter, loadConfig } from "@mark1russell7/ste-lint";
 import { describe, expect, it } from "vitest";
-import { AREAS, BUNDLES, CATALOG_TAB, GRAPH, HAZARDS, BUNDLE_LEVELS, CASES, CUTS, GAPS, MEDIA_UNITS, MEDIUM_GAPS, MEDIUM_LOSSES, MASTER, MORE_CASES, NEEDS, OPEN_CELLS, RULES, SOCIETY_KEY, SOURCES, START_TAB, STEPS, TABS, TOPICS } from "./index.ts";
+import { AREAS, BUNDLES, CATALOG_TAB, GRAPH, HAZARDS, BUNDLE_LEVELS, CASES, CUTS, GAPS, MEDIA_UNITS, MEDIUM_GAPS, MEDIUM_LIVES, MEDIUM_LOSSES, MASTER, MORE_CASES, NEEDS, OPEN_CELLS, RULES, SOCIETY_KEY, SOURCES, START_TAB, STEPS, TABS, TOPICS } from "./index.ts";
 
 const ALL_CASES = [...CASES, ...MORE_CASES];
 const KEYS = [...ALL_CASES, ...CUTS, SOCIETY_KEY];
@@ -38,7 +38,13 @@ describe("the rates of the media", () => {
       const unit = MEDIA_UNITS.find((u) => u.id === loss.unit);
       expect(unit?.text, kind).toContain(`${(loss.yearlyLoss * 100).toFixed(2)}%`);
     }
-    expect([...Object.keys(MEDIUM_LOSSES), ...MEDIUM_GAPS].sort()).toEqual(["flash", "hdd", "optical", "paper", "ssd"]);
+    for (const [id, entry] of Object.entries(MEDIUM_LIVES)) {
+      const unit = MEDIA_UNITS.find((u) => u.id === entry.unit);
+      expect(unit?.text, id).toContain(`more than ${entry.life.years} years`);
+      expect(entry.life.quantile, id).toBe(0.05);
+    }
+    const lives = Object.values(MEDIUM_LIVES).map((entry) => entry.kind);
+    expect([...new Set([...Object.keys(MEDIUM_LOSSES), ...lives, ...MEDIUM_GAPS])].sort()).toEqual(["flash", "hdd", "optical", "paper", "ssd"]);
   });
 });
 

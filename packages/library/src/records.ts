@@ -30,6 +30,19 @@ export interface Bundle {
   readonly url?: string;
 }
 
+/**
+ * The life of a medium at a quantile, for example the time to 5% failure of a disc.
+ * A medium younger than `years` fails with a chance of `quantile` or less. Past `years`, the life gives no bound.
+ */
+export interface MediumLife {
+  /** The age in years at which the fraction `quantile` of the media fails. */
+  readonly years: number;
+  /** The fraction from 0 to 1 of the media that fails by the age `years`, for example 0.05. */
+  readonly quantile: number;
+  /** The source of the life, with its conditions, for example a temperature and a humidity. */
+  readonly source: string;
+}
+
 /** A copy of a bundle on one medium. Where each copy goes is a query of the caller, for example of `stack-placement`. */
 export interface Copy {
   /** The `id` of the bundle. */
@@ -45,6 +58,10 @@ export interface Copy {
   readonly version?: string;
   /** The SHA-256 that the last check read from the copy. */
   readonly sha256?: string;
+  /** The life of the medium. A copy older than the life does not count. */
+  readonly life?: MediumLife;
+  /** The date on which the medium was written. A copy with a `life` needs it, because its age comes from it. */
+  readonly written?: IsoDate;
 }
 
 /** The copies that a level needs. */

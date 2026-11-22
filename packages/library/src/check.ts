@@ -21,6 +21,7 @@ export const LIBRARY_CODES = [
   "bad-date",
   "checked-in-future",
   "duplicate-copy",
+  "bad-life",
 ] as const;
 
 /** A code of a finding of the catalog gate. */
@@ -100,6 +101,15 @@ export function checkCopies(copies: readonly Copy[], bundles: readonly Bundle[],
     const checked = timeOf(copy.checked);
     if (checked === undefined) error("bad-date", `The copy "${id}" has the check date "${copy.checked}". It needs a date YYYY-MM-DD.`);
     else if (at !== undefined && checked > at) error("checked-in-future", `The copy "${id}" has a check date after the date of the check.`);
+    if (copy.written !== undefined) {
+      const written = timeOf(copy.written);
+      if (written === undefined) error("bad-date", `The copy "${id}" has the date of writing "${copy.written}". It needs a date YYYY-MM-DD.`);
+      else if (at !== undefined && written > at) error("checked-in-future", `The copy "${id}" has a date of writing after the date of the check.`);
+    }
+    const life = copy.life;
+    if (life !== undefined && !(life.years > 0 && life.quantile >= 0 && life.quantile <= 1 && life.source.trim() !== "")) {
+      error("bad-life", `The copy "${id}" has a life that is not more than 0 years, a quantile out of 0 to 1, or no source.`);
+    }
   }
   return out;
 }

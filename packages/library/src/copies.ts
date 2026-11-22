@@ -6,7 +6,7 @@ import { addDays } from "./date.ts";
 import type { Bundle, Copy, CopyRule, MediumKind } from "./records.ts";
 
 /** The codes of the copy gaps. */
-export const GAP_CODES = ["few-copies", "few-kinds", "few-places", "no-rule", "check-due", "bad-hash", "old-version"] as const;
+export const GAP_CODES = ["few-copies", "few-kinds", "few-places", "no-rule", "check-due", "bad-hash", "old-version", "past-life", "no-written-date"] as const;
 
 /** A code of a copy gap. */
 export type GapCode = (typeof GAP_CODES)[number];
@@ -20,8 +20,9 @@ export type GapFinding = Finding<GapCode, "bundle" | "copy">;
  * - `old`: as `good`, but the copy holds an earlier release of the bundle. It counts as a good copy.
  * - `due`: the last check is older than the days of the rule. The copy does not count until a new check.
  * - `bad`: the hash of the copy does not agree with the hash of the same release. Replace the copy.
+ * - `aged`: the copy has a `life`, and it is older than the life, or its `written` date is not a date. Write a new copy.
  */
-export type CopyStatus = "good" | "old" | "due" | "bad";
+export type CopyStatus = "good" | "old" | "due" | "bad" | "aged";
 
 /** The state of the copies of one bundle. */
 export interface CopyState {
@@ -49,6 +50,10 @@ export interface CopyStates {
 function statusOf(copy: Copy, bundle: Bundle, rule: CopyRule | undefined, at: number): CopyStatus {
   const sameRelease = bundle.version === undefined || copy.version === undefined || bundle.version === copy.version;
   if (sameRelease && bundle.sha256 !== undefined && copy.sha256 !== undefined && bundle.sha256 !== copy.sha256) return "bad";
+  if (copy.life !== undefined) {
+    const written = copy.written === undefined ? undefined : timeOf(copy.written);
+    if (written === undefined || (at - written) / DAY_MS > copy.life.years * 365.25) return "aged";
+  }
   const checked = timeOf(copy.checked);
   if (checked === undefined) return "due";
   if (rule !== undefined && (at - checked) / DAY_MS > rule.everyDays) return "due";
@@ -58,7 +63,7 @@ function statusOf(copy: Copy, bundle: Bundle, rule: CopyRule | undefined, at: nu
 /**
  * This function gives the state of the copies of each bundle at the date `at`, and the gaps.
  * A bundle with fewer good copies, kinds or places than the rule of its level gets an error.
- * A copy with a check that is due, a bad hash or an earlier release gets a warning.
+ * A copy with a check that is due, a bad hash, an earlier release or an age past its life gets a warning.
  */
 export function copyStates(bundles: readonly Bundle[], copies: readonly Copy[], rules: readonly CopyRule[], options: { readonly at: IsoDate }): CopyStates {
   const at = timeOf(options.at);
@@ -92,6 +97,14 @@ export function copyStates(bundles: readonly Bundle[], copies: readonly Copy[], 
       const id = `${copy.bundle}@${copy.medium}`;
       if (status === "due") findings.push({ level: "warning", code: "check-due", record: "copy", id, message: `Read the copy "${id}" against its hash. Its last check was on ${copy.checked}.` });
       if (status === "bad") findings.push({ level: "warning", code: "bad-hash", record: "copy", id, message: `The copy "${id}" does not agree with the hash of its release. Replace it.` });
+      if (status === "aged") {
+        const life = copy.life;
+        const code: GapCode = copy.written === undefined || timeOf(copy.written) === undefined ? "no-written-date" : "past-life";
+        const message = code === "past-life"
+          ? `The copy "${id}" was written on ${copy.written ?? ""}. It is older than the life of its medium, ${life?.years ?? 0} years. Write a new copy.`
+          : `The copy "${id}" has a life and no date of writing. Add the field "written", or write a new copy.`;
+        findings.push({ level: "warning", code, record: "copy", id, message });
+      }
       if (status === "old") findings.push({ level: "warning", code: "old-version", record: "copy", id, message: `The copy "${id}" holds the release "${copy.version ?? ""}". The catalog has "${bundle.version ?? ""}".` });
     }
     const ok = rule !== undefined && good.length >= rule.copies && kinds.length >= rule.kinds && places.length >= rule.places;

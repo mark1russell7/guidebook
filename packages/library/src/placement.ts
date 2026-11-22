@@ -9,7 +9,7 @@ import type { RiskLayer } from "@mark1russell7/stack-risk";
 import { riskAddOn } from "@mark1russell7/stack-risk/add-on";
 import type { Part, Stack } from "@mark1russell7/system-stack";
 import { readLayer } from "@mark1russell7/system-stack";
-import type { CopyRule, MediumKind } from "./records.ts";
+import type { CopyRule, MediumKind, MediumLife } from "./records.ts";
 
 /** A medium that a copy can go on, with its price and its rate of loss. The offers are input data of the caller. */
 export interface MediumOffer {
@@ -25,6 +25,11 @@ export interface MediumOffer {
   readonly yearlyLoss: number;
   /** The source of `yearlyLoss`. */
   readonly source: string;
+  /**
+   * The life of the medium at a quantile. A medium that ages fails more frequently when it is old, so a yearly rate is not a safe bound.
+   * With a life, the chance of a copy is the smaller of the two. A plan that keeps a medium past its life gets the chance 0.
+   */
+  readonly life?: MediumLife;
 }
 
 /** A place that holds copies, with its rate of loss. The places are input data of the caller. */
@@ -75,6 +80,23 @@ export const libraryPartOf = (level: string): string => `library:${level}`;
 const placePartOf = (place: string): string => `place:${place}`;
 const kindPartOf = (kind: MediumKind): string => `medium:${kind}`;
 
+/**
+ * This function gives the chance that a medium with a life still works at the end of each period, from 0 to 1.
+ * The medium is replaced after `useYears`. For each period that ends by the age `life.years`, the chance is `1 - life.quantile` or more.
+ * The reason: the chance of the period is S(end) / S(start), and S(end) is S(life) or more. When `useYears` is more than `life.years`, the chance is 0.
+ */
+export function lifeChance(life: MediumLife, useYears: number): number {
+  if (!(life.quantile >= 0 && life.quantile <= 1) || !(life.years > 0) || !(useYears > 0)) {
+    throw new RangeError(`lifeChance: the life ${life.years} years at ${life.quantile}, or the use ${useYears} years, is out of range.`);
+  }
+  return useYears <= life.years ? 1 - life.quantile : 0;
+}
+
+const offerChance = (offer: MediumOffer, days: number): number => {
+  const rate = keepChance(offer.yearlyLoss, days);
+  return offer.life === undefined ? rate : Math.min(rate, lifeChance(offer.life, offer.lifeYears));
+};
+
 /** This function gives the chance that a thing with a yearly loss still works after `days` days. */
 export function keepChance(yearlyLoss: number, days: number): number {
   if (!(yearlyLoss >= 0 && yearlyLoss <= 1) || !(days >= 0)) throw new RangeError(`keepChance: the loss ${yearlyLoss} or the days ${days} is out of range.`);
@@ -121,7 +143,7 @@ export function copiesLayer(input: CopiesInput): CopiesQuery {
         cost: offer.price / (offer.lifeYears * 12),
         uses: [placePartOf(place.id), kindPartOf(offer.kind)],
         source: offer.id,
-        stack: fragment({ id: slot, kind: "copy", needs: [placePartOf(place.id), kindPartOf(offer.kind)] }, keepChance(offer.yearlyLoss, days), offer.source),
+        stack: fragment({ id: slot, kind: "copy", needs: [placePartOf(place.id), kindPartOf(offer.kind)] }, offerChance(offer, days), offer.life === undefined ? offer.source : `${offer.source} ${offer.life.source}`),
       })),
     );
   const part = libraryPartOf(rule.level);

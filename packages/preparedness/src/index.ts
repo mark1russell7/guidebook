@@ -14,7 +14,7 @@ export { RULES } from "./data/rules.ts";
 export { CATALOG_TAB, MASTER, START_TAB } from "./data/chart.ts";
 export { AREAS, TOPICS } from "./data/topics.ts";
 export { BUNDLES, BUNDLES_CHECKED, BUNDLE_LEVELS } from "./data/bundles.ts";
-export { MEDIA_UNITS, MEDIUM_GAPS, MEDIUM_LOSSES } from "./data/media.ts";
+export { MEDIA_UNITS, MEDIUM_GAPS, MEDIUM_LIVES, MEDIUM_LOSSES } from "./data/media.ts";
 
 /**
  * The 12 cases of v1. A case is a kind of event. The codes come from the event taxonomy of the alerts project.

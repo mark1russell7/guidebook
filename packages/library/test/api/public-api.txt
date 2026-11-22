@@ -30,6 +30,7 @@ type LibraryCode: build/index.d.ts#LibraryCode
 type LibraryFinding: build/index.d.ts#LibraryFinding
 MEDIUM_KINDS: build/index.d.ts#MEDIUM_KINDS
 type MediumKind: build/index.d.ts#MediumKind
+type MediumLife: build/index.d.ts#MediumLife
 type MediumOffer: build/index.d.ts#MediumOffer
 type Meta4: build/index.d.ts#Meta4
 type PlanCopiesOptions: build/index.d.ts#PlanCopiesOptions
@@ -49,6 +50,7 @@ kiwixFeedUrl: build/index.d.ts#kiwixFeedUrl
 kiwixKeyOf: build/index.d.ts#kiwixKeyOf
 latestReleases: build/index.d.ts#latestReleases
 libraryPartOf: build/index.d.ts#libraryPartOf
+lifeChance: build/index.d.ts#lifeChance
 parseKiwixFeed: build/index.d.ts#parseKiwixFeed
 parseMeta4: build/index.d.ts#parseMeta4
 planCopies: build/index.d.ts#planCopies
@@ -111,6 +113,8 @@ interface Copy {
   readonly checked: IsoDate;
   readonly version?: string;
   readonly sha256?: string;
+  readonly life?: MediumLife;
+  readonly written?: IsoDate;
 }
 
 ### build/index.d.ts#CopyPlace
@@ -152,7 +156,7 @@ interface CopyStates {
 }
 
 ### build/index.d.ts#CopyStatus
-type CopyStatus = "good" | "old" | "due" | "bad";
+type CopyStatus = "good" | "old" | "due" | "bad" | "aged";
 
 ### build/index.d.ts#DueCheck
 interface DueCheck {
@@ -171,7 +175,7 @@ interface FeedQuery {
 }
 
 ### build/index.d.ts#GAP_CODES
-export declare const GAP_CODES: readonly ["few-copies", "few-kinds", "few-places", "no-rule", "check-due", "bad-hash", "old-version"];
+export declare const GAP_CODES: readonly ["few-copies", "few-kinds", "few-places", "no-rule", "check-due", "bad-hash", "old-version", "past-life", "no-written-date"];
 
 ### build/index.d.ts#GapCode
 type GapCode = (typeof GAP_CODES)[number];
@@ -202,7 +206,7 @@ interface KiwixEntry {
 }
 
 ### build/index.d.ts#LIBRARY_CODES
-export declare const LIBRARY_CODES: readonly ["duplicate-id", "empty-title", "bad-bytes", "bad-sha256", "bad-url", "unknown-license", "missing-source", "unknown-level", "use-refused", "missing-bundle", "bad-kind", "bad-date", "checked-in-future", "duplicate-copy"];
+export declare const LIBRARY_CODES: readonly ["duplicate-id", "empty-title", "bad-bytes", "bad-sha256", "bad-url", "unknown-license", "missing-source", "unknown-level", "use-refused", "missing-bundle", "bad-kind", "bad-date", "checked-in-future", "duplicate-copy", "bad-life"];
 
 ### build/index.d.ts#LibraryCode
 type LibraryCode = (typeof LIBRARY_CODES)[number];
@@ -216,6 +220,13 @@ export declare const MEDIUM_KINDS: readonly ["flash", "ssd", "hdd", "optical", "
 ### build/index.d.ts#MediumKind
 type MediumKind = (typeof MEDIUM_KINDS)[number];
 
+### build/index.d.ts#MediumLife
+interface MediumLife {
+  readonly years: number;
+  readonly quantile: number;
+  readonly source: string;
+}
+
 ### build/index.d.ts#MediumOffer
 interface MediumOffer {
   readonly id: string;
@@ -225,6 +236,7 @@ interface MediumOffer {
   readonly lifeYears: number;
   readonly yearlyLoss: number;
   readonly source: string;
+  readonly life?: MediumLife;
 }
 
 ### build/index.d.ts#Meta4
@@ -299,6 +311,9 @@ export declare function latestReleases(entries: readonly KiwixEntry[]): Readonly
 
 ### build/index.d.ts#libraryPartOf
 export declare const libraryPartOf: (level: string) => string;
+
+### build/index.d.ts#lifeChance
+export declare function lifeChance(life: MediumLife, useYears: number): number;
 
 ### build/index.d.ts#parseKiwixFeed
 export declare function parseKiwixFeed(xml: string): readonly KiwixEntry[];
