@@ -64,11 +64,14 @@ Each part of `SUPPLY_PARTS` has its steps.
 
 Each step is one instruction in Simplified Technical English, in the words of the guidebook. It is a summary of its sources, not a quote. Each step cites one or more pages that tell the action.
 
+No step waits for officials. The trigger of a step is a fact at the place of the reader: water, fire, smoke, a cloud, a dose rate. A broadcast is one input of these facts. A step that changes the trigger of its source gives its `reasoning`.
+
 The test of the package applies these gates:
 
 - The source gate of the core, on the sources.
 - The step gate of the plans add-on, over all the keys and all the phases, with no unmarked gap.
-- The rules of `ste-lint` on the text of each step and the reason of each gap.
+- The rules of `ste-lint` on the texts of the steps, the gaps, the rules and the chart.
+- The no-officials gate: no step, rule or chart text tells the reader to obey, wait for or follow officials.
 - No plan of a case gives the same text two times.
 
 ## The topics and the bundles
