@@ -62,7 +62,9 @@ const result = checkSteps(library, sources, { phases: PHASES, on: keys, gaps });
 | --- | --- |
 | `duplicate-id` | Two steps have the same `id`. |
 | `empty-text` | A step has no text `do`. |
-| `no-source` | A step cites no source. |
+| `no-source` | A step cites no source and gives no `reasoning`. |
+| `number-without-source` | A step with a `reasoning` and no source has a number in its text. A dose, a time or a safety limit needs a source. |
+| `empty-reasoning` | A step has an empty `reasoning`. |
 | `missing-source` | A step cites a source that is not in the list. |
 | `use-refused` | The license of a source refuses the use. An example is an invented source outside a fixture. |
 | `unknown-phase` | A step or a gap has a phase that is not in `phases`. |
@@ -116,6 +118,45 @@ import { chartOf, checkRules } from "@mark1russell7/guidebook-plans";
 
 const gate = checkRules(rules, library, sources, { on: keys });
 const chart = chartOf(rules); // The questions, each with its rules in the sequence of their rank.
+```
+
+## Strategy steps and the state of society
+
+A step that no source tells can give its `reasoning` from first principles instead of a source. The reasoning goes with the step into the print. A step with a number in its text still cites a source.
+
+A step can name the states of society that it is for: `works`, `partly` or `none`. A step with no `society` is for each state. `stepsFor(library, keys, phases, { society: "none" })` gives the steps of one state.
+
+## The master chart
+
+The master chart is one chart for any disaster. A reader starts at a signal, answers a few questions and goes to a tab. A tab is a section of a printed plan: the steps of its keys in its phases, with an optional page budget `pages`. Each tab is for one need or one subject. The state of society is a section in each tab.
+
+| Kind of node | Fields |
+| --- | --- |
+| `signal` | A thing that a reader sees or hears, and the `next` node. |
+| `question` | A question, two or more `answers` (each with a label, the next node and an optional state of society), and its sources. |
+| `goto` | An instruction that sends the reader to a `tab`. |
+
+The chart gate `checkMasterChart` gives these codes:
+
+| Code | When |
+| --- | --- |
+| `duplicate-id` | Two nodes or two tabs have the same `id`. |
+| `unknown-node`, `unknown-tab`, `unknown-key` | A node goes to an unknown node or tab, or a tab names an unknown key. |
+| `few-answers` | A question has fewer than 2 answers. |
+| `no-signal`, `unreachable` | The chart has no signal, or no signal reaches a node. |
+| `cycle` | A node is in a cycle, so its path has no end. |
+| `too-deep` | A path from a signal has more questions than `maxQuestions` (default 3). |
+| `too-many-nodes`, `too-many-ends` | The chart has more nodes than `maxNodes`, or more ends than `maxEnds`. |
+| `tab-without-steps` | A tab with keys has no step in its keys and phases. |
+| `unused-tab` | No path goes to a tab. |
+| `uncovered-key` | No tab that the chart reaches holds a key of `cover`. Give the hazard codes of a catalog as `cover`, so each hazard has a route. |
+| `no-source`, `unknown-source` | A question cites no source and gives no `reasoning`, or a node cites an unknown source. |
+
+```ts
+import { checkMasterChart, masterChartOf } from "@mark1russell7/guidebook-plans";
+
+const gate = checkMasterChart(nodes, tabs, library, sources, { on: keys, cover: hazards, maxNodes: 20, maxEnds: 13 });
+const chart = masterChartOf(nodes, tabs); // The nodes by layer, the edges with their labels and the tabs that the chart reaches.
 ```
 
 ## Limits

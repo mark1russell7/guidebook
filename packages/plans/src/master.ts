@@ -1,0 +1,281 @@
+// The master chart: one chart for any disaster, as data. A reader starts at a signal, answers a few questions and goes to a tab.
+// A tab is a section of a printed plan: a set of keys and phases. The print gives each tab its page.
+
+import { stronglyConnectedComponents } from "@mark1russell7/collections/graph";
+import { resultOf } from "@mark1russell7/guidebook";
+import type { Finding, GateResult, Source } from "@mark1russell7/guidebook";
+import type { Phase } from "./ladder.ts";
+import type { Step } from "./steps.ts";
+
+/** The states of society after an event, from a society that works to a society that does not work. */
+export const SOCIETY_STATES = ["works", "partly", "none"] as const;
+
+/** A state of society: the emergency services, the shops, the grid and the law work, work in part or do not work. */
+export type Society = (typeof SOCIETY_STATES)[number];
+
+/** The words of each state of society, for a chart. */
+export const SOCIETY_TITLES: Readonly<Record<Society, string>> = {
+  works: "Society works",
+  partly: "Society works in part",
+  none: "Society does not work",
+};
+
+/**
+ * A tab of a printed plan: the steps of its keys in its phases.
+ * Each state of society is a section in the tab, so a tab is for one need or one subject, not for one state.
+ */
+export interface Tab<P extends string = Phase> {
+  readonly id: string;
+  readonly title: string;
+  /** The keys of the tab: cases, cuts or needs. A tab of reference text or of a chart has no keys. */
+  readonly keys: readonly string[];
+  readonly phases: readonly P[];
+  /** The most pages that the print of the tab can use. */
+  readonly pages?: number;
+}
+
+/** An answer to a question of the chart. */
+export interface ChartAnswer {
+  /** The words of the answer, for a chart. */
+  readonly label: string;
+  /** The id of the next node. */
+  readonly next: string;
+  /** The state of society that the answer tells, if any. */
+  readonly society?: Society;
+}
+
+/** A start of the chart: a thing that a reader sees or hears. */
+export interface SignalNode {
+  readonly id: string;
+  readonly kind: "signal";
+  readonly text: string;
+  readonly next: string;
+  readonly sources?: readonly string[];
+}
+
+/** A question of the chart, with two or more answers. */
+export interface QuestionNode {
+  readonly id: string;
+  readonly kind: "question";
+  readonly text: string;
+  readonly answers: readonly ChartAnswer[];
+  /** The ids of the sources that tell the question and its answers. */
+  readonly sources: readonly string[];
+  /** The reasoning of the question from first principles, for a question that no source tells. */
+  readonly reasoning?: string;
+}
+
+/** An end of the chart: an instruction that sends the reader to a tab. */
+export interface GotoNode {
+  readonly id: string;
+  readonly kind: "goto";
+  readonly text: string;
+  readonly tab: string;
+  readonly sources?: readonly string[];
+}
+
+/** A node of the master chart. */
+export type ChartNode = SignalNode | QuestionNode | GotoNode;
+
+/** The codes of the findings of the chart gate. */
+export const MASTER_FINDING_CODES = [
+  "duplicate-id",
+  "unknown-node",
+  "unknown-tab",
+  "unknown-key",
+  "few-answers",
+  "no-signal",
+  "unreachable",
+  "cycle",
+  "too-deep",
+  "too-many-nodes",
+  "too-many-ends",
+  "tab-without-steps",
+  "unused-tab",
+  "uncovered-key",
+  "no-source",
+  "unknown-source",
+] as const;
+
+/** A code of a finding of the chart gate. */
+export type MasterFindingCode = (typeof MASTER_FINDING_CODES)[number];
+
+/** A finding of the chart gate. */
+export type MasterFinding = Finding<MasterFindingCode, "chart">;
+
+/** The options of the chart gate. */
+export interface MasterGateOptions {
+  /** The known keys: the cases, the cuts and the needs. */
+  readonly on: readonly string[];
+  /** The keys that a tab of the chart must hold. No `cover` means no key. */
+  readonly cover?: readonly string[];
+  /** The most questions on a path from a signal to a tab. The default is 3. */
+  readonly maxQuestions?: number;
+  /** The most nodes that the print of the chart can hold. No `maxNodes` means no limit. */
+  readonly maxNodes?: number;
+  /** The most ends (nodes of the kind `goto`) that the print of the chart can hold. No `maxEnds` means no limit. */
+  readonly maxEnds?: number;
+}
+
+/** The ids of the nodes that come after a node. */
+function nextOf(node: ChartNode): readonly string[] {
+  if (node.kind === "signal") return [node.next];
+  if (node.kind === "question") return node.answers.map((answer) => answer.next);
+  return [];
+}
+
+/** The nodes in a cycle. A chart with a cycle has no end on that path. */
+function cycleNodes(nodes: readonly ChartNode[], byId: ReadonlyMap<string, ChartNode>): Set<string> {
+  const next = (id: string): readonly string[] => {
+    const node = byId.get(id);
+    return node === undefined ? [] : nextOf(node).filter((to) => byId.has(to));
+  };
+  const out = new Set<string>();
+  for (const group of stronglyConnectedComponents(nodes.map((node) => node.id), next)) {
+    const [first] = group;
+    if (group.length > 1 || (first !== undefined && next(first).includes(first))) for (const id of group) out.add(id);
+  }
+  return out;
+}
+
+/** The most questions from each node to an end, on a chart with no cycle. */
+function questionsToEnd(byId: ReadonlyMap<string, ChartNode>, skip: ReadonlySet<string>): Map<string, number> {
+  const memo = new Map<string, number>();
+  const walk = (id: string): number => {
+    const known = memo.get(id);
+    if (known !== undefined) return known;
+    const node = byId.get(id);
+    if (node === undefined || skip.has(id)) return 0;
+    const rest = Math.max(0, ...nextOf(node).map(walk));
+    const value = (node.kind === "question" ? 1 : 0) + rest;
+    memo.set(id, value);
+    return value;
+  };
+  for (const id of byId.keys()) walk(id);
+  return memo;
+}
+
+/** The ids of the nodes that a signal reaches. */
+function reached(nodes: readonly ChartNode[], byId: ReadonlyMap<string, ChartNode>): Set<string> {
+  const seen = new Set<string>();
+  const stack = nodes.filter((node) => node.kind === "signal").map((node) => node.id);
+  for (let id = stack.pop(); id !== undefined; id = stack.pop()) {
+    if (seen.has(id)) continue;
+    seen.add(id);
+    const node = byId.get(id);
+    if (node !== undefined) stack.push(...nextOf(node));
+  }
+  return seen;
+}
+
+/**
+ * This function applies the chart gate.
+ * Each node is known and reached, and each path ends at a known tab after a few questions.
+ * Each tab with keys has steps. Each key of `cover` is in a tab that the chart reaches.
+ */
+export function checkMasterChart<P extends string>(
+  nodes: readonly ChartNode[],
+  tabs: readonly Tab<P>[],
+  steps: readonly Step<P>[],
+  sources: readonly Source[],
+  options: MasterGateOptions,
+): GateResult<MasterFinding> {
+  const out: MasterFinding[] = [];
+  const error = (code: MasterFindingCode, id: string, message: string): void => {
+    out.push({ level: "error", code, record: "chart", id, message });
+  };
+  const byId = new Map<string, ChartNode>();
+  for (const node of nodes) {
+    if (byId.has(node.id)) error("duplicate-id", node.id, `Two nodes have the id "${node.id}".`);
+    byId.set(node.id, node);
+  }
+  const tabById = new Map<string, Tab<P>>();
+  for (const tab of tabs) {
+    if (tabById.has(tab.id)) error("duplicate-id", tab.id, `Two tabs have the id "${tab.id}".`);
+    tabById.set(tab.id, tab);
+  }
+  const known = new Set(options.on);
+  const sourceIds = new Set(sources.map((source) => source.id));
+
+  for (const node of nodes) {
+    for (const to of nextOf(node)) if (!byId.has(to)) error("unknown-node", node.id, `The node goes to the unknown node "${to}".`);
+    if (node.kind === "question" && node.answers.length < 2) error("few-answers", node.id, "The question has fewer than 2 answers.");
+    if (node.kind === "goto" && !tabById.has(node.tab)) error("unknown-tab", node.id, `The node goes to the unknown tab "${node.tab}".`);
+    if (node.kind === "question" && node.sources.length === 0 && (node.reasoning ?? "").trim() === "") error("no-source", node.id, "The question cites no source and gives no reasoning.");
+    for (const id of node.sources ?? []) if (!sourceIds.has(id)) error("unknown-source", node.id, `The node cites the unknown source "${id}".`);
+  }
+  if (!nodes.some((node) => node.kind === "signal")) error("no-signal", "chart", "The chart has no signal, so a reader cannot start.");
+
+  const seen = reached(nodes, byId);
+  for (const node of nodes) if (!seen.has(node.id)) error("unreachable", node.id, "No signal reaches the node.");
+  const cycle = cycleNodes(nodes, byId);
+  for (const id of cycle) error("cycle", id, "The node is in a cycle, so its path has no end.");
+  const limit = options.maxQuestions ?? 3;
+  const depth = questionsToEnd(byId, cycle);
+  for (const node of nodes) {
+    const value = depth.get(node.id) ?? 0;
+    if (node.kind === "signal" && value > limit) error("too-deep", node.id, `A path from the signal has ${value} questions. The limit is ${limit}.`);
+  }
+
+  if (options.maxNodes !== undefined && nodes.length > options.maxNodes) error("too-many-nodes", "chart", `The chart has ${nodes.length} nodes. The limit is ${options.maxNodes}.`);
+  const ends = nodes.filter((node) => node.kind === "goto").length;
+  if (options.maxEnds !== undefined && ends > options.maxEnds) error("too-many-ends", "chart", `The chart has ${ends} ends. The limit is ${options.maxEnds}.`);
+
+  const used = new Set(nodes.filter((node) => seen.has(node.id)).flatMap((node) => (node.kind === "goto" ? [node.tab] : [])));
+  for (const tab of tabs) {
+    for (const key of tab.keys) if (!known.has(key)) error("unknown-key", tab.id, `The tab names the unknown key "${key}".`);
+    const keys = new Set(tab.keys);
+    if (keys.size > 0 && !steps.some((step) => keys.has(step.on) && tab.phases.includes(step.phase))) error("tab-without-steps", tab.id, "The tab has no step in its keys and phases.");
+    if (!used.has(tab.id)) error("unused-tab", tab.id, "No path of the chart goes to the tab.");
+  }
+  const held = new Set([...used].flatMap((id) => tabById.get(id)?.keys ?? []));
+  for (const key of options.cover ?? []) if (!held.has(key)) error("uncovered-key", key, `No tab of the chart holds the key "${key}".`);
+  return resultOf(out);
+}
+
+/** An edge of the master chart, for a renderer. */
+export interface ChartEdge {
+  readonly from: string;
+  readonly to: string;
+  /** The words of the answer. A signal edge has no label. */
+  readonly label?: string;
+}
+
+/** A node of the master chart with its layer: the most edges from a signal to the node. */
+export interface PlacedNode {
+  readonly node: ChartNode;
+  readonly layer: number;
+}
+
+/** The master chart, for a renderer: the nodes by layer, the edges and the tabs that the chart reaches. */
+export interface MasterChart<P extends string = Phase> {
+  readonly nodes: readonly PlacedNode[];
+  readonly edges: readonly ChartEdge[];
+  readonly tabs: readonly Tab<P>[];
+}
+
+/** This function gives the master chart for a renderer. It gives no layer to a node in a cycle. Apply the chart gate first. */
+export function masterChartOf<P extends string>(nodes: readonly ChartNode[], tabs: readonly Tab<P>[]): MasterChart<P> {
+  const byId = new Map(nodes.map((node) => [node.id, node] as const));
+  const cycle = cycleNodes(nodes, byId);
+  const edges: ChartEdge[] = nodes.flatMap((node): ChartEdge[] => {
+    if (node.kind === "signal") return [{ from: node.id, to: node.next }];
+    if (node.kind === "question") return node.answers.map((answer) => ({ from: node.id, to: answer.next, label: answer.label }));
+    return [];
+  });
+  const layer = new Map<string, number>();
+  const into = new Map<string, string[]>();
+  for (const edge of edges) into.set(edge.to, [...(into.get(edge.to) ?? []), edge.from]);
+  const layerOf = (id: string): number => {
+    const known = layer.get(id);
+    if (known !== undefined) return known;
+    const before = (into.get(id) ?? []).filter((from) => byId.has(from) && !cycle.has(from));
+    const value = before.length === 0 ? 0 : 1 + Math.max(...before.map(layerOf));
+    layer.set(id, value);
+    return value;
+  };
+  const placed = nodes.filter((node) => !cycle.has(node.id)).map((node) => ({ node, layer: layerOf(node.id) }));
+  placed.sort((a, b) => a.layer - b.layer);
+  const tabIds = new Set(nodes.flatMap((node) => (node.kind === "goto" ? [node.tab] : [])));
+  return { nodes: placed, edges, tabs: tabs.filter((tab) => tabIds.has(tab.id)) };
+}

@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import type { Source } from "@mark1russell7/guidebook";
-import { HORIZONS, LADDER, PHASES, PHASE_BOUNDS, RULE_KINDS, chartOf, checkCoverage, checkRules, checkSteps, coverageOf, phaseIn, phaseOf, phasesOf, planMatrix, stepsFor } from "./index.ts";
-import type { Ladder, Rule, Step } from "./index.ts";
+import { HORIZONS, LADDER, PHASES, PHASE_BOUNDS, RULE_KINDS, chartOf, checkMasterChart, masterChartOf, checkCoverage, checkRules, checkSteps, coverageOf, phaseIn, phaseOf, phasesOf, planMatrix, stepsFor } from "./index.ts";
+import type { ChartNode, Ladder, Rule, Step, Tab } from "./index.ts";
 
 const MIN = 60;
 const HOUR = 3600;
@@ -228,5 +228,96 @@ describe("checkRules", () => {
     expect(chart.map((question) => question.kind)).toEqual(["place", "reflex", "go"]);
     expect(chart[1]?.rules.map((r) => r.id)).toEqual(["r1", "r2"]);
     expect(RULE_KINDS[0]).toBe("place");
+  });
+});
+
+describe("checkMasterChart", () => {
+  const library = [step("a", "case.a", "P0", 1), step("b", "cut.b", "P3", 1)];
+  const tabs: Tab[] = [
+    { id: "now", title: "Immediate danger", keys: ["case.a"], phases: ["P0"] },
+    { id: "long", title: "No society", keys: ["cut.b"], phases: ["P3"], pages: 2 },
+  ];
+  const nodes: ChartNode[] = [
+    { id: "smoke", kind: "signal", text: "You see smoke.", next: "danger" },
+    { id: "danger", kind: "question", text: "Is there an immediate danger?", sources: ["pd"], answers: [{ label: "Yes", next: "go-now" }, { label: "No", next: "society" }] },
+    { id: "society", kind: "question", text: "Does 911 answer?", sources: ["pd"], answers: [{ label: "Yes", next: "go-now", society: "works" }, { label: "No", next: "go-long", society: "none" }] },
+    { id: "go-now", kind: "goto", text: "Go to the tab Immediate danger.", tab: "now" },
+    { id: "go-long", kind: "goto", text: "Go to the tab No society.", tab: "long" },
+  ];
+  const codes = (list: ChartNode[], more: { cover?: string[]; maxQuestions?: number; maxNodes?: number; maxEnds?: number; tabs?: Tab[] } = {}) =>
+    checkMasterChart(list, more.tabs ?? tabs, library, sources, { on: ["case.a", "cut.b"], ...more }).findings.map((finding) => `${finding.code}:${finding.id}`);
+
+  it("finds no finding in a good chart", () => {
+    expect(codes(nodes, { cover: ["case.a", "cut.b"] })).toEqual([]);
+  });
+
+  it("finds an unknown node, an unknown tab and an answer list that is too short", () => {
+    const bad: ChartNode[] = [
+      ...nodes.slice(0, 4),
+      { id: "go-long", kind: "goto", text: "Go.", tab: "nowhere" },
+      { id: "lonely", kind: "question", text: "Why?", sources: ["pd"], answers: [{ label: "Yes", next: "ghost" }] },
+    ];
+    expect(codes(bad)).toEqual(expect.arrayContaining(["unknown-tab:go-long", "unknown-node:lonely", "few-answers:lonely", "unreachable:lonely", "unused-tab:long"]));
+  });
+
+  it("finds a cycle and a path with too many questions", () => {
+    const loop: ChartNode[] = nodes.map((node) => (node.id === "society" ? { ...node, answers: [{ label: "Yes", next: "danger" }, { label: "No", next: "go-long" }] } : node));
+    expect(codes(loop)).toEqual(expect.arrayContaining(["cycle:danger", "cycle:society"]));
+    expect(codes(nodes, { maxQuestions: 1 })).toEqual(["too-deep:smoke"]);
+  });
+
+  it("finds a tab with no steps, a key that no tab holds and a question with no source", () => {
+    const empty: Tab[] = [tabs[0] as Tab, { ...(tabs[1] as Tab), phases: ["P5"] }];
+    expect(codes(nodes, { tabs: empty, cover: ["case.a", "case.z"] })).toEqual(["tab-without-steps:long", "uncovered-key:case.z"]);
+    const unsourced: ChartNode[] = nodes.map((node) => (node.kind === "question" ? { ...node, sources: [] } : node));
+    expect(codes(unsourced)).toEqual(["no-source:danger", "no-source:society"]);
+    const reasoned: ChartNode[] = unsourced.map((node) => (node.kind === "question" ? { ...node, reasoning: "A reader can answer it from what the reader sees." } : node));
+    expect(codes(reasoned)).toEqual([]);
+  });
+
+  it("finds a chart with too many nodes or ends for its page", () => {
+    expect(codes(nodes, { maxNodes: 4, maxEnds: 1 })).toEqual(["too-many-nodes:chart", "too-many-ends:chart"]);
+  });
+
+  it("finds a chart with no signal", () => {
+    expect(codes(nodes.slice(1))).toEqual(expect.arrayContaining(["no-signal:chart"]));
+  });
+});
+
+describe("masterChartOf", () => {
+  it("gives the nodes by layer, the edges with their labels and the tabs that the chart reaches", () => {
+    const nodes: ChartNode[] = [
+      { id: "s", kind: "signal", text: "A signal.", next: "q" },
+      { id: "q", kind: "question", text: "A question?", sources: ["pd"], answers: [{ label: "Yes", next: "g" }, { label: "No", next: "g" }] },
+      { id: "g", kind: "goto", text: "Go.", tab: "t" },
+    ];
+    const tabs: Tab[] = [{ id: "t", title: "A tab", keys: ["k"], phases: ["P0"] }, { id: "u", title: "Unused", keys: ["k"], phases: ["P1"] }];
+    const chart = masterChartOf(nodes, tabs);
+    expect(chart.nodes.map((placed) => [placed.node.id, placed.layer])).toEqual([["s", 0], ["q", 1], ["g", 2]]);
+    expect(chart.edges).toEqual([{ from: "s", to: "q" }, { from: "q", to: "g", label: "Yes" }, { from: "q", to: "g", label: "No" }]);
+    expect(chart.tabs.map((tab) => tab.id)).toEqual(["t"]);
+  });
+});
+
+describe("strategy steps and the state of society", () => {
+  const options = { phases: PHASES, on: ["k"], gaps: [] };
+  const strategy = (id: string, text: string, reasoning?: string): Step => ({ ...step(id, "k", "P3", 1, []), do: text, ...(reasoning === undefined ? {} : { reasoning }) });
+
+  it("accepts a step with no source when it gives its reasoning and has no number", () => {
+    const codes = (list: Step[]) => checkSteps(list, sources, { ...options, phases: ["P3"] }).findings.map((finding) => finding.code);
+    expect(codes([strategy("a", "Store seeds that you can grow again.", "Seeds give food again each year with no shop.")])).toEqual([]);
+    expect(codes([strategy("a", "Boil water for 1 minute.", "Heat kills germs.")])).toEqual(["number-without-source"]);
+    expect(codes([strategy("a", "Keep calm.", " ")])).toEqual(["empty-reasoning"]);
+    expect(codes([strategy("a", "Keep calm.")])).toEqual(["no-source"]);
+  });
+
+  it("gives the steps of one state of society, and the steps for each state", () => {
+    const all = step("all", "k", "P3", 1);
+    const none: Step = { ...step("none", "k", "P3", 2), society: ["none"] };
+    const works: Step = { ...step("works", "k", "P3", 3), society: ["works", "partly"] };
+    const ids = (society?: "works" | "partly" | "none") => stepsFor([all, none, works], ["k"], ["P3"], society === undefined ? {} : { society }).map((s) => s.id);
+    expect(ids()).toEqual(["all", "none", "works"]);
+    expect(ids("none")).toEqual(["all", "none"]);
+    expect(ids("partly")).toEqual(["all", "works"]);
   });
 });

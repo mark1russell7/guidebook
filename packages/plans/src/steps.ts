@@ -3,6 +3,7 @@
 import { checkUnits, resultOf } from "@mark1russell7/guidebook";
 import type { CitedUnit, Finding, GateResult, Source, SourceId, UseContext } from "@mark1russell7/guidebook";
 import type { Phase } from "./ladder.ts";
+import type { Society } from "./master.ts";
 
 /**
  * One action of a plan. A step belongs to a key and to a phase.
@@ -26,8 +27,15 @@ export interface Step<P extends string = Phase> {
   readonly uses?: readonly string[];
   /** The order of the step in its phase, from 1. */
   readonly order: number;
-  /** The sources of the step. Each step has one or more. */
+  /** The sources of the step. A step with no `reasoning` has one or more. */
   readonly sources: readonly SourceId[];
+  /**
+   * The reasoning of a strategy step from first principles, for a step that no source tells.
+   * A step with a number in its text (a dose, a time or a safety limit) still cites a source.
+   */
+  readonly reasoning?: string;
+  /** The states of society that the step is for. No `society` means each state. */
+  readonly society?: readonly Society[];
 }
 
 /** A marked gap: a key and a phase that have no step on purpose, with the reason. */
@@ -48,16 +56,24 @@ export interface Cell<P extends string = Phase> {
 
 const byOrder = <P extends string>(a: Step<P>, b: Step<P>): number => a.order - b.order || a.id.localeCompare(b.id);
 
+/** The options of the steps query. */
+export interface StepsForOptions {
+  /** Only the steps for this state of society. A step with no `society` is for each state. */
+  readonly society?: Society;
+}
+
 /**
  * This function gives the steps whose `on` is in `on` and whose phase is in `phases`.
  * The sequence is by `on`, then by `phases`, then by `order`. A step that matches two entries of `on` comes one time.
  */
-export function stepsFor<P extends string>(library: readonly Step<P>[], on: readonly string[], phases: readonly P[]): readonly Step<P>[] {
+export function stepsFor<P extends string>(library: readonly Step<P>[], on: readonly string[], phases: readonly P[], options: StepsForOptions = {}): readonly Step<P>[] {
+  const { society } = options;
+  const fits = (step: Step<P>): boolean => society === undefined || step.society === undefined || step.society.includes(society);
   const out: Step<P>[] = [];
   const seen = new Set<string>();
   for (const key of on) {
     for (const phase of phases) {
-      const hits = library.filter((step) => step.on === key && step.phase === phase && !seen.has(step.id)).sort(byOrder);
+      const hits = library.filter((step) => step.on === key && step.phase === phase && !seen.has(step.id) && fits(step)).sort(byOrder);
       for (const step of hits) {
         seen.add(step.id);
         out.push(step);
@@ -88,6 +104,8 @@ export const STEP_FINDING_CODES = [
   "duplicate-id",
   "empty-text",
   "no-source",
+  "number-without-source",
+  "empty-reasoning",
   "missing-source",
   "use-refused",
   "unknown-phase",
@@ -137,7 +155,11 @@ export function checkSteps<P extends string>(steps: readonly Step<P>[], sources:
     if (ids.has(step.id)) error("duplicate-id", "step", step.id, `Two steps have the id "${step.id}".`);
     ids.add(step.id);
     if (step.do.trim() === "") error("empty-text", "step", step.id, `The step "${step.id}" has no text.`);
-    if (step.sources.length === 0) error("no-source", "step", step.id, `The step "${step.id}" cites no source.`);
+    if (step.reasoning !== undefined && step.reasoning.trim() === "") error("empty-reasoning", "step", step.id, `The step "${step.id}" has an empty reasoning.`);
+    if (step.sources.length === 0) {
+      if (step.reasoning === undefined) error("no-source", "step", step.id, `The step "${step.id}" cites no source and gives no reasoning.`);
+      else if (/[0-9]/.test(step.do)) error("number-without-source", "step", step.id, `The step "${step.id}" has a number, so it needs a source.`);
+    }
     if (!phases.has(step.phase)) error("unknown-phase", "step", step.id, `The step "${step.id}" has the unknown phase "${step.phase}".`);
     if (!Number.isInteger(step.order) || step.order < 1) error("bad-order", "step", step.id, `The step "${step.id}" has the order ${String(step.order)}. It needs an integer from 1.`);
     const cell = `${step.on}\u0000${step.phase}\u0000${String(step.order)}`;
