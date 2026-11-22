@@ -61,6 +61,8 @@ export interface QuestionNode {
   readonly answers: readonly ChartAnswer[];
   /** The ids of the sources that tell the question and its answers. */
   readonly sources: readonly string[];
+  /** The reasoning of the question from first principles, for a question that no source tells. */
+  readonly reasoning?: string;
 }
 
 /** An end of the chart: an instruction that sends the reader to a tab. */
@@ -199,7 +201,7 @@ export function checkMasterChart<P extends string>(
     for (const to of nextOf(node)) if (!byId.has(to)) error("unknown-node", node.id, `The node goes to the unknown node "${to}".`);
     if (node.kind === "question" && node.answers.length < 2) error("few-answers", node.id, "The question has fewer than 2 answers.");
     if (node.kind === "goto" && !tabById.has(node.tab)) error("unknown-tab", node.id, `The node goes to the unknown tab "${node.tab}".`);
-    if (node.kind === "question" && node.sources.length === 0) error("no-source", node.id, "The question cites no source.");
+    if (node.kind === "question" && node.sources.length === 0 && (node.reasoning ?? "").trim() === "") error("no-source", node.id, "The question cites no source and gives no reasoning.");
     for (const id of node.sources ?? []) if (!sourceIds.has(id)) error("unknown-source", node.id, `The node cites the unknown source "${id}".`);
   }
   if (!nodes.some((node) => node.kind === "signal")) error("no-signal", "chart", "The chart has no signal, so a reader cannot start.");

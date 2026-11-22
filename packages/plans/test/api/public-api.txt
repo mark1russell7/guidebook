@@ -207,6 +207,7 @@ interface QuestionNode {
   readonly text: string;
   readonly answers: readonly ChartAnswer[];
   readonly sources: readonly string[];
+  readonly reasoning?: string;
 }
 
 ### build/index.d.ts#RULE_FINDING_CODES

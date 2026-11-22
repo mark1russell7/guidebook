@@ -271,6 +271,8 @@ describe("checkMasterChart", () => {
     expect(codes(nodes, { tabs: empty, cover: ["case.a", "case.z"] })).toEqual(["tab-without-steps:long", "uncovered-key:case.z"]);
     const unsourced: ChartNode[] = nodes.map((node) => (node.kind === "question" ? { ...node, sources: [] } : node));
     expect(codes(unsourced)).toEqual(["no-source:danger", "no-source:society"]);
+    const reasoned: ChartNode[] = unsourced.map((node) => (node.kind === "question" ? { ...node, reasoning: "A reader can answer it from what the reader sees." } : node));
+    expect(codes(reasoned)).toEqual([]);
   });
 
   it("finds a chart with too many nodes or ends for its page", () => {

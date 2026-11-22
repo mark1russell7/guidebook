@@ -150,7 +150,7 @@ The chart gate `checkMasterChart` gives these codes:
 | `tab-without-steps` | A tab with keys has no step in its keys and phases. |
 | `unused-tab` | No path goes to a tab. |
 | `uncovered-key` | No tab that the chart reaches holds a key of `cover`. Give the hazard codes of a catalog as `cover`, so each hazard has a route. |
-| `no-source`, `unknown-source` | A question cites no source, or a node cites an unknown source. |
+| `no-source`, `unknown-source` | A question cites no source and gives no `reasoning`, or a node cites an unknown source. |
 
 ```ts
 import { checkMasterChart, masterChartOf } from "@mark1russell7/guidebook-plans";
