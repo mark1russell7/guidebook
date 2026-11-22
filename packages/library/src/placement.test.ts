@@ -77,7 +77,7 @@ describe("lifeChance", () => {
     const old = { ...disc, id: "cd-r-old", lifeYears: 40 };
     const { layer } = copiesLayer({ ...input, offers: [disc, old] });
     const works = (key: string): number => {
-      const risk = layer.slots[0]?.candidates.find((c) => c.key === key)?.stack.layers[RISK_SCHEMA] as RiskLayer | undefined;
+      const risk = layer.slots[0]?.candidates.find((c) => c.key === key)?.stack.layers?.[RISK_SCHEMA] as RiskLayer | undefined;
       return risk?.chances?.[0]?.works ?? Number.NaN;
     };
     expect(works("cd-r@home")).toBeCloseTo(0.95, 12);
