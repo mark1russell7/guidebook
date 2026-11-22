@@ -1,5 +1,5 @@
 import { fileURLToPath } from "node:url";
-import { checkSources, checkUnits } from "@mark1russell7/guidebook";
+import { checkSources, checkUnits, permits } from "@mark1russell7/guidebook";
 import { bytesOf, checkCatalog, kiwixKeyOf } from "@mark1russell7/guidebook-library";
 import { checkTopics, printOrder } from "@mark1russell7/guidebook-topics";
 import { HORIZONS, PHASES, checkCoverage, checkSteps, planMatrix, stepsFor } from "@mark1russell7/guidebook-plans";
@@ -17,9 +17,9 @@ describe("the source gate", () => {
     expect(checkSources(SOURCES, { at: AT })).toEqual([]);
   });
 
-  it("gives each source of a step a public-domain license", () => {
+  it("gives each source of a step a license that permits a summary in a commercial guidebook", () => {
     const ofSteps = new Set(STEPS.flatMap((step) => step.sources));
-    expect(SOURCES.filter((source) => ofSteps.has(source.id) && source.license !== "us-public-domain")).toEqual([]);
+    expect(SOURCES.filter((source) => ofSteps.has(source.id) && !permits(source.license, "summary", { commercial: true }))).toEqual([]);
   });
 
   it("uses each source in a step, a bundle or a unit", () => {
