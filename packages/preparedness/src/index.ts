@@ -1,4 +1,4 @@
-// The preparedness content of the guidebook: the sources, the steps and the marked gaps of 12 cases and 7 cuts,
+// The preparedness content of the guidebook: the sources, the steps and the marked gaps of 12 cases and 12 cuts,
 // the topics of 12 areas, and the catalog of offline bundles.
 
 export { CHECKED, SOURCES } from "./data/sources.ts";
@@ -36,7 +36,7 @@ export const CASES = [
 export const MORE_CASES = ["cbrne.hazardous-materials", "cbrne.radiological", "civic.ai-collapse", "health.outbreak.pandemic", "infra.supply-chain.food", "infra.power.grid-collapse", "cyber.infrastructure-attack", "civic.economy.collapse", "security.civil-unrest", "cbrne.nuclear-detonation", "security.nuclear-war", "cbrne.emp", "geo.space-weather.geomagnetic-storm", "security.armed-conflict"] as const;
 
 /** The cuts of the content. A cut is a service that an event stops. The ids are the ids of `SUPPLY_PARTS` in `stack-hazards`. */
-export const CUTS = ["power.grid", "water.main", "road.local", "phone.network", "network.access", "gas.main", "care.local"] as const;
+export const CUTS = ["power.grid", "water.main", "road.local", "phone.network", "network.access", "gas.main", "care.local", "sewer.main", "fuel.retail", "food.retail", "cash.retail", "home.dwelling"] as const;
 
 /** The need codes that the steps protect. */
 export const NEEDS = ["hydration.drink", "food.energy", "health.medicine", "power.electric"] as const;

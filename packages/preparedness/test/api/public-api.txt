@@ -51,7 +51,7 @@ export declare const CASE_STEPS: readonly Step[];
 export declare const CHECKED = "2026-11-21";
 
 ### build/index.d.ts#CUTS
-export declare const CUTS: readonly ["power.grid", "water.main", "road.local", "phone.network", "network.access", "gas.main", "care.local"];
+export declare const CUTS: readonly ["power.grid", "water.main", "road.local", "phone.network", "network.access", "gas.main", "care.local", "sewer.main", "fuel.retail", "food.retail", "cash.retail", "home.dwelling"];
 
 ### build/index.d.ts#CUT_STEPS
 export declare const CUT_STEPS: readonly Step[];

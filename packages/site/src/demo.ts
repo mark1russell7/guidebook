@@ -53,6 +53,11 @@ export const KEY_TITLES: Readonly<Record<string, string>> = {
   "network.access": "No internet access",
   "gas.main": "No gas from the main",
   "care.local": "Closed pharmacy or hospital",
+  "sewer.main": "No public sewer",
+  "fuel.retail": "No fuel at the stations",
+  "food.retail": "Empty or closed food shops",
+  "cash.retail": "No banks or cash machines",
+  "home.dwelling": "Damaged home",
 };
 
 /** The words of a key. A key with no title shows its code. */
