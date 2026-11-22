@@ -71,7 +71,7 @@ export declare const MEDIUM_LOSSES: Readonly<Partial<Record<MediumKind, {
 }>>>;
 
 ### build/index.d.ts#MORE_CASES
-export declare const MORE_CASES: readonly ["cbrne.hazardous-materials", "cbrne.radiological"];
+export declare const MORE_CASES: readonly ["cbrne.hazardous-materials", "cbrne.radiological", "civic.ai-collapse"];
 
 ### build/index.d.ts#NEEDS
 export declare const NEEDS: readonly ["hydration.drink", "food.energy", "health.medicine", "power.electric"];

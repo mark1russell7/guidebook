@@ -39,6 +39,20 @@ export const SOURCES: readonly Source[] = [
   { id: "energypedia", title: "energypedia", url: "https://energypedia.info/", license: "cc-by-sa-4.0", checked: CHECKED, by: "energypedia contributors" },
   federal("cdc-heart", "CDC", "About Heart Attack Symptoms, Risk, and Recovery", "https://www.cdc.gov/heart-disease/about/heart-attack.html"),
   federal("cdc-stroke", "CDC", "Signs and Symptoms of Stroke", "https://www.cdc.gov/stroke/signs-symptoms/index.html"),
+  // The sources of the case civic.ai-collapse. They were read on 2026-11-22.
+  { ...federal("ic3-genai", "FBI IC3", "Criminals Use Generative Artificial Intelligence to Facilitate Financial Fraud", "https://www.ic3.gov/PSA/2024/PSA241203"), checked: "2026-11-22" },
+  { ...federal("ready-financial", "Ready.gov", "Financial Preparedness", "https://www.ready.gov/financial-preparedness"), checked: "2026-11-22" },
+  { ...federal("ready-cyber", "Ready.gov", "Cybersecurity", "https://www.ready.gov/cybersecurity"), checked: "2026-11-22" },
+  { ...federal("ready-alerts", "Ready.gov", "Emergency Alerts", "https://www.ready.gov/alerts"), checked: "2026-11-22" },
+  { ...federal("nws-nwr", "NOAA National Weather Service", "NOAA Weather Radio All Hazards", "https://www.weather.gov/nwr/"), checked: "2026-11-22" },
+  { ...federal("dol-ui", "U.S. Department of Labor", "How Do I File for Unemployment Insurance?", "https://www.dol.gov/general/topic/unemployment-insurance"), checked: "2026-11-22" },
+  { ...federal("ftc-voice", "FTC Consumer Advice", "Scammers use AI to enhance their family emergency schemes", "https://consumer.ftc.gov/consumer-alerts/2023/03/scammers-use-ai-enhance-their-family-emergency-schemes"), checked: "2026-11-22" },
+  // The 72 hours guidance of SPEK, the Finnish National Rescue Association, with the Finnish government. The pages give no license.
+  // Thus each step is a summary with a citation, not a quote.
+  { id: "fi-72h-shelter", title: "Sheltering indoors", url: "https://72tuntia.fi/en/sheltering-indoors/", license: "all-rights-reserved", checked: "2026-11-22", by: "SPEK, 72 hours" },
+  { id: "fi-72h-info", title: "Communication in a disruption and reliable information", url: "https://72tuntia.fi/en/communication-in-a-disruption-and-reliable-information/", license: "all-rights-reserved", checked: "2026-11-22", by: "SPEK, 72 hours" },
+  { id: "fi-72h-cyber", title: "Cybersecurity", url: "https://72tuntia.fi/en/cybersecurity/", license: "all-rights-reserved", checked: "2026-11-22", by: "SPEK, 72 hours" },
+  { ...federal("snap-apply", "USDA Food and Nutrition Service", "SNAP: Applicant and Participant", "https://www.fns.usda.gov/snap/applicant-recipient"), checked: "2026-11-22" },
   // The data dump of Stack Exchange, Inc. on archive.org gives CC BY-SA 4.0 for all user content of the network.
   // A use shows the network as the source, links each question, and shows and links the name of each author.
   { id: "stackexchange", title: "The Stack Exchange network", url: "https://archive.org/details/stackexchange", license: "cc-by-sa-4.0", checked: CHECKED, by: "Stack Exchange contributors" },
