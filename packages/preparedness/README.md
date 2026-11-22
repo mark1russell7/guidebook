@@ -18,6 +18,8 @@ The core and the plans add-on name no topic. This package is the first topic.
 | `STEPS` | All the steps |
 | `GAPS` | The marked gaps: each key and phase with no step on purpose, with the reason |
 | `RULES` | The 41 trigger rules of the decision chart. Each rule cites its sources and sends the reader to the steps of a key. |
+| `MASTER` | The master chart for any disaster: 3 signals, 5 questions and 12 ends. Each path has at most 2 questions. No answer waits for officials. |
+| `TABS`, `START_TAB` | The 13 tabs of the printed plan, each with its keys, its phases and its page budget. The chart is the start tab. |
 | `CASES` | The codes of the 12 cases |
 | `MORE_CASES` | The codes of 14 more cases, with the same gates |
 | `CUTS` | The ids of the cuts |

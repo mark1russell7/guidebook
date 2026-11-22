@@ -2,10 +2,10 @@ import { fileURLToPath } from "node:url";
 import { checkSources, checkUnits, permits } from "@mark1russell7/guidebook";
 import { bytesOf, checkCatalog, kiwixKeyOf } from "@mark1russell7/guidebook-library";
 import { checkTopics, printOrder } from "@mark1russell7/guidebook-topics";
-import { HORIZONS, PHASES, checkCoverage, checkSteps, planMatrix, stepsFor, chartOf, checkRules } from "@mark1russell7/guidebook-plans";
+import { HORIZONS, PHASES, checkCoverage, checkSteps, planMatrix, stepsFor, chartOf, checkMasterChart, checkRules, masterChartOf } from "@mark1russell7/guidebook-plans";
 import { Linter, loadConfig } from "@mark1russell7/ste-lint";
 import { describe, expect, it } from "vitest";
-import { AREAS, BUNDLES, BUNDLE_LEVELS, CASES, CUTS, GAPS, MEDIA_UNITS, MEDIUM_GAPS, MEDIUM_LOSSES, MORE_CASES, NEEDS, OPEN_CELLS, RULES, SOURCES, STEPS, TOPICS } from "./index.ts";
+import { AREAS, BUNDLES, BUNDLE_LEVELS, CASES, CUTS, GAPS, MEDIA_UNITS, MEDIUM_GAPS, MEDIUM_LOSSES, MASTER, MORE_CASES, NEEDS, OPEN_CELLS, RULES, SOURCES, START_TAB, STEPS, TABS, TOPICS } from "./index.ts";
 
 const ALL_CASES = [...CASES, ...MORE_CASES];
 const KEYS = [...ALL_CASES, ...CUTS];
@@ -136,7 +136,12 @@ describe("the coverage gate", () => {
 describe("the words of the steps", () => {
   const root = fileURLToPath(new URL("../../..", import.meta.url));
   const linter = new Linter(loadConfig({ cwd: root }));
-  const texts = [...STEPS.map((step) => [step.id, step.do] as const), ...GAPS.map((gap) => [`${gap.on}.${gap.phase}`, gap.why] as const)];
+  const texts = [
+    ...STEPS.map((step) => [step.id, step.do] as const),
+    ...GAPS.map((gap) => [`${gap.on}.${gap.phase}`, gap.why] as const),
+    ...MASTER.map((node) => [`chart.${node.id}`, node.text] as const),
+    ...MASTER.flatMap((node) => (node.kind === "question" && node.reasoning !== undefined ? [[`chart.${node.id}.reasoning`, node.reasoning] as const] : [])),
+  ];
 
   it("obey the rules of Simplified Technical English", () => {
     const errors = texts.flatMap(([id, text]) =>
@@ -161,5 +166,31 @@ describe("the decision chart", () => {
   it("gives a module for each cut", () => {
     const modules = new Set(RULES.filter((rule) => rule.kind === "module").map((rule) => rule.target?.on));
     expect(CUTS.filter((cut) => !modules.has(cut))).toEqual([]);
+  });
+});
+
+describe("the master chart", () => {
+  // The catalog of hazards in the stack model has the same 26 cases, and its cuts are the ids of CUTS.
+  const cover = [...ALL_CASES, ...CUTS, ...NEEDS];
+  const tabs = TABS.filter((tab) => tab.id !== START_TAB);
+
+  it("finds no finding: each hazard and each part has a route, in 3 questions or fewer, on one page", () => {
+    const result = checkMasterChart(MASTER, tabs, STEPS, SOURCES, { on: [...KEYS, ...NEEDS], cover, maxQuestions: 3, maxNodes: 20, maxEnds: 13 });
+    expect(result.findings).toEqual([]);
+  });
+
+  it("asks for the state of society, with an answer for each state", () => {
+    const states = MASTER.flatMap((node) => (node.kind === "question" ? node.answers.flatMap((answer) => answer.society ?? []) : []));
+    expect([...new Set(states)].sort()).toEqual(["none", "partly", "works"]);
+  });
+
+  it("gives no answer that waits for officials", () => {
+    const words = MASTER.flatMap((node) => [node.text, ...(node.kind === "question" ? [node.reasoning ?? "", ...node.answers.map((answer) => answer.label)] : [])]);
+    expect(words.filter((text) => /(obey|wait for|listen to|follow).*(officials?|authorit|instructions)/i.test(text))).toEqual([]);
+  });
+
+  it("gives each tab of the binder a page budget, and sends the reader to each tab but the start", () => {
+    expect(TABS.filter((tab) => tab.pages === undefined)).toEqual([]);
+    expect(masterChartOf(MASTER, TABS).tabs.map((tab) => tab.id)).toEqual(tabs.map((tab) => tab.id));
   });
 });
