@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import type { Source } from "@mark1russell7/guidebook";
-import { LADDER, PHASES, PHASE_BOUNDS, checkSteps, phaseIn, phaseOf, phasesOf, planMatrix, stepsFor } from "./index.ts";
+import { HORIZONS, LADDER, PHASES, PHASE_BOUNDS, checkCoverage, checkSteps, coverageOf, phaseIn, phaseOf, phasesOf, planMatrix, stepsFor } from "./index.ts";
 import type { Ladder, Step } from "./index.ts";
 
 const MIN = 60;
@@ -155,6 +155,37 @@ describe("checkSteps", () => {
       "a/P1:duplicate-gap",
       "a/P9:unknown-phase",
       "a/P2:unmarked-gap",
+    ]);
+  });
+});
+
+describe("checkCoverage", () => {
+  const full = HORIZONS.map((phase) => step(`a.${phase}`, "a", phase, 1));
+
+  it("passes a key with steps in each horizon", () => {
+    expect(checkCoverage(full, { on: ["a"], phases: HORIZONS })).toEqual({ ok: true, findings: [] });
+  });
+
+  it("fails a cell with no step, and a marked gap does not pass it", () => {
+    const steps = full.filter((item) => item.phase !== "P4" && item.phase !== "P5");
+    const result = checkCoverage(steps, { on: ["a"], phases: HORIZONS, gaps: [{ on: "a", phase: "P5", why: "No source gives a step." }] });
+    expect(result.ok).toBe(false);
+    expect(result.findings.map((finding) => [finding.code, finding.id])).toEqual([
+      ["no-step", "a/P4"],
+      ["marked-gap", "a/P5"],
+    ]);
+    expect(result.findings[1]?.message).toContain("No source gives a step.");
+  });
+
+  it("shows each horizon of a key with no step as a finding, never as a pass", () => {
+    const result = checkCoverage(full, { on: ["a", "b"], phases: HORIZONS });
+    expect(result.findings.map((finding) => finding.id)).toEqual(HORIZONS.map((phase) => `b/${phase}`));
+  });
+
+  it("gives the covered and the missing phases of each key", () => {
+    expect(coverageOf(full.slice(0, 2), ["a", "b"], HORIZONS)).toEqual([
+      { on: "a", covered: ["P0", "P1"], missing: ["P2", "P3", "P4", "P5"] },
+      { on: "b", covered: [], missing: [...HORIZONS] },
     ]);
   });
 });

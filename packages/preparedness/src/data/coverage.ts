@@ -1,0 +1,43 @@
+// The open cells of the coverage gate: each key and horizon from 5 minutes to 5 years that has no step yet.
+// The coverage gate fails each of them. A test holds this list, so it can only get shorter.
+
+/**
+ * The cells with no step, as `<key>/<phase>`, in the sequence of the matrix.
+ * Each cell is open until a cited step fills it. The items G8, G9 and G10 of the roadmap fill them.
+ */
+export const OPEN_CELLS: readonly string[] = [
+  "met.winter.storm/P3",
+  "met.heat.extreme/P3",
+  "met.tornado/P3",
+  "infra.power.outage/P0",
+  "infra.power.outage/P1",
+  "infra.power.outage/P2",
+  "infra.power.outage/P3",
+  "infra.water.outage/P0",
+  "infra.water.outage/P1",
+  "infra.water.outage/P2",
+  "infra.water.outage/P3",
+  "health.outbreak/P0",
+  "health.outbreak/P1",
+  "health.medical-emergency/P1",
+  "health.medical-emergency/P2",
+  "health.medical-emergency/P3",
+  "cbrne.hazardous-materials/P3",
+  "energy.grid/P4",
+  "energy.grid/P5",
+  "water.main/P4",
+  "water.main/P5",
+  "road.local/P0",
+  "road.local/P4",
+  "road.local/P5",
+  "telecom.network/P0",
+  "telecom.network/P3",
+  "telecom.network/P4",
+  "telecom.network/P5",
+  "gas.main/P3",
+  "gas.main/P4",
+  "gas.main/P5",
+  "store.pharmacy/P0",
+  "store.pharmacy/P1",
+  "store.pharmacy/P5",
+];

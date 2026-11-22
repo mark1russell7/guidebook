@@ -223,8 +223,14 @@ for (const [value, label] of [
   facts.append(item);
 }
 const verdict = el("li", errors.length === 0 ? "pass" : "fail");
-verdict.append(el("strong", "", errors.length === 0 ? "Pass" : "Fail"), el("span", "", "the gates"));
+verdict.append(el("strong", "", errors.length === 0 ? "Pass" : "Fail"), el("span", "", "the source and step gates"));
 facts.append(verdict);
+const coverage = el("li", report.open.length === 0 ? "pass" : "fail");
+coverage.append(
+  el("strong", "", `${report.covered} of ${report.horizonCells}`),
+  el("span", "", report.open.length === 0 ? "cells with steps from 5 minutes to 5 years: the coverage gate passes" : "cells with steps from 5 minutes to 5 years: the coverage gate fails"),
+);
+facts.append(coverage);
 
 const gates = byId("gates");
 const summary = el("p", `verdict ${errors.length === 0 ? "pass" : "fail"}`);
@@ -238,4 +244,10 @@ if (report.findings.length > 0) {
   for (const finding of report.findings) list.append(el("li", finding.level, `${finding.code} on ${finding.id}: ${finding.message}`));
   gates.append(list);
 }
+const open = el("p", `verdict ${report.open.length === 0 ? "pass" : "fail"}`);
+open.textContent =
+  report.open.length === 0
+    ? "The coverage gate passes: each key has steps in each horizon from 5 minutes to 5 years."
+    : `The coverage gate fails: ${report.open.length} cells from 5 minutes to 5 years have no step. A marked gap does not pass it.`;
+gates.append(open);
 gates.append(el("p", "note", `The sources were last read on ${report.checked}. A source that is too old gives a warning.`));

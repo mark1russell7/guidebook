@@ -42,4 +42,10 @@ describe("the model of the demo", () => {
     expect(report.findings.filter((finding) => finding.level === "error")).toEqual([]);
     expect(report.filled).toBe(report.cells);
   });
+
+  it("counts each cell of the horizons with no step as open, never as covered", () => {
+    const report = gateReport("2026-11-22");
+    expect(report.covered + report.open.length).toBe(report.horizonCells);
+    expect(report.open.every((finding) => finding.level === "error")).toBe(true);
+  });
 });

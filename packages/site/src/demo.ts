@@ -1,7 +1,21 @@
 // The model of the demo: pure functions over the content of the guidebook. The page draws what they give.
 
 import { LICENSE_RULES, checkSources, creditOf, type Finding, type Source } from "@mark1russell7/guidebook";
-import { PHASES, PHASE_TITLES, checkSteps, planMatrix, stepsFor, type Cell, type Gap, type Phase, type Step, type StepFinding } from "@mark1russell7/guidebook-plans";
+import {
+  HORIZONS,
+  PHASES,
+  PHASE_TITLES,
+  checkCoverage,
+  checkSteps,
+  planMatrix,
+  stepsFor,
+  type Cell,
+  type CoverageFinding,
+  type Gap,
+  type Phase,
+  type Step,
+  type StepFinding,
+} from "@mark1russell7/guidebook-plans";
 import { CASES, CHECKED, CUTS, GAPS, MORE_CASES, SOURCES, STEPS } from "@mark1russell7/guidebook-preparedness";
 
 /** The words of each case and each cut, for the page. */
@@ -106,12 +120,20 @@ export interface GateReport {
   readonly cells: number;
   readonly filled: number;
   readonly findings: readonly (Finding | StepFinding)[];
+  /** The cells of the horizons from 5 minutes to 5 years. */
+  readonly horizonCells: number;
+  /** The cells of the horizons that have one or more steps. */
+  readonly covered: number;
+  /** The findings of the coverage gate: one for each cell of the horizons with no step. */
+  readonly open: readonly CoverageFinding[];
 }
 
-/** This function applies the source gate and the step gate to the content, at the date `at`. */
+/** This function applies the source gate, the step gate and the coverage gate to the content, at the date `at`. */
 export function gateReport(at: string): GateReport {
   const cells = matrixOf().flat();
   const findings = [...checkSources(SOURCES, { at }), ...checkSteps(STEPS, SOURCES, { phases: PHASES, on: KEYS, gaps: GAPS, commercial: true }).findings];
+  const open = checkCoverage(STEPS, { on: KEYS, phases: HORIZONS, gaps: GAPS }).findings;
+  const horizonCells = KEYS.length * HORIZONS.length;
   return {
     checked: CHECKED,
     sources: SOURCES.length,
@@ -120,6 +142,9 @@ export function gateReport(at: string): GateReport {
     cells: cells.length,
     filled: cells.filter((cell) => stateOf(cell) !== "empty").length,
     findings,
+    horizonCells,
+    covered: horizonCells - open.length,
+    open,
   };
 }
 

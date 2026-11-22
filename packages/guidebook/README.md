@@ -28,7 +28,7 @@ A unit has one of three uses:
 | License | `quote` | `bundle` | `summary` and `fact` | Credit line | Layer of a quote |
 | --- | --- | --- | --- | --- | --- |
 | `us-public-domain`, `public-domain`, `cc0` | yes | yes | yes | no | `main` |
-| `cc-by-4.0` | yes | yes | yes | yes | `main` |
+| `cc-by-4.0`, `ogl-uk-3.0` | yes | yes | yes | yes | `main` |
 | `cc-by-sa-4.0`, `cc-by-sa-3.0` | yes | yes | yes | yes | `share-alike` |
 | `cc-by-nc-sa-3.0` | no | only when not commercial | yes | yes | `share-alike` |
 | `all-rights-reserved` | no | no | yes | no | `main` |
