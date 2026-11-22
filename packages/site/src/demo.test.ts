@@ -21,9 +21,9 @@ describe("the model of the demo", () => {
   });
 
   it("shows the marked gap of a key only when the key has no step in the phase", () => {
-    const [part] = planOf(["infra.power.outage", "energy.grid"], ["P0"]);
+    const [part] = planOf(["infra.power.outage", "power.grid"], ["P0"]);
     expect(part?.gaps.map((gap) => gap.on)).toEqual(["infra.power.outage"]);
-    expect(part?.steps.every((step) => step.on === "energy.grid")).toBe(true);
+    expect(part?.steps.every((step) => step.on === "power.grid")).toBe(true);
     expect(planOf(ALL_CASES, [])).toEqual([]);
   });
 

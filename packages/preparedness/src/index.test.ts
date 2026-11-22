@@ -78,9 +78,9 @@ describe("the topics", () => {
 });
 
 describe("the step gate", () => {
-  it("has the 12 cases of v1 and the 6 cuts", () => {
+  it("has the 12 cases of v1 and the 7 cuts", () => {
     expect(new Set(CASES).size).toBe(12);
-    expect(new Set(CUTS).size).toBe(6);
+    expect(new Set(CUTS).size).toBe(7);
     expect(CASES.filter((key) => (MORE_CASES as readonly string[]).includes(key))).toEqual([]);
   });
 

@@ -84,7 +84,7 @@ for (const [label, keys] of [["The 12 cases of v1", CASES], ["More cases", MORE_
   }
   caseSelect.append(group);
 }
-for (const cut of CUTS) cutsBox.append(chip(titleOf(cut), cut, cut === "energy.grid"));
+for (const cut of CUTS) cutsBox.append(chip(titleOf(cut), cut, cut === "power.grid"));
 for (const phase of PHASES) phasesBox.append(chip(phase, phase, phase !== "P4" && phase !== "P5"));
 for (const button of phasesBox.querySelectorAll("button")) button.title = PHASE_TITLES[button.dataset["value"] as Phase];
 
