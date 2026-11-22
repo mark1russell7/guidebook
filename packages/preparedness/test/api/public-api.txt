@@ -22,6 +22,7 @@ MEDIUM_LOSSES: build/index.d.ts#MEDIUM_LOSSES
 MORE_CASES: build/index.d.ts#MORE_CASES
 NEEDS: build/index.d.ts#NEEDS
 OPEN_CELLS: build/index.d.ts#OPEN_CELLS
+RULES: build/index.d.ts#RULES
 SOURCES: build/index.d.ts#SOURCES
 STEPS: build/index.d.ts#STEPS
 TOPICS: build/index.d.ts#TOPICS
@@ -78,6 +79,9 @@ export declare const NEEDS: readonly ["hydration.drink", "food.energy", "health.
 
 ### build/index.d.ts#OPEN_CELLS
 export declare const OPEN_CELLS: readonly string[];
+
+### build/index.d.ts#RULES
+export declare const RULES: readonly Rule[];
 
 ### build/index.d.ts#SOURCES
 export declare const SOURCES: readonly Source[];

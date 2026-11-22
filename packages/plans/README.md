@@ -86,6 +86,38 @@ const coverage = checkCoverage(library, { on: keys, phases: HORIZONS, gaps });
 // A key with no step gives one finding for each horizon. It does not pass.
 ```
 
+## The decision chart
+
+A rule of the chart has a trigger `when`, an action `then`, the keys of the trigger and a target. The target is the steps of a key in some phases. `chartOf` gives one question for each kind of rule, in this sequence:
+
+| Kind | Question |
+| --- | --- |
+| `place` | Where am I? |
+| `reflex` | Is there an immediate danger? |
+| `module` | What is cut? |
+| `stay` | When do I stay? |
+| `go` | When do I go? |
+| `fallback` | When do I go to a fallback place? |
+| `long-plan` | When do I change to the long plan? |
+
+A rule of the kind `place` has no target, because the places of a household are input data. The rule gate `checkRules` gives these codes:
+
+| Code | When |
+| --- | --- |
+| `duplicate-id` | Two rules have the same `id`. |
+| `unknown-key` | A key of the trigger or of the target is not in `on`. |
+| `no-target` | A rule other than `place` has no target. |
+| `target-without-steps` | The target has no step in its phases. |
+| `no-source` | A rule cites no source. |
+| `unknown-source` | A rule cites an id with no source. |
+
+```ts
+import { chartOf, checkRules } from "@mark1russell7/guidebook-plans";
+
+const gate = checkRules(rules, library, sources, { on: keys });
+const chart = chartOf(rules); // The questions, each with its rules in the sequence of their rank.
+```
+
 ## Limits
 
 - The gate does not evaluate `when`. The planner of an app evaluates it over the live state.

@@ -17,6 +17,7 @@ The core and the plans add-on name no topic. This package is the first topic.
 | `CUT_STEPS` | The steps of the 6 cuts |
 | `STEPS` | All the steps |
 | `GAPS` | The marked gaps: each key and phase with no step on purpose, with the reason |
+| `RULES` | The 33 trigger rules of the decision chart. Each rule cites its sources and sends the reader to the steps of a key. |
 | `CASES` | The codes of the 12 cases |
 | `MORE_CASES` | The codes of 9 more cases, with the same gates |
 | `CUTS` | The ids of the cuts |

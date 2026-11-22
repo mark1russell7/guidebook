@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import type { Source } from "@mark1russell7/guidebook";
-import { HORIZONS, LADDER, PHASES, PHASE_BOUNDS, checkCoverage, checkSteps, coverageOf, phaseIn, phaseOf, phasesOf, planMatrix, stepsFor } from "./index.ts";
-import type { Ladder, Step } from "./index.ts";
+import { HORIZONS, LADDER, PHASES, PHASE_BOUNDS, RULE_KINDS, chartOf, checkCoverage, checkRules, checkSteps, coverageOf, phaseIn, phaseOf, phasesOf, planMatrix, stepsFor } from "./index.ts";
+import type { Ladder, Rule, Step } from "./index.ts";
 
 const MIN = 60;
 const HOUR = 3600;
@@ -187,5 +187,46 @@ describe("checkCoverage", () => {
       { on: "a", covered: ["P0", "P1"], missing: ["P2", "P3", "P4", "P5"] },
       { on: "b", covered: [], missing: [...HORIZONS] },
     ]);
+  });
+});
+
+describe("checkRules", () => {
+  const source: Source = { id: "page", title: "A page", url: "https://example.org/page", license: "us-public-domain", checked: "2026-11-22" };
+  const steps: Step[] = [{ id: "fire.P0.out", on: "fire", phase: "P0", needs: [], do: "Get out.", order: 1, sources: ["page"] }];
+  const rule = (over: Partial<Rule>): Rule => ({ id: "r", kind: "reflex", when: "There is smoke.", then: "Get out.", on: ["fire"], target: { on: "fire", phases: ["P0"] }, rank: 1, sources: ["page"], ...over });
+  const bare = (base: Rule): Rule => {
+    const { target: _target, ...rest } = base;
+    return rest;
+  };
+
+  it("passes a rule with known keys, a target with steps and a known source", () => {
+    expect(checkRules([rule({})], steps, [source], { on: ["fire"] }).findings).toEqual([]);
+    expect(checkRules([bare(rule({ kind: "place", on: [] }))], steps, [source], { on: ["fire"] }).ok).toBe(true);
+  });
+
+  it("finds each break of a rule", () => {
+    const rules = [
+      rule({ id: "a", on: ["flood"] }),
+      rule({ id: "a", target: { on: "fire", phases: ["P3"] } }),
+      bare(rule({ id: "b", kind: "go" })),
+      rule({ id: "c", sources: [] }),
+      rule({ id: "d", sources: ["no-page"], target: { on: "smoke", phases: ["P0"] } }),
+    ];
+    expect(checkRules(rules, steps, [source], { on: ["fire"] }).findings.map((finding) => `${finding.code}:${finding.id}`)).toEqual([
+      "unknown-key:a",
+      "duplicate-id:a",
+      "target-without-steps:a",
+      "no-target:b",
+      "no-source:c",
+      "unknown-key:d",
+      "unknown-source:d",
+    ]);
+  });
+
+  it("gives the chart in the sequence of the kinds, and each kind in the sequence of the rank", () => {
+    const chart = chartOf([rule({ id: "go", kind: "go" }), rule({ id: "r2", rank: 2 }), rule({ id: "r1", rank: 1 }), bare(rule({ id: "where", kind: "place" }))]);
+    expect(chart.map((question) => question.kind)).toEqual(["place", "reflex", "go"]);
+    expect(chart[1]?.rules.map((r) => r.id)).toEqual(["r1", "r2"]);
+    expect(RULE_KINDS[0]).toBe("place");
   });
 });
