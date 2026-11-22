@@ -45,6 +45,7 @@ export const KEY_TITLES: Readonly<Record<string, string>> = {
   "security.nuclear-war": "Nuclear war",
   "cbrne.emp": "Electromagnetic pulse (EMP)",
   "geo.space-weather.geomagnetic-storm": "Severe solar storm",
+  "security.armed-conflict": "Armed conflict",
   "energy.grid": "No power from the grid",
   "water.main": "No water from the main",
   "road.local": "Closed local roads",
