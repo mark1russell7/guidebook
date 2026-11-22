@@ -50,7 +50,7 @@ Many cases stop the same service. So most steps belong to a cut, and each case t
 import { PHASES, checkSteps, phaseOf, stepsFor } from "@mark1russell7/guidebook-plans";
 
 const phase = phaseOf(2 * 86_400); // "P2"
-const steps = stepsFor(library, ["met.winter.storm", "energy.grid"], [phase]);
+const steps = stepsFor(library, ["met.winter.storm", "power.grid"], [phase]);
 const result = checkSteps(library, sources, { phases: PHASES, on: keys, gaps });
 ```
 

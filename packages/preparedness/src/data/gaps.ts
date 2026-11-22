@@ -2,11 +2,11 @@
 
 import type { Gap } from "@mark1russell7/guidebook-plans";
 
-const OF_GRID = "This case is the power cut itself. The steps of the cut `energy.grid` apply.";
+const OF_GRID = "This case is the power cut itself. The steps of the cut `power.grid` apply.";
 const OF_WATER = "This case is the water cut itself. The steps of the cut `water.main` apply.";
 const NO_HOME_STEP = "The emergency team and the hospital give the care after the first minutes. The sources give no household step.";
 
-const NO_EMP = "The sources give no household step for this phase of an EMP. The steps of the cuts `energy.grid` and `telecom.network` apply.";
+const NO_EMP = "The sources give no household step for this phase of an EMP. The steps of the cuts `power.grid` and `phone.network` apply.";
 const NO_LONG_STEP = "The sources give no step for a cut of this length. The steps of the earlier phases continue.";
 
 /** The marked gaps of the cases and the cuts. */
@@ -30,26 +30,32 @@ export const GAPS: readonly Gap[] = [
   { on: "civic.economy.collapse", phase: "P1", why: "A financial collapse grows over days, not hours. The steps of the ready phase are the protection." },
   { on: "security.civil-unrest", phase: "warned", why: "No official household page read gives a step for a warning of unrest." },
   { on: "security.civil-unrest", phase: "P3", why: "No official household page read gives a step for unrest that continues for weeks." },
-  { on: "energy.grid", phase: "warned", why: "A power cut often comes with no warning. The warning steps of the case and of the network apply." },
-  { on: "energy.grid", phase: "P4", why: NO_LONG_STEP },
-  { on: "energy.grid", phase: "P5", why: NO_LONG_STEP },
+  { on: "power.grid", phase: "warned", why: "A power cut often comes with no warning. The warning steps of the case and of the network apply." },
+  { on: "power.grid", phase: "P4", why: NO_LONG_STEP },
+  { on: "power.grid", phase: "P5", why: NO_LONG_STEP },
   { on: "water.main", phase: "warned", why: "A break of a water main comes with no warning. The stored water of the ready phase is the protection." },
   { on: "water.main", phase: "P4", why: NO_LONG_STEP },
   { on: "water.main", phase: "P5", why: NO_LONG_STEP },
   { on: "road.local", phase: "P0", why: "A closed road does not change the first minutes at home. The steps of the case apply." },
   { on: "road.local", phase: "P4", why: NO_LONG_STEP },
   { on: "road.local", phase: "P5", why: NO_LONG_STEP },
-  { on: "telecom.network", phase: "P0", why: "A cut of the network does not change the first minutes. The steps of the case apply." },
-  { on: "telecom.network", phase: "P3", why: NO_LONG_STEP },
-  { on: "telecom.network", phase: "P4", why: NO_LONG_STEP },
-  { on: "telecom.network", phase: "P5", why: NO_LONG_STEP },
+  { on: "phone.network", phase: "P0", why: "A cut of the network does not change the first minutes. The steps of the case apply." },
+  { on: "phone.network", phase: "P3", why: NO_LONG_STEP },
+  { on: "phone.network", phase: "P4", why: NO_LONG_STEP },
+  { on: "phone.network", phase: "P5", why: NO_LONG_STEP },
+  { on: "network.access", phase: "warned", why: "A loss of the internet access often comes with no warning. The steps of `ready` are the protection." },
+  { on: "network.access", phase: "P0", why: "A loss of the internet access does not change the first minutes. The steps of the case apply." },
+  { on: "network.access", phase: "P2", why: NO_LONG_STEP },
+  { on: "network.access", phase: "P3", why: NO_LONG_STEP },
+  { on: "network.access", phase: "P4", why: NO_LONG_STEP },
+  { on: "network.access", phase: "P5", why: NO_LONG_STEP },
   { on: "gas.main", phase: "warned", why: "A gas leak gives no warning before you smell it or hear it." },
   { on: "gas.main", phase: "P3", why: NO_LONG_STEP },
   { on: "gas.main", phase: "P4", why: NO_LONG_STEP },
   { on: "gas.main", phase: "P5", why: NO_LONG_STEP },
-  { on: "store.pharmacy", phase: "P0", why: "A closed pharmacy does not change the first minutes. The steps of the case apply." },
-  { on: "store.pharmacy", phase: "P1", why: "A closed pharmacy does not change the first hours. The medicines of the ready phase are the protection." },
-  { on: "store.pharmacy", phase: "P5", why: NO_LONG_STEP },
+  { on: "care.local", phase: "P0", why: "A closed pharmacy does not change the first minutes. The steps of the case apply." },
+  { on: "care.local", phase: "P1", why: "A closed pharmacy does not change the first hours. The medicines of the ready phase are the protection." },
+  { on: "care.local", phase: "P5", why: NO_LONG_STEP },
   { on: "infra.power.outage", phase: "ready", why: OF_GRID },
   { on: "infra.power.outage", phase: "warned", why: OF_GRID },
   { on: "infra.power.outage", phase: "P0", why: OF_GRID },

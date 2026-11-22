@@ -46,12 +46,13 @@ export const KEY_TITLES: Readonly<Record<string, string>> = {
   "cbrne.emp": "Electromagnetic pulse (EMP)",
   "geo.space-weather.geomagnetic-storm": "Severe solar storm",
   "security.armed-conflict": "Armed conflict",
-  "energy.grid": "No power from the grid",
+  "power.grid": "No power from the grid",
   "water.main": "No water from the main",
   "road.local": "Closed local roads",
-  "telecom.network": "No phone or internet",
+  "phone.network": "No phone network",
+  "network.access": "No internet access",
   "gas.main": "No gas from the main",
-  "store.pharmacy": "Closed pharmacy",
+  "care.local": "Closed pharmacy or hospital",
 };
 
 /** The words of a key. A key with no title shows its code. */
@@ -67,9 +68,9 @@ export const KEYS: readonly string[] = [...ALL_CASES, ...CUTS];
 
 /** The cut that each outage case is, so that the demo ticks it with the case. */
 export const CUT_OF_CASE: Readonly<Record<string, string>> = {
-  "infra.power.outage": "energy.grid",
+  "infra.power.outage": "power.grid",
   "infra.water.outage": "water.main",
-  "infra.power.grid-collapse": "energy.grid",
+  "infra.power.grid-collapse": "power.grid",
 };
 
 const SOURCE_BY_ID: ReadonlyMap<string, Source> = new Map(SOURCES.map((source) => [source.id, source]));

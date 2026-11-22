@@ -1,4 +1,4 @@
-// The steps of the 12 cases of v1, the 2 more cases and the 6 cuts. Each step is in the words of the guidebook, and each step cites the page that tells it.
+// The steps of the 12 cases of v1, the 2 more cases and the 7 cuts. Each step is in the words of the guidebook, and each step cites the page that tells it.
 // The steps are full from `ready` to `P3`. `P4` and `P5` are an outline. Each cell with no step has a marked gap in `gaps.ts`.
 
 import type { Phase, Step } from "@mark1russell7/guidebook-plans";
@@ -566,7 +566,7 @@ export const CASE_STEPS: readonly Step[] = [
 
 /** The steps of the cuts. A cut is a service that an event stops. A plan of a case adds the steps of its cuts. */
 export const CUT_STEPS: readonly Step[] = [
-  ...stepsOf("energy.grid", [
+  ...stepsOf("power.grid", [
     ["ready", "list", "Make a list of the items that need electricity, and plan batteries or a power bank for them.", ["ready-power"], [POWER]],
     ["ready", "flashlights", "Keep a flashlight for each person in the household.", ["ready-power"]],
     ["ready", "co-alarms", "Put carbon monoxide alarms with battery backup on each level of the house.", ["ready-power", "cdc-co"]],
@@ -610,7 +610,7 @@ export const CUT_STEPS: readonly Step[] = [
     ["P2", "officials", "Before you travel, speak to the local officials.", ["ready-evacuation"]],
     ["P3", "trip", "Before a trip, fill the fuel tank, and take water and non-perishable food for the ride.", ["ready-evacuation"], [DRINK, FOOD]],
   ]),
-  ...stepsOf("telecom.network", [
+  ...stepsOf("phone.network", [
     ["ready", "radio", "Keep a radio with batteries or a hand crank, and a NOAA Weather Radio with a tone alert.", ["ready-kit"]],
     ["ready", "home-phone", "Learn if your home phone works with no power, and for how long its battery lasts.", ["ready-power"]],
     ["ready", "contact", "Make a communication plan with a contact outside the state and a meeting place.", ["ready-earthquakes"]],
@@ -618,6 +618,12 @@ export const CUT_STEPS: readonly Step[] = [
     ["P1", "text", "Use text messages. They are more reliable than calls and use less battery.", ["ready-earthquakes"]],
     ["P1", "calls", "Make phone calls only for emergencies.", ["ready-tornadoes", "ready-hurricanes"]],
     ["P2", "news", "Listen to the local news on a radio with batteries.", ["ready-earthquakes"]],
+  ]),
+  ...stepsOf("network.access", [
+    ["ready", "radio", "Keep a radio with batteries or a hand crank, so that news comes without the internet.", ["ready-kit"]],
+    ["ready", "paper", "Keep on paper the addresses, the phone numbers and the documents that you keep online.", ["uk-ready"]],
+    ["ready", "backup", "Make backups of important information on an external drive or a USB drive.", ["se-brochure-en"]],
+    ["P1", "news", "With no internet, get the news and the instructions of officials from a local radio station.", ["ready-earthquakes"]],
   ]),
   ...stepsOf("gas.main", [
     ["ready", "meter", "Ask your gas company how to turn off the gas at your meter, and teach your household.", ["ready-safety"]],
@@ -628,7 +634,7 @@ export const CUT_STEPS: readonly Step[] = [
     ["P1", "restore", "Do not turn the gas on again yourself. Only a qualified professional can do this.", ["ready-safety"]],
     ["P2", "indoors", "Do not use a camp stove or charcoal indoors at any time.", ["cdc-co"]],
   ]),
-  ...stepsOf("store.pharmacy", [
+  ...stepsOf("care.local", [
     ["ready", "list", "Keep a current list of your medicines: the name, the strength, the dose, the time and your allergies.", ["fda-drugs"], [MEDICINE]],
     ["ready", "copies", "Keep a copy of your prescriptions with the emergency supplies.", ["fda-drugs"], [MEDICINE]],
     ["ready", "watertight", "Store medicines in watertight containers, in a place that flood water cannot reach.", ["fda-drugs"], [MEDICINE]],
