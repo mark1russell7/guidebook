@@ -13,13 +13,13 @@ The core and the plans add-on name no topic. This package is the first topic.
 | Name | What it is |
 | --- | --- |
 | `SOURCES` | The 70 sources. The 63 sources of the steps are 55 pages of US federal agencies in the US public domain, 3 pages of the UK Government under the Open Government Licence v3.0, 3 pages of the Finnish 72 hours guidance and 2 pages of the Swedish civil defence agency. A step is a summary of its sources, not a quote. The 5 sources of the bundles are 4 open wikis and the Stack Exchange network, under CC BY-SA 4.0. The 2 sources of the media rates are reports of Backblaze. |
-| `CASE_STEPS` | The steps of the 12 cases and of the 13 more cases |
+| `CASE_STEPS` | The steps of the 12 cases and of the 14 more cases |
 | `CUT_STEPS` | The steps of the 6 cuts |
 | `STEPS` | All the steps |
 | `GAPS` | The marked gaps: each key and phase with no step on purpose, with the reason |
-| `RULES` | The 35 trigger rules of the decision chart. Each rule cites its sources and sends the reader to the steps of a key. |
+| `RULES` | The 36 trigger rules of the decision chart. Each rule cites its sources and sends the reader to the steps of a key. |
 | `CASES` | The codes of the 12 cases |
-| `MORE_CASES` | The codes of 13 more cases, with the same gates |
+| `MORE_CASES` | The codes of 14 more cases, with the same gates |
 | `CUTS` | The ids of the cuts |
 | `NEEDS` | The need codes that the steps protect |
 | `TOPICS` | The 40 topics, as a graph of prerequisites |
@@ -50,7 +50,7 @@ The code `health.medical-emergency` is new in the taxonomy. A household starts t
 
 An evacuation is a set of steps of the hurricane, the flood and the wildfire, not a case. The power outage and the water outage use the steps of their cuts.
 
-The 9 more cases are `cbrne.hazardous-materials`, `cbrne.radiological`, `civic.ai-collapse`, `health.outbreak.pandemic`, `infra.supply-chain.food`, `infra.power.grid-collapse`, `cyber.infrastructure-attack`, `civic.economy.collapse`, `security.civil-unrest`, `cbrne.nuclear-detonation`, `security.nuclear-war`, `cbrne.emp` and `geo.space-weather.geomagnetic-storm`. The case `civic.ai-collapse` is a collapse that AI causes. It includes a loss of jobs and income, fraud with cloned voices and false images, and attacks on accounts and homes. Its steps go from `ready` to `P5`.
+The 9 more cases are `cbrne.hazardous-materials`, `cbrne.radiological`, `civic.ai-collapse`, `health.outbreak.pandemic`, `infra.supply-chain.food`, `infra.power.grid-collapse`, `cyber.infrastructure-attack`, `civic.economy.collapse`, `security.civil-unrest`, `cbrne.nuclear-detonation`, `security.nuclear-war`, `cbrne.emp`, `geo.space-weather.geomagnetic-storm` and `security.armed-conflict`. The case `civic.ai-collapse` is a collapse that AI causes. It includes a loss of jobs and income, fraud with cloned voices and false images, and attacks on accounts and homes. Its steps go from `ready` to `P5`.
 
 The 6 cuts are the services that an event stops:
 
