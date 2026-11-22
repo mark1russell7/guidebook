@@ -342,6 +342,16 @@ importers:
         version: 5.1.1(@types/node@26.6.6)(@vitest/coverage-v8@5.1.1)(vite@8.3.8(@types/node@26.6.6)(esbuild@0.28.2)(tsx@4.23.15)(yaml@2.9.1))
 
   packages/site:
+    dependencies:
+      '@mark1russell7/guidebook':
+        specifier: workspace:*
+        version: link:../guidebook
+      '@mark1russell7/guidebook-plans':
+        specifier: workspace:*
+        version: link:../plans
+      '@mark1russell7/guidebook-preparedness':
+        specifier: workspace:*
+        version: link:../preparedness
     devDependencies:
       '@mark1russell7/cue':
         specifier: ^2.0.0

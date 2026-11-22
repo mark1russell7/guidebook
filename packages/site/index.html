@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="color-scheme" content="light dark">
 <title>guidebook</title>
-<meta name="description" content="Guidebooks of cited knowledge: cited units with a source, a license and a source gate, and add-ons for plans and topics.">
+<meta name="description" content="Guidebooks of cited knowledge: a live demo of the cited steps of a household plan, their matrix and their gates.">
 <!-- The icon of the site. Without an icon link, the browser asks for /favicon.ico and logs a 404 error. -->
 <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2032%2032%22%3E%3Crect%20width%3D%2232%22%20height%3D%2232%22%20rx%3D%227%22%20fill%3D%22%232346c4%22%2F%3E%3Cpath%20d%3D%22M10%207h8l5%205v13H10z%22%20fill%3D%22%23fff%22%2F%3E%3Cpath%20d%3D%22M18%207v5h5z%22%20fill%3D%22%23e7ecfd%22%2F%3E%3C%2Fsvg%3E">
 <script>
@@ -27,14 +27,65 @@
 
 <main>
   <h1>guidebook</h1>
-  <p class="lead">Guidebooks of cited knowledge: cited units with a source, a license and a source gate, and add-ons for plans and topics.</p>
+  <p class="lead">Guidebooks of cited knowledge. Each unit has a source, a license and a gate. This page is a live demo of the preparedness content.</p>
 
-  <h2>Install</h2>
-  <div class="command">
-    <code id="install">pnpm add @mark1russell7/guidebook</code>
-    <button id="copy" type="button">Copy</button>
-  </div>
-  <p class="note">This package has no release on npm yet. <a href="./releases/">Releases</a> shows each version, and <a href="./status/">Status</a> shows the open work.</p>
+  <ul class="facts" id="facts" aria-label="The content at a glance"></ul>
+
+  <section aria-labelledby="plan-title">
+    <h2 id="plan-title">Make a plan</h2>
+    <p class="note">Choose a case and the services that it stops. The plan gives the steps of each phase, with their sources.</p>
+    <div class="controls">
+      <label class="field">
+        <span>Case</span>
+        <select id="case"></select>
+      </label>
+      <fieldset class="chips">
+        <legend>Services that stop</legend>
+        <div id="cuts"></div>
+      </fieldset>
+      <fieldset class="chips">
+        <legend>Phases</legend>
+        <div id="phases"></div>
+      </fieldset>
+    </div>
+    <p class="count" id="plan-count" aria-live="polite"></p>
+    <ol class="plan" id="plan"></ol>
+  </section>
+
+  <section aria-labelledby="matrix-title">
+    <h2 id="matrix-title">The matrix of the library</h2>
+    <p class="note">Each row is a case or a cut. Each column is a phase. Select a cell to see its steps or the reason for its gap.</p>
+    <div class="matrix-tools">
+      <div class="segmented" role="group" aria-label="Rows">
+        <button type="button" data-rows="all" aria-pressed="true">All</button>
+        <button type="button" data-rows="cases" aria-pressed="false">Cases</button>
+        <button type="button" data-rows="cuts" aria-pressed="false">Cuts</button>
+      </div>
+      <ul class="legend" aria-label="Legend">
+        <li><span class="swatch steps"></span>Steps</li>
+        <li><span class="swatch gap"></span>Marked gap</li>
+        <li><span class="swatch empty"></span>No step and no mark</li>
+      </ul>
+    </div>
+    <div class="matrix-wrap"><table class="matrix" id="matrix"></table></div>
+    <div class="cell-detail" id="cell-detail" aria-live="polite" hidden></div>
+  </section>
+
+  <section aria-labelledby="gates-title">
+    <h2 id="gates-title">The gates</h2>
+    <p class="note">This page applies the source gate and the step gate in your browser, at the date of today.</p>
+    <div id="gates"></div>
+  </section>
+
+  <section aria-labelledby="install-title">
+    <h2 id="install-title">Install</h2>
+    <div class="command">
+      <code id="install">pnpm add @mark1russell7/guidebook @mark1russell7/guidebook-plans @mark1russell7/guidebook-preparedness</code>
+      <button id="copy" type="button">Copy</button>
+    </div>
+    <p class="note">These packages have no release on npm yet. <a href="./releases/">Releases</a> shows each version, and <a href="./status/">Status</a> shows the open work.</p>
+    <p class="note">The steps are general advice for a household. They do not replace the instructions of the local authorities.</p>
+  </section>
 </main>
 
 <script type="module" src="./src/index.ts"></script>
