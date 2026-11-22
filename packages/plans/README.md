@@ -134,7 +134,7 @@ The master chart is one chart for any disaster. A reader starts at a signal, ans
 | --- | --- |
 | `signal` | A thing that a reader sees or hears, and the `next` node. |
 | `question` | A question, two or more `answers` (each with a label, the next node and an optional state of society), and its sources. |
-| `goto` | An instruction that sends the reader to a `tab`. |
+| `goto` | An instruction that sends the reader to a `tab`. With `card: true`, it also sends the reader to the card of the event. |
 
 The chart gate `checkMasterChart` gives these codes:
 
@@ -148,7 +148,7 @@ The chart gate `checkMasterChart` gives these codes:
 | `too-deep` | A path from a signal has more questions than `maxQuestions` (default 3). |
 | `too-many-nodes`, `too-many-ends` | The chart has more nodes than `maxNodes`, or more ends than `maxEnds`. |
 | `tab-without-steps` | A tab with keys has no step in its keys and phases. |
-| `unused-tab` | No path goes to a tab. |
+| `unused-tab` | No path goes to a tab, and the tab is not in `used`. |
 | `uncovered-key` | No tab that the chart reaches holds a key of `cover`. Give the hazard codes of a catalog as `cover`, so each hazard has a route. |
 | `no-source`, `unknown-source` | A question cites no source and gives no `reasoning`, or a node cites an unknown source. |
 
@@ -157,6 +157,37 @@ import { checkMasterChart, masterChartOf } from "@mark1russell7/guidebook-plans"
 
 const gate = checkMasterChart(nodes, tabs, library, sources, { on: keys, cover: hazards, maxNodes: 20, maxEnds: 13 });
 const chart = masterChartOf(nodes, tabs); // The nodes by layer, the edges with their labels and the tabs that the chart reaches.
+```
+
+## The master graph
+
+The master graph `MasterGraph` is the one value that a printed binder and an app read. Its schema is `GRAPH_SCHEMA`, `"guidebook-graph/1"`. A reader refuses a graph with another value.
+
+| Field | Value |
+| --- | --- |
+| `schema` | The name and the major version of the schema. |
+| `start`, `catalog` | The id of the tab of the chart, and the id of the tab of the hazard catalog. |
+| `societies` | The states of society, in the sequence of the sections of each tab. |
+| `nodes`, `tabs` | The nodes and the tabs of the chart. The edges come from `masterChartOf`, so no second list can disagree. |
+| `hazards` | The rows of the hazard catalog. Each row has a case `key`, a `title`, its `signals`, its `entry` node and its `card`: the ids of the steps unique to the case. |
+
+The graph holds ids. A reader gets the steps and the sources from their own exports. The ids of the nodes, the tabs and the steps are stable. A change of an id is a new major version of the schema.
+
+The graph gate `checkMasterGraph` applies the chart gate. It also gives these codes:
+
+| Code | When |
+| --- | --- |
+| `bad-schema` | The schema is not `GRAPH_SCHEMA`. |
+| `unknown-start`, `unknown-catalog` | The start tab or the catalog tab is not a tab. |
+| `unknown-hazard`, `duplicate-hazard`, `missing-hazard` | A row names an unknown case, two rows have one case, or a case of `cases` has no row. |
+| `unknown-signal`, `unknown-entry` | A row names no signal, a node that is not a signal, or an unknown entry. |
+| `unknown-card-step` | A card names a step that is not a step of its case. |
+| `no-route` | No path from the entry of a row goes to a tab with keys. |
+
+```ts
+import { checkMasterGraph } from "@mark1russell7/guidebook-plans";
+
+const gate = checkMasterGraph(graph, library, sources, { on: keys, cover: hazards, cases, maxNodes: 20, maxEnds: 13 });
 ```
 
 ## Limits

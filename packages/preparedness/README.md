@@ -18,8 +18,10 @@ The core and the plans add-on name no topic. This package is the first topic.
 | `STEPS` | All the steps |
 | `GAPS` | The marked gaps: each key and phase with no step on purpose, with the reason |
 | `RULES` | The 41 trigger rules of the decision chart. Each rule cites its sources and sends the reader to the steps of a key. |
-| `MASTER` | The master chart for any disaster: 3 signals, 5 questions and 12 ends. Each path has at most 2 questions. No answer waits for officials. |
+| `MASTER` | The master chart for any disaster: 3 signals, 4 questions and 11 ends. Each path has at most 2 questions. No answer waits for officials. |
 | `TABS`, `START_TAB` | The 13 tabs of the printed plan, each with its keys, its phases and its page budget. The chart is the start tab. |
+| `GRAPH` | The master graph `guidebook-graph/1`: the chart, the tabs and the hazard catalog, in one value for the binder and the app. |
+| `HAZARDS`, `CATALOG_TAB` | The 26 rows of the hazard catalog: the signals, the entry node and the card of each case. The catalog has 8 pages. |
 | `SOCIETY_KEY` | The key of the cut of all the services of society. Its steps are for a society with no service. |
 | `CASES` | The codes of the 12 cases |
 | `MORE_CASES` | The codes of 14 more cases, with the same gates |

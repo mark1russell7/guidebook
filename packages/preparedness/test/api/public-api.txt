@@ -12,10 +12,13 @@ BUNDLES_CHECKED: build/index.d.ts#BUNDLES_CHECKED
 BUNDLE_LEVELS: build/index.d.ts#BUNDLE_LEVELS
 CASES: build/index.d.ts#CASES
 CASE_STEPS: build/index.d.ts#CASE_STEPS
+CATALOG_TAB: build/index.d.ts#CATALOG_TAB
 CHECKED: build/index.d.ts#CHECKED
 CUTS: build/index.d.ts#CUTS
 CUT_STEPS: build/index.d.ts#CUT_STEPS
 GAPS: build/index.d.ts#GAPS
+GRAPH: build/index.d.ts#GRAPH
+HAZARDS: build/index.d.ts#HAZARDS
 MASTER: build/index.d.ts#MASTER
 MEDIA_UNITS: build/index.d.ts#MEDIA_UNITS
 MEDIUM_GAPS: build/index.d.ts#MEDIUM_GAPS
@@ -51,6 +54,9 @@ export declare const CASES: readonly ["met.winter.storm", "met.tropical.hurrican
 ### build/index.d.ts#CASE_STEPS
 export declare const CASE_STEPS: readonly Step[];
 
+### build/index.d.ts#CATALOG_TAB
+export declare const CATALOG_TAB = "catalog";
+
 ### build/index.d.ts#CHECKED
 export declare const CHECKED = "2026-11-21";
 
@@ -62,6 +68,12 @@ export declare const CUT_STEPS: readonly Step[];
 
 ### build/index.d.ts#GAPS
 export declare const GAPS: readonly Gap[];
+
+### build/index.d.ts#GRAPH
+export declare const GRAPH: MasterGraph;
+
+### build/index.d.ts#HAZARDS
+export declare const HAZARDS: readonly HazardRow[];
 
 ### build/index.d.ts#MASTER
 export declare const MASTER: readonly ChartNode[];

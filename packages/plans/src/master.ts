@@ -72,6 +72,8 @@ export interface GotoNode {
   readonly text: string;
   readonly tab: string;
   readonly sources?: readonly string[];
+  /** The end also shows the card of the hazard of the reader, if the reader came with one. */
+  readonly card?: true;
 }
 
 /** A node of the master chart. */
@@ -95,6 +97,16 @@ export const MASTER_FINDING_CODES = [
   "uncovered-key",
   "no-source",
   "unknown-source",
+  "bad-schema",
+  "unknown-start",
+  "unknown-catalog",
+  "unknown-hazard",
+  "duplicate-hazard",
+  "missing-hazard",
+  "unknown-signal",
+  "unknown-entry",
+  "unknown-card-step",
+  "no-route",
 ] as const;
 
 /** A code of a finding of the chart gate. */
@@ -115,6 +127,8 @@ export interface MasterGateOptions {
   readonly maxNodes?: number;
   /** The most ends (nodes of the kind `goto`) that the print of the chart can hold. No `maxEnds` means no limit. */
   readonly maxEnds?: number;
+  /** The ids of the tabs that a reader reaches by another way than an end, for example the catalog through the cards. */
+  readonly used?: readonly string[];
 }
 
 /** The ids of the nodes that come after a node. */
@@ -221,7 +235,7 @@ export function checkMasterChart<P extends string>(
   const ends = nodes.filter((node) => node.kind === "goto").length;
   if (options.maxEnds !== undefined && ends > options.maxEnds) error("too-many-ends", "chart", `The chart has ${ends} ends. The limit is ${options.maxEnds}.`);
 
-  const used = new Set(nodes.filter((node) => seen.has(node.id)).flatMap((node) => (node.kind === "goto" ? [node.tab] : [])));
+  const used = new Set([...(options.used ?? []), ...nodes.filter((node) => seen.has(node.id)).flatMap((node) => (node.kind === "goto" ? [node.tab] : []))]);
   for (const tab of tabs) {
     for (const key of tab.keys) if (!known.has(key)) error("unknown-key", tab.id, `The tab names the unknown key "${key}".`);
     const keys = new Set(tab.keys);
@@ -278,4 +292,96 @@ export function masterChartOf<P extends string>(nodes: readonly ChartNode[], tab
   placed.sort((a, b) => a.layer - b.layer);
   const tabIds = new Set(nodes.flatMap((node) => (node.kind === "goto" ? [node.tab] : [])));
   return { nodes: placed, edges, tabs: tabs.filter((tab) => tabIds.has(tab.id)) };
+}
+
+/** The name and the major version of the schema of the master graph. A reader refuses a graph with another value. */
+export const GRAPH_SCHEMA = "guidebook-graph/1";
+
+/** A row of the hazard catalog: an index into the graph, with the facts that are unique to the hazard. */
+export interface HazardRow {
+  /** The key of the case. */
+  readonly key: string;
+  readonly title: string;
+  /** The ids of the signal nodes that the hazard gives. */
+  readonly signals: readonly string[];
+  /** The id of the node where a reader with this hazard joins the graph. */
+  readonly entry: string;
+  /** The ids of the steps of the case that are unique to it: its card. */
+  readonly card: readonly string[];
+}
+
+/**
+ * The master graph: one value that a printed binder and an app read.
+ * The edges come from the nodes with `masterChartOf`, so no second list can disagree with them.
+ */
+export interface MasterGraph<P extends string = Phase> {
+  readonly schema: typeof GRAPH_SCHEMA;
+  /** The id of the tab of the chart itself, the entry of the binder. */
+  readonly start: string;
+  /** The id of the tab of the hazard catalog. An end with `card` shows the card from it. */
+  readonly catalog: string;
+  /** The states of society, in the sequence of the sections of each tab. */
+  readonly societies: readonly Society[];
+  readonly nodes: readonly ChartNode[];
+  readonly tabs: readonly Tab<P>[];
+  readonly hazards: readonly HazardRow[];
+}
+
+/** The options of the graph gate: the options of the chart gate and the cases that the catalog must index. */
+export interface GraphGateOptions extends MasterGateOptions {
+  /** The keys of the cases. Each case has one row of the catalog. */
+  readonly cases: readonly string[];
+}
+
+/**
+ * This function applies the graph gate: the chart gate, and the gate of the hazard rows.
+ *
+ * The start tab and the catalog tab are tabs. The start tab needs no path. An end with `card` uses the catalog tab.
+ * Each case has one row. Each row names known signals, a known entry and steps of its case.
+ * Each entry reaches an end whose tab has keys.
+ */
+export function checkMasterGraph<P extends string>(
+  graph: MasterGraph<P>,
+  steps: readonly Step<P>[],
+  sources: readonly Source[],
+  options: GraphGateOptions,
+): GateResult<MasterFinding> {
+  const out: MasterFinding[] = [];
+  const error = (code: MasterFindingCode, id: string, message: string): void => {
+    out.push({ level: "error", code, record: "chart", id, message });
+  };
+  if (graph.schema !== GRAPH_SCHEMA) error("bad-schema", "graph", `The schema is "${String(graph.schema)}", not "${GRAPH_SCHEMA}".`);
+  const tabIds = new Set(graph.tabs.map((tab) => tab.id));
+  if (!tabIds.has(graph.start)) error("unknown-start", graph.start, `The start tab "${graph.start}" is not a tab.`);
+  if (!tabIds.has(graph.catalog)) error("unknown-catalog", graph.catalog, `The catalog tab "${graph.catalog}" is not a tab.`);
+  const withCards = graph.nodes.some((node) => node.kind === "goto" && node.card === true);
+  const chartTabs = graph.tabs.filter((tab) => tab.id !== graph.start);
+  const chart = checkMasterChart(graph.nodes, chartTabs, steps, sources, { ...options, used: [...(options.used ?? []), ...(withCards ? [graph.catalog] : [])] });
+  out.push(...chart.findings);
+
+  const byId = new Map(graph.nodes.map((node) => [node.id, node] as const));
+  const stepById = new Map(steps.map((step) => [step.id, step] as const));
+  const tabById = new Map(graph.tabs.map((tab) => [tab.id, tab] as const));
+  const cases = new Set(options.cases);
+  const rows = new Set<string>();
+  const routes = (id: string, seen = new Set<string>()): boolean => {
+    if (seen.has(id)) return false;
+    seen.add(id);
+    const node = byId.get(id);
+    if (node === undefined) return false;
+    if (node.kind === "goto") return (tabById.get(node.tab)?.keys.length ?? 0) > 0;
+    return nextOf(node).some((to) => routes(to, seen));
+  };
+  for (const row of graph.hazards) {
+    if (rows.has(row.key)) error("duplicate-hazard", row.key, `Two rows of the catalog have the key "${row.key}".`);
+    rows.add(row.key);
+    if (!cases.has(row.key)) error("unknown-hazard", row.key, `The row names the unknown case "${row.key}".`);
+    if (row.signals.length === 0) error("unknown-signal", row.key, "The row names no signal.");
+    for (const id of row.signals) if (byId.get(id)?.kind !== "signal") error("unknown-signal", row.key, `The row names "${id}", which is not a signal node.`);
+    if (!byId.has(row.entry)) error("unknown-entry", row.key, `The row names the unknown entry "${row.entry}".`);
+    else if (!routes(row.entry)) error("no-route", row.key, "No path from the entry of the row goes to a tab with keys.");
+    for (const id of row.card) if (stepById.get(id)?.on !== row.key) error("unknown-card-step", row.key, `The card names "${id}", which is not a step of the case.`);
+  }
+  for (const key of options.cases) if (!rows.has(key)) error("missing-hazard", key, `The catalog has no row for the case "${key}".`);
+  return resultOf(out);
 }
