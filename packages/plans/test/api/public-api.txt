@@ -8,19 +8,30 @@
 
 COVERAGE_FINDING_CODES: build/index.d.ts#COVERAGE_FINDING_CODES
 type Cell: build/index.d.ts#Cell
+type ChartAnswer: build/index.d.ts#ChartAnswer
+type ChartEdge: build/index.d.ts#ChartEdge
+type ChartNode: build/index.d.ts#ChartNode
 type ChartQuestion: build/index.d.ts#ChartQuestion
 type CoverageFinding: build/index.d.ts#CoverageFinding
 type CoverageFindingCode: build/index.d.ts#CoverageFindingCode
 type CoverageOptions: build/index.d.ts#CoverageOptions
 type Gap: build/index.d.ts#Gap
+type GotoNode: build/index.d.ts#GotoNode
 HORIZONS: build/index.d.ts#HORIZONS
 type KeyCoverage: build/index.d.ts#KeyCoverage
 LADDER: build/index.d.ts#LADDER
 type Ladder: build/index.d.ts#Ladder
+MASTER_FINDING_CODES: build/index.d.ts#MASTER_FINDING_CODES
+type MasterChart: build/index.d.ts#MasterChart
+type MasterFinding: build/index.d.ts#MasterFinding
+type MasterFindingCode: build/index.d.ts#MasterFindingCode
+type MasterGateOptions: build/index.d.ts#MasterGateOptions
 PHASES: build/index.d.ts#PHASES
 PHASE_BOUNDS: build/index.d.ts#PHASE_BOUNDS
 PHASE_TITLES: build/index.d.ts#PHASE_TITLES
 type Phase: build/index.d.ts#Phase
+type PlacedNode: build/index.d.ts#PlacedNode
+type QuestionNode: build/index.d.ts#QuestionNode
 RULE_FINDING_CODES: build/index.d.ts#RULE_FINDING_CODES
 RULE_KINDS: build/index.d.ts#RULE_KINDS
 RULE_KIND_TITLES: build/index.d.ts#RULE_KIND_TITLES
@@ -31,16 +42,24 @@ type RuleGateOptions: build/index.d.ts#RuleGateOptions
 type RuleKind: build/index.d.ts#RuleKind
 type RuleTarget: build/index.d.ts#RuleTarget
 SECONDS_PER_DAY: build/index.d.ts#SECONDS_PER_DAY
+SOCIETY_STATES: build/index.d.ts#SOCIETY_STATES
+SOCIETY_TITLES: build/index.d.ts#SOCIETY_TITLES
 STEP_FINDING_CODES: build/index.d.ts#STEP_FINDING_CODES
+type SignalNode: build/index.d.ts#SignalNode
+type Society: build/index.d.ts#Society
 type Step: build/index.d.ts#Step
 type StepFinding: build/index.d.ts#StepFinding
 type StepFindingCode: build/index.d.ts#StepFindingCode
 type StepGateOptions: build/index.d.ts#StepGateOptions
+type StepsForOptions: build/index.d.ts#StepsForOptions
+type Tab: build/index.d.ts#Tab
 chartOf: build/index.d.ts#chartOf
 checkCoverage: build/index.d.ts#checkCoverage
+checkMasterChart: build/index.d.ts#checkMasterChart
 checkRules: build/index.d.ts#checkRules
 checkSteps: build/index.d.ts#checkSteps
 coverageOf: build/index.d.ts#coverageOf
+masterChartOf: build/index.d.ts#masterChartOf
 phaseIn: build/index.d.ts#phaseIn
 phaseOf: build/index.d.ts#phaseOf
 phasesOf: build/index.d.ts#phasesOf
@@ -60,6 +79,23 @@ interface Cell<P extends string = Phase> {
   readonly steps: readonly Step<P>[];
   readonly gap?: Gap<P>;
 }
+
+### build/index.d.ts#ChartAnswer
+interface ChartAnswer {
+  readonly label: string;
+  readonly next: string;
+  readonly society?: Society;
+}
+
+### build/index.d.ts#ChartEdge
+interface ChartEdge {
+  readonly from: string;
+  readonly to: string;
+  readonly label?: string;
+}
+
+### build/index.d.ts#ChartNode
+type ChartNode = SignalNode | QuestionNode | GotoNode;
 
 ### build/index.d.ts#ChartQuestion
 interface ChartQuestion<P extends string = Phase> {
@@ -88,6 +124,15 @@ interface Gap<P extends string = Phase> {
   readonly why: string;
 }
 
+### build/index.d.ts#GotoNode
+interface GotoNode {
+  readonly id: string;
+  readonly kind: "goto";
+  readonly text: string;
+  readonly tab: string;
+  readonly sources?: readonly string[];
+}
+
 ### build/index.d.ts#HORIZONS
 export declare const HORIZONS: readonly ["P0", "P1", "P2", "P3", "P4", "P5"];
 
@@ -112,6 +157,31 @@ interface Ladder<P extends string = string> {
   readonly titles: Readonly<Record<P, string>>;
 }
 
+### build/index.d.ts#MASTER_FINDING_CODES
+export declare const MASTER_FINDING_CODES: readonly ["duplicate-id", "unknown-node", "unknown-tab", "unknown-key", "few-answers", "no-signal", "unreachable", "cycle", "too-deep", "too-many-nodes", "too-many-ends", "tab-without-steps", "unused-tab", "uncovered-key", "no-source", "unknown-source"];
+
+### build/index.d.ts#MasterChart
+interface MasterChart<P extends string = Phase> {
+  readonly nodes: readonly PlacedNode[];
+  readonly edges: readonly ChartEdge[];
+  readonly tabs: readonly Tab<P>[];
+}
+
+### build/index.d.ts#MasterFinding
+type MasterFinding = Finding<MasterFindingCode, "chart">;
+
+### build/index.d.ts#MasterFindingCode
+type MasterFindingCode = (typeof MASTER_FINDING_CODES)[number];
+
+### build/index.d.ts#MasterGateOptions
+interface MasterGateOptions {
+  readonly on: readonly string[];
+  readonly cover?: readonly string[];
+  readonly maxQuestions?: number;
+  readonly maxNodes?: number;
+  readonly maxEnds?: number;
+}
+
 ### build/index.d.ts#PHASES
 export declare const PHASES: readonly ["ready", "warned", "P0", "P1", "P2", "P3", "P4", "P5"];
 
@@ -123,6 +193,21 @@ export declare const PHASE_TITLES: Readonly<Record<Phase, string>>;
 
 ### build/index.d.ts#Phase
 type Phase = (typeof PHASES)[number];
+
+### build/index.d.ts#PlacedNode
+interface PlacedNode {
+  readonly node: ChartNode;
+  readonly layer: number;
+}
+
+### build/index.d.ts#QuestionNode
+interface QuestionNode {
+  readonly id: string;
+  readonly kind: "question";
+  readonly text: string;
+  readonly answers: readonly ChartAnswer[];
+  readonly sources: readonly string[];
+}
 
 ### build/index.d.ts#RULE_FINDING_CODES
 export declare const RULE_FINDING_CODES: readonly ["duplicate-id", "unknown-key", "no-target", "target-without-steps", "no-source", "unknown-source"];
@@ -168,8 +253,26 @@ interface RuleTarget<P extends string = Phase> {
 ### build/index.d.ts#SECONDS_PER_DAY
 export declare const SECONDS_PER_DAY: number;
 
+### build/index.d.ts#SOCIETY_STATES
+export declare const SOCIETY_STATES: readonly ["works", "partly", "none"];
+
+### build/index.d.ts#SOCIETY_TITLES
+export declare const SOCIETY_TITLES: Readonly<Record<Society, string>>;
+
 ### build/index.d.ts#STEP_FINDING_CODES
-export declare const STEP_FINDING_CODES: readonly ["duplicate-id", "empty-text", "no-source", "missing-source", "use-refused", "unknown-phase", "bad-order", "duplicate-order", "unmarked-gap", "gap-with-steps", "duplicate-gap", "empty-reason"];
+export declare const STEP_FINDING_CODES: readonly ["duplicate-id", "empty-text", "no-source", "number-without-source", "empty-reasoning", "missing-source", "use-refused", "unknown-phase", "bad-order", "duplicate-order", "unmarked-gap", "gap-with-steps", "duplicate-gap", "empty-reason"];
+
+### build/index.d.ts#SignalNode
+interface SignalNode {
+  readonly id: string;
+  readonly kind: "signal";
+  readonly text: string;
+  readonly next: string;
+  readonly sources?: readonly string[];
+}
+
+### build/index.d.ts#Society
+type Society = (typeof SOCIETY_STATES)[number];
 
 ### build/index.d.ts#Step
 interface Step<P extends string = Phase> {
@@ -182,6 +285,8 @@ interface Step<P extends string = Phase> {
   readonly uses?: readonly string[];
   readonly order: number;
   readonly sources: readonly SourceId[];
+  readonly reasoning?: string;
+  readonly society?: readonly Society[];
 }
 
 ### build/index.d.ts#StepFinding
@@ -197,11 +302,28 @@ interface StepGateOptions<P extends string> extends UseContext {
   readonly gaps?: readonly Gap<P>[];
 }
 
+### build/index.d.ts#StepsForOptions
+interface StepsForOptions {
+  readonly society?: Society;
+}
+
+### build/index.d.ts#Tab
+interface Tab<P extends string = Phase> {
+  readonly id: string;
+  readonly title: string;
+  readonly keys: readonly string[];
+  readonly phases: readonly P[];
+  readonly pages?: number;
+}
+
 ### build/index.d.ts#chartOf
 export declare function chartOf<P extends string>(rules: readonly Rule<P>[]): readonly ChartQuestion<P>[];
 
 ### build/index.d.ts#checkCoverage
 export declare function checkCoverage<P extends string>(steps: readonly Step<P>[], options: CoverageOptions<P>): GateResult<CoverageFinding>;
+
+### build/index.d.ts#checkMasterChart
+export declare function checkMasterChart<P extends string>(nodes: readonly ChartNode[], tabs: readonly Tab<P>[], steps: readonly Step<P>[], sources: readonly Source[], options: MasterGateOptions): GateResult<MasterFinding>;
 
 ### build/index.d.ts#checkRules
 export declare function checkRules<P extends string>(rules: readonly Rule<P>[], steps: readonly Step<P>[], sources: readonly Source[], options: RuleGateOptions): GateResult<RuleFinding>;
@@ -211,6 +333,9 @@ export declare function checkSteps<P extends string>(steps: readonly Step<P>[], 
 
 ### build/index.d.ts#coverageOf
 export declare function coverageOf<P extends string>(steps: readonly Step<P>[], on: readonly string[], phases: readonly P[]): readonly KeyCoverage<P>[];
+
+### build/index.d.ts#masterChartOf
+export declare function masterChartOf<P extends string>(nodes: readonly ChartNode[], tabs: readonly Tab<P>[]): MasterChart<P>;
 
 ### build/index.d.ts#phaseIn
 export declare function phaseIn<P extends string>(ladder: Ladder<P>, seconds: number, warned?: boolean): P;
@@ -225,7 +350,7 @@ export declare function phasesOf<P extends string>(ladder: Ladder<P>): readonly 
 export declare function planMatrix<P extends string>(library: readonly Step<P>[], gaps: readonly Gap<P>[], on: readonly string[], phases: readonly P[]): readonly (readonly Cell<P>[])[];
 
 ### build/index.d.ts#stepsFor
-export declare function stepsFor<P extends string>(library: readonly Step<P>[], on: readonly string[], phases: readonly P[]): readonly Step<P>[];
+export declare function stepsFor<P extends string>(library: readonly Step<P>[], on: readonly string[], phases: readonly P[], options?: StepsForOptions): readonly Step<P>[];
 
 ### build/index.d.ts#unitsOf
 export declare function unitsOf<P extends string>(steps: readonly Step<P>[]): readonly CitedUnit[];
