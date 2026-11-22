@@ -72,7 +72,7 @@ export declare const MEDIUM_LOSSES: Readonly<Partial<Record<MediumKind, {
 }>>>;
 
 ### build/index.d.ts#MORE_CASES
-export declare const MORE_CASES: readonly ["cbrne.hazardous-materials", "cbrne.radiological", "civic.ai-collapse", "health.outbreak.pandemic", "infra.supply-chain.food", "infra.power.grid-collapse", "cyber.infrastructure-attack", "civic.economy.collapse", "security.civil-unrest"];
+export declare const MORE_CASES: readonly ["cbrne.hazardous-materials", "cbrne.radiological", "civic.ai-collapse", "health.outbreak.pandemic", "infra.supply-chain.food", "infra.power.grid-collapse", "cyber.infrastructure-attack", "civic.economy.collapse", "security.civil-unrest", "cbrne.nuclear-detonation", "security.nuclear-war", "cbrne.emp", "geo.space-weather.geomagnetic-storm"];
 
 ### build/index.d.ts#NEEDS
 export declare const NEEDS: readonly ["hydration.drink", "food.energy", "health.medicine", "power.electric"];

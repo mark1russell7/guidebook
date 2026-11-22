@@ -6,6 +6,7 @@ const OF_GRID = "This case is the power cut itself. The steps of the cut `energy
 const OF_WATER = "This case is the water cut itself. The steps of the cut `water.main` apply.";
 const NO_HOME_STEP = "The emergency team and the hospital give the care after the first minutes. The sources give no household step.";
 
+const NO_EMP = "The sources give no household step for this phase of an EMP. The steps of the cuts `energy.grid` and `telecom.network` apply.";
 const NO_LONG_STEP = "The sources give no step for a cut of this length. The steps of the earlier phases continue.";
 
 /** The marked gaps of the cases and the cuts. */
@@ -65,4 +66,8 @@ export const GAPS: readonly Gap[] = [
   { on: "health.medical-emergency", phase: "P1", why: NO_HOME_STEP },
   { on: "health.medical-emergency", phase: "P2", why: NO_HOME_STEP },
   { on: "health.medical-emergency", phase: "P3", why: NO_HOME_STEP },
+  { on: "cbrne.emp", phase: "warned", why: "The sources give no household step for a warning of a pulse. If the kind of attack is not known, the steps of a nuclear detonation apply." },
+  { on: "cbrne.emp", phase: "P2", why: NO_EMP },
+  { on: "cbrne.emp", phase: "P3", why: NO_EMP },
+  { on: "geo.space-weather.geomagnetic-storm", phase: "P0", why: "A storm builds over hours. The sources give no step for its first 5 minutes." },
 ];
