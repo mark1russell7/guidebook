@@ -20,6 +20,7 @@ The core and the plans add-on name no topic. This package is the first topic.
 | `RULES` | The 41 trigger rules of the decision chart. Each rule cites its sources and sends the reader to the steps of a key. |
 | `MASTER` | The master chart for any disaster: 3 signals, 5 questions and 12 ends. Each path has at most 2 questions. No answer waits for officials. |
 | `TABS`, `START_TAB` | The 13 tabs of the printed plan, each with its keys, its phases and its page budget. The chart is the start tab. |
+| `SOCIETY_KEY` | The key of the cut of all the services of society. Its steps are for a society with no service. |
 | `CASES` | The codes of the 12 cases |
 | `MORE_CASES` | The codes of 14 more cases, with the same gates |
 | `CUTS` | The ids of the cuts |
@@ -66,12 +67,16 @@ Each step is one instruction in Simplified Technical English, in the words of th
 
 No step waits for officials. The trigger of a step is a fact at the place of the reader: water, fire, smoke, a cloud, a dose rate. A broadcast is one input of these facts. A step that changes the trigger of its source gives its `reasoning`.
 
+A step gives its `society` when it is only for some states of society. The long-term tab has the steps of each cut for a society with no service, by need. A case keeps only the facts unique to it.
+
 The test of the package applies these gates:
 
 - The source gate of the core, on the sources.
 - The step gate of the plans add-on, over all the keys and all the phases, with no unmarked gap.
 - The rules of `ste-lint` on the texts of the steps, the gaps, the rules and the chart.
 - The no-officials gate: no step, rule or chart text tells the reader to obey, wait for or follow officials.
+- The no-society gate: each step after the start that names a service of society gives its states of society.
+- Each key of the long-term tab has steps for a society with no service from 5 days to 5 years.
 - No plan of a case gives the same text two times.
 
 ## The topics and the bundles
