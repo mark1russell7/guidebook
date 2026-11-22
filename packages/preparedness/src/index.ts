@@ -28,8 +28,11 @@ export const CASES = [
   "health.medical-emergency",
 ] as const;
 
-/** The cases past v1. Their steps have the same gates as the steps of `CASES`. */
-export const MORE_CASES = ["cbrne.hazardous-materials", "cbrne.radiological"] as const;
+/**
+ * The cases past v1. Their steps have the same gates as the steps of `CASES`.
+ * The code `civic.ai-collapse` is new. The hazard catalog of `stack-hazards` gives its cuts.
+ */
+export const MORE_CASES = ["cbrne.hazardous-materials", "cbrne.radiological", "civic.ai-collapse"] as const;
 
 /** The cuts of the content. A cut is a service that an event stops. These ids are a proposal until the stack model names them. */
 export const CUTS = ["energy.grid", "water.main", "road.local", "telecom.network", "gas.main", "store.pharmacy"] as const;

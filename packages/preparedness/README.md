@@ -12,13 +12,13 @@ The core and the plans add-on name no topic. This package is the first topic.
 
 | Name | What it is |
 | --- | --- |
-| `SOURCES` | The 28 sources. The 21 sources of the steps are pages of Ready.gov, CDC and FDA in the US public domain. The 5 sources of the bundles are 4 open wikis and the Stack Exchange network, under CC BY-SA 4.0. The 2 sources of the media rates are reports of Backblaze. |
-| `CASE_STEPS` | The steps of the 12 cases and of the 2 more cases |
+| `SOURCES` | The 35 sources. The 28 sources of the steps are pages of US federal agencies (Ready.gov, CDC, FDA, FBI, NOAA, the Department of Labor and USDA) in the US public domain. The 5 sources of the bundles are 4 open wikis and the Stack Exchange network, under CC BY-SA 4.0. The 2 sources of the media rates are reports of Backblaze. |
+| `CASE_STEPS` | The steps of the 12 cases and of the 3 more cases |
 | `CUT_STEPS` | The steps of the 6 cuts |
 | `STEPS` | All the steps |
 | `GAPS` | The marked gaps: each key and phase with no step on purpose, with the reason |
 | `CASES` | The codes of the 12 cases |
-| `MORE_CASES` | The codes of 2 more cases, with the same gates |
+| `MORE_CASES` | The codes of 3 more cases, with the same gates |
 | `CUTS` | The ids of the cuts |
 | `NEEDS` | The need codes that the steps protect |
 | `TOPICS` | The 40 topics, as a graph of prerequisites |
@@ -49,7 +49,7 @@ The code `health.medical-emergency` is new in the taxonomy. A household starts t
 
 An evacuation is a set of steps of the hurricane, the flood and the wildfire, not a case. The power outage and the water outage use the steps of their cuts.
 
-The 2 more cases are `cbrne.hazardous-materials` and `cbrne.radiological`.
+The 3 more cases are `cbrne.hazardous-materials`, `cbrne.radiological` and `civic.ai-collapse`. The case `civic.ai-collapse` is a collapse that AI causes: a loss of jobs and income, fraud with cloned voices and false images, and attacks on accounts. Its steps go from `ready` to `P5`.
 
 The 6 cuts are the services that an event stops:
 

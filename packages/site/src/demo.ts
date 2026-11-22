@@ -34,6 +34,7 @@ export const KEY_TITLES: Readonly<Record<string, string>> = {
   "health.medical-emergency": "Medical emergency at home",
   "cbrne.hazardous-materials": "Hazardous materials",
   "cbrne.radiological": "Radiological emergency",
+  "civic.ai-collapse": "AI-driven collapse",
   "energy.grid": "No power from the grid",
   "water.main": "No water from the main",
   "road.local": "Closed local roads",
@@ -47,7 +48,7 @@ export function titleOf(key: string): string {
   return KEY_TITLES[key] ?? key;
 }
 
-/** All the cases of the demo: the 12 cases of v1, then the 2 more cases. */
+/** All the cases of the demo: the 12 cases of v1, then the more cases. */
 export const ALL_CASES: readonly string[] = [...CASES, ...MORE_CASES];
 
 /** All the keys of the matrix: the cases, then the cuts. */
@@ -135,7 +136,7 @@ export function gateReport(at: string): GateReport {
   const open = checkCoverage(STEPS, { on: KEYS, phases: HORIZONS, gaps: GAPS }).findings;
   const horizonCells = KEYS.length * HORIZONS.length;
   return {
-    checked: CHECKED,
+    checked: SOURCES.map((source) => source.checked).reduce<string>((last, date) => (date > last ? date : last), CHECKED),
     sources: SOURCES.length,
     steps: STEPS.length,
     gaps: GAPS.length,
