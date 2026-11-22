@@ -2,10 +2,10 @@ import { fileURLToPath } from "node:url";
 import { checkSources, checkUnits, permits } from "@mark1russell7/guidebook";
 import { bytesOf, checkCatalog, kiwixKeyOf } from "@mark1russell7/guidebook-library";
 import { checkTopics, printOrder } from "@mark1russell7/guidebook-topics";
-import { HORIZONS, PHASES, checkCoverage, checkSteps, planMatrix, stepsFor } from "@mark1russell7/guidebook-plans";
+import { HORIZONS, PHASES, checkCoverage, checkSteps, planMatrix, stepsFor, chartOf, checkRules } from "@mark1russell7/guidebook-plans";
 import { Linter, loadConfig } from "@mark1russell7/ste-lint";
 import { describe, expect, it } from "vitest";
-import { AREAS, BUNDLES, BUNDLE_LEVELS, CASES, CUTS, GAPS, MEDIA_UNITS, MEDIUM_GAPS, MEDIUM_LOSSES, MORE_CASES, NEEDS, OPEN_CELLS, SOURCES, STEPS, TOPICS } from "./index.ts";
+import { AREAS, BUNDLES, BUNDLE_LEVELS, CASES, CUTS, GAPS, MEDIA_UNITS, MEDIUM_GAPS, MEDIUM_LOSSES, MORE_CASES, NEEDS, OPEN_CELLS, RULES, SOURCES, STEPS, TOPICS } from "./index.ts";
 
 const ALL_CASES = [...CASES, ...MORE_CASES];
 const KEYS = [...ALL_CASES, ...CUTS];
@@ -146,5 +146,20 @@ describe("the words of the steps", () => {
         .map((finding) => `${id}: ${finding.ruleId}: ${finding.message}`),
     );
     expect(errors).toEqual([]);
+  });
+});
+
+describe("the decision chart", () => {
+  it("passes the rule gate: each key is known, each target has steps, each rule cites a source", () => {
+    expect(checkRules(RULES, STEPS, SOURCES, { on: [...KEYS, ...NEEDS] }).findings).toEqual([]);
+  });
+
+  it("asks first where you are, then for a danger now, then for what is cut", () => {
+    expect(chartOf(RULES).map((question) => question.kind)).toEqual(["place", "reflex", "module", "stay", "go", "fallback", "long-plan"]);
+  });
+
+  it("gives a module for each cut", () => {
+    const modules = new Set(RULES.filter((rule) => rule.kind === "module").map((rule) => rule.target?.on));
+    expect(CUTS.filter((cut) => !modules.has(cut))).toEqual([]);
   });
 });

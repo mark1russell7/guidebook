@@ -8,6 +8,7 @@
 
 COVERAGE_FINDING_CODES: build/index.d.ts#COVERAGE_FINDING_CODES
 type Cell: build/index.d.ts#Cell
+type ChartQuestion: build/index.d.ts#ChartQuestion
 type CoverageFinding: build/index.d.ts#CoverageFinding
 type CoverageFindingCode: build/index.d.ts#CoverageFindingCode
 type CoverageOptions: build/index.d.ts#CoverageOptions
@@ -20,13 +21,24 @@ PHASES: build/index.d.ts#PHASES
 PHASE_BOUNDS: build/index.d.ts#PHASE_BOUNDS
 PHASE_TITLES: build/index.d.ts#PHASE_TITLES
 type Phase: build/index.d.ts#Phase
+RULE_FINDING_CODES: build/index.d.ts#RULE_FINDING_CODES
+RULE_KINDS: build/index.d.ts#RULE_KINDS
+RULE_KIND_TITLES: build/index.d.ts#RULE_KIND_TITLES
+type Rule: build/index.d.ts#Rule
+type RuleFinding: build/index.d.ts#RuleFinding
+type RuleFindingCode: build/index.d.ts#RuleFindingCode
+type RuleGateOptions: build/index.d.ts#RuleGateOptions
+type RuleKind: build/index.d.ts#RuleKind
+type RuleTarget: build/index.d.ts#RuleTarget
 SECONDS_PER_DAY: build/index.d.ts#SECONDS_PER_DAY
 STEP_FINDING_CODES: build/index.d.ts#STEP_FINDING_CODES
 type Step: build/index.d.ts#Step
 type StepFinding: build/index.d.ts#StepFinding
 type StepFindingCode: build/index.d.ts#StepFindingCode
 type StepGateOptions: build/index.d.ts#StepGateOptions
+chartOf: build/index.d.ts#chartOf
 checkCoverage: build/index.d.ts#checkCoverage
+checkRules: build/index.d.ts#checkRules
 checkSteps: build/index.d.ts#checkSteps
 coverageOf: build/index.d.ts#coverageOf
 phaseIn: build/index.d.ts#phaseIn
@@ -47,6 +59,13 @@ interface Cell<P extends string = Phase> {
   readonly phase: P;
   readonly steps: readonly Step<P>[];
   readonly gap?: Gap<P>;
+}
+
+### build/index.d.ts#ChartQuestion
+interface ChartQuestion<P extends string = Phase> {
+  readonly kind: RuleKind;
+  readonly title: string;
+  readonly rules: readonly Rule<P>[];
 }
 
 ### build/index.d.ts#CoverageFinding
@@ -105,6 +124,47 @@ export declare const PHASE_TITLES: Readonly<Record<Phase, string>>;
 ### build/index.d.ts#Phase
 type Phase = (typeof PHASES)[number];
 
+### build/index.d.ts#RULE_FINDING_CODES
+export declare const RULE_FINDING_CODES: readonly ["duplicate-id", "unknown-key", "no-target", "target-without-steps", "no-source", "unknown-source"];
+
+### build/index.d.ts#RULE_KINDS
+export declare const RULE_KINDS: readonly ["place", "reflex", "module", "stay", "go", "fallback", "long-plan"];
+
+### build/index.d.ts#RULE_KIND_TITLES
+export declare const RULE_KIND_TITLES: Readonly<Record<RuleKind, string>>;
+
+### build/index.d.ts#Rule
+interface Rule<P extends string = Phase> {
+  readonly id: string;
+  readonly kind: RuleKind;
+  readonly when: string;
+  readonly then: string;
+  readonly on: readonly string[];
+  readonly target?: RuleTarget<P>;
+  readonly rank: number;
+  readonly sources: readonly string[];
+}
+
+### build/index.d.ts#RuleFinding
+type RuleFinding = Finding<RuleFindingCode, "rule">;
+
+### build/index.d.ts#RuleFindingCode
+type RuleFindingCode = (typeof RULE_FINDING_CODES)[number];
+
+### build/index.d.ts#RuleGateOptions
+interface RuleGateOptions {
+  readonly on: readonly string[];
+}
+
+### build/index.d.ts#RuleKind
+type RuleKind = (typeof RULE_KINDS)[number];
+
+### build/index.d.ts#RuleTarget
+interface RuleTarget<P extends string = Phase> {
+  readonly on: string;
+  readonly phases: readonly P[];
+}
+
 ### build/index.d.ts#SECONDS_PER_DAY
 export declare const SECONDS_PER_DAY: number;
 
@@ -137,8 +197,14 @@ interface StepGateOptions<P extends string> extends UseContext {
   readonly gaps?: readonly Gap<P>[];
 }
 
+### build/index.d.ts#chartOf
+export declare function chartOf<P extends string>(rules: readonly Rule<P>[]): readonly ChartQuestion<P>[];
+
 ### build/index.d.ts#checkCoverage
 export declare function checkCoverage<P extends string>(steps: readonly Step<P>[], options: CoverageOptions<P>): GateResult<CoverageFinding>;
+
+### build/index.d.ts#checkRules
+export declare function checkRules<P extends string>(rules: readonly Rule<P>[], steps: readonly Step<P>[], sources: readonly Source[], options: RuleGateOptions): GateResult<RuleFinding>;
 
 ### build/index.d.ts#checkSteps
 export declare function checkSteps<P extends string>(steps: readonly Step<P>[], sources: readonly Source[], options: StepGateOptions<P>): GateResult<StepFinding>;
