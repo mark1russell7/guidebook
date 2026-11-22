@@ -134,7 +134,7 @@ The master chart is one chart for any disaster. A reader starts at a signal, ans
 | --- | --- |
 | `signal` | A thing that a reader sees or hears, and the `next` node. |
 | `question` | A question, two or more `answers` (each with a label, the next node and an optional state of society), and its sources. |
-| `goto` | An instruction that sends the reader to a `tab`. With `card: true`, it also sends the reader to the card of the event. |
+| `goto` | An instruction that sends the reader to a `tab`. With `card: true`, it also sends the reader to the card of the event. With `next`, the reader goes on to that node after the tab. |
 
 The chart gate `checkMasterChart` gives these codes:
 
@@ -161,7 +161,7 @@ const chart = masterChartOf(nodes, tabs); // The nodes by layer, the edges with 
 
 ## The master graph
 
-The master graph `MasterGraph` is the one value that a printed binder and an app read. Its schema is `GRAPH_SCHEMA`, `"guidebook-graph/1"`. A reader refuses a graph with another value.
+The master graph `MasterGraph` is the one value that a printed binder and an app read. Its schema is `GRAPH_SCHEMA`, `"guidebook-graph/2"`. A reader refuses a graph with another value. In version 2, an end can lead on to a next node.
 
 | Field | Value |
 | --- | --- |

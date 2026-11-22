@@ -131,7 +131,7 @@ interface CoverageOptions<P extends string> {
 }
 
 ### build/index.d.ts#GRAPH_SCHEMA
-export declare const GRAPH_SCHEMA = "guidebook-graph/1";
+export declare const GRAPH_SCHEMA = "guidebook-graph/2";
 
 ### build/index.d.ts#Gap
 interface Gap<P extends string = Phase> {
@@ -148,6 +148,7 @@ interface GotoNode {
   readonly tab: string;
   readonly sources?: readonly string[];
   readonly card?: true;
+  readonly next?: string;
 }
 
 ### build/index.d.ts#GraphGateOptions

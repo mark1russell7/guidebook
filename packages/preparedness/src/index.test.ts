@@ -2,8 +2,9 @@ import { fileURLToPath } from "node:url";
 import { checkSources, checkUnits, permits } from "@mark1russell7/guidebook";
 import { bytesOf, checkCatalog, kiwixKeyOf } from "@mark1russell7/guidebook-library";
 import { checkTopics, printOrder } from "@mark1russell7/guidebook-topics";
-import { HORIZONS, PHASES, checkCoverage, checkSteps, planMatrix, stepsFor, chartOf, checkMasterGraph, checkRules, masterChartOf } from "@mark1russell7/guidebook-plans";
+import { HORIZONS, PHASES, checkCoverage, checkSteps, planMatrix, stepsFor, chartOf, checkMasterGraph, checkRules, masterChartOf, walkAnswer, walkStart } from "@mark1russell7/guidebook-plans";
 import { Linter, loadConfig } from "@mark1russell7/ste-lint";
+import type { WalkState } from "@mark1russell7/guidebook-plans";
 import { describe, expect, it } from "vitest";
 import { AREAS, BUNDLES, CATALOG_TAB, GRAPH, HAZARDS, BUNDLE_LEVELS, CASES, CUTS, GAPS, MEDIA_UNITS, MEDIUM_GAPS, MEDIUM_LIVES, MEDIUM_LOSSES, MASTER, MORE_CASES, NEEDS, OPEN_CELLS, RULES, SOCIETY_KEY, SOURCES, START_TAB, STEPS, TABS, TOPICS } from "./index.ts";
 
@@ -205,7 +206,7 @@ describe("the no-officials gate", () => {
 
 // The words of a service of a society that works. A step after the start that names one gives the states of society that it is for.
 const SERVICE =
-  /\b(buy|purchase|shops?|pharmac(?:y|ies|ist)|hospitals?|doctors?|911|banks?|insurers?|insurance|apply|FEMA|landlord|(?:power|gas|water|utility) company|emergency services|reception center|public shelter|charit(?:y|ies)|volunteer groups?|employer|credit cards?|debit cards?|ATM|SNAP|unemployment|professional|plumber|electrician|contractors?|poison center|ambulance|fire department)\b/i;
+  /\b(buy|purchase|shops?|pharmac(?:y|ies|ist)|hospitals?|doctors?|911|9-1-1|ambulances?|emergency team|fire department|banks?|insurers?|insurance|apply|FEMA|landlord|(?:power|gas|water|utility) company|emergency services|reception center|public shelter|charit(?:y|ies)|volunteer groups?|employer|credit cards?|debit cards?|ATM|SNAP|unemployment|professional|plumber|electrician|contractors?|poison center|ambulance|fire department)\b/i;
 const LONG = ["P3", "P4", "P5"] as const;
 
 describe("the no-society gate", () => {
@@ -240,8 +241,47 @@ describe("the master chart", () => {
   const tabs = TABS.filter((tab) => tab.id !== START_TAB);
 
   it("finds no finding: each hazard and each part has a route, in 3 questions or fewer, on one page", () => {
-    const result = checkMasterGraph(GRAPH, STEPS, SOURCES, { on: [...KEYS, ...NEEDS], cover, cases: ALL_CASES, maxQuestions: 3, maxNodes: 20, maxEnds: 13 });
+    const result = checkMasterGraph(GRAPH, STEPS, SOURCES, { on: [...KEYS, ...NEEDS], cover, cases: ALL_CASES, maxQuestions: 3, maxNodes: 21, maxEnds: 13 });
     expect(result.findings).toEqual([]);
+  });
+
+  // Each walk of the chart, from each signal and each catalog row, with each answer. A walk ends at an end with no next.
+  const walks = (): WalkState[] => {
+    const done: WalkState[] = [];
+    const starts = [...MASTER.filter((node) => node.kind === "signal").map((node) => walkStart(GRAPH, undefined, node.id)), ...HAZARDS.map((row) => walkStart(GRAPH, row.key))];
+    const open = starts.filter((state) => state !== undefined);
+    for (let state = open.pop(); state !== undefined; state = open.pop()) {
+      const node = MASTER.find((item) => item.id === state.at);
+      const labels = node?.kind === "question" ? node.answers.map((answer) => answer.label) : [undefined];
+      const next = labels.map((label) => walkAnswer(GRAPH, state, label)).filter((item) => item !== undefined);
+      if (next.length === 0) done.push(state);
+      open.push(...next);
+    }
+    return done;
+  };
+
+  it("leads each walk to the question of society and to a need, so no walk ends at stay or go", () => {
+    const short = walks().filter((state) => !state.trail.some((step) => step.at === "society"));
+    expect(short.map((state) => [...state.trail.map((step) => step.at), state.at].join(" > "))).toEqual([]);
+  });
+
+  it("sends a reader out only for a danger inside the place, never for a danger in the air or the street", () => {
+    const out = walks().filter((state) => {
+      const path = [...state.trail.map((step) => step.at), state.at];
+      const seal = path.indexOf("to-seal");
+      return seal >= 0 && path.indexOf("to-go", seal) >= 0 && path.indexOf("to-go", seal) < path.indexOf("society");
+    });
+    expect(out).toEqual([]);
+    const inside = MASTER.find((node) => node.id === "outside");
+    expect(inside?.kind === "question" && inside.answers.find((answer) => answer.label === "Yes")?.next).toBe("to-seal");
+  });
+
+  it("gives each card of a release of radiation the time to stay inside", () => {
+    const byId = new Map(STEPS.map((step) => [step.id, step] as const));
+    for (const key of ["cbrne.radiological", "cbrne.nuclear-detonation"]) {
+      const card = HAZARDS.find((row) => row.key === key)?.card ?? [];
+      expect(card.some((id) => /at least 24 hours/.test(byId.get(id)?.do ?? "")), key).toBe(true);
+    }
   });
 
   it("gives each hazard a card of its own facts, and the cards fit the pages of the catalog", () => {
