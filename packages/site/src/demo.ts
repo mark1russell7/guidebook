@@ -35,6 +35,12 @@ export const KEY_TITLES: Readonly<Record<string, string>> = {
   "cbrne.hazardous-materials": "Hazardous materials",
   "cbrne.radiological": "Radiological emergency",
   "civic.ai-collapse": "AI-driven collapse",
+  "health.outbreak.pandemic": "Severe pandemic",
+  "infra.supply-chain.food": "Food supply failure: empty stores",
+  "infra.power.grid-collapse": "Long grid-down",
+  "cyber.infrastructure-attack": "Cyberattack on the infrastructure",
+  "civic.economy.collapse": "Financial collapse",
+  "security.civil-unrest": "Civil unrest",
   "energy.grid": "No power from the grid",
   "water.main": "No water from the main",
   "road.local": "Closed local roads",
@@ -58,6 +64,7 @@ export const KEYS: readonly string[] = [...ALL_CASES, ...CUTS];
 export const CUT_OF_CASE: Readonly<Record<string, string>> = {
   "infra.power.outage": "energy.grid",
   "infra.water.outage": "water.main",
+  "infra.power.grid-collapse": "energy.grid",
 };
 
 const SOURCE_BY_ID: ReadonlyMap<string, Source> = new Map(SOURCES.map((source) => [source.id, source]));
