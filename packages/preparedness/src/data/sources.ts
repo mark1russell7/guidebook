@@ -66,4 +66,32 @@ export const SOURCES: readonly Source[] = [
   // Backblaze gives the failure rates of the drives of its data centers. The units cite each rate as a fact, so the license permits the use.
   { id: "backblaze-hdd-2026q2", title: "Backblaze Drive Stats for Q2 2026", url: "https://www.backblaze.com/blog/backblaze-drive-stats-for-q2-2026/", license: "all-rights-reserved", checked: CHECKED, by: "Backblaze" },
   { id: "backblaze-ssd-2023", title: "SSD Edition: 2023 Drive Stats Mid-Year Review", url: "https://www.backblaze.com/blog/ssd-edition-2023-mid-year-drive-stats-review/", license: "all-rights-reserved", checked: CHECKED, by: "Backblaze" },
+  // The sources of the nuclear, EMP and solar storm cases, read on 2026-11-22.
+  { ...federal("ready-nd-flyer", "Ready.gov", "Nuclear Detonation Safety: Food, Drinking Water and Medicine", "https://www.ready.gov/sites/default/files/2023-01/ready-gov_nuclear-detonation-safety_flyer1.pdf"), checked: "2026-11-22" },
+  { ...federal("ready-space-weather", "Ready.gov", "Space Weather", "https://www.ready.gov/space-weather"), checked: "2026-11-22" },
+  { ...federal("cdc-get-inside", "CDC", "What to Do: Get Inside", "https://www.cdc.gov/radiation-emergencies/response/get-inside.html"), checked: "2026-11-22" },
+  { ...federal("cdc-stay-inside", "CDC", "What to Do: Stay Inside", "https://www.cdc.gov/radiation-emergencies/response/stay-inside.html"), checked: "2026-11-22" },
+  { ...federal("cdc-stay-tuned", "CDC", "What to Do: Stay Tuned", "https://www.cdc.gov/radiation-emergencies/response/stay-tuned.html"), checked: "2026-11-22" },
+  { ...federal("cdc-self-decon", "CDC", "How to Self-Decontaminate after a Radiation Emergency", "https://www.cdc.gov/radiation-emergencies/prevention/self-decontaminate.html"), checked: "2026-11-22" },
+  { ...federal("cdc-decon-info", "CDC", "Decontamination for Yourself and Others (infographic)", "https://www.cdc.gov/radiation-emergencies/media/pdfs/infographics/Infographic_Decontamination.pdf"), checked: "2026-11-22" },
+  { ...federal("cdc-help-others", "CDC", "Stay Tuned to Learn How to Help Others", "https://www.cdc.gov/radiation-emergencies/response/help-others.html"), checked: "2026-11-22" },
+  { ...federal("cdc-prepare", "CDC", "Preparing for a Radiation Emergency", "https://www.cdc.gov/radiation-emergencies/safety/index.html"), checked: "2026-11-22" },
+  { ...federal("cdc-ki", "CDC", "Potassium Iodide (KI)", "https://www.cdc.gov/radiation-emergencies/treatment/potassium-iodide.html"), checked: "2026-11-22" },
+  { ...federal("cdc-food-water", "CDC", "Food, Drinking Water, and Medicine Safety in a Radiation Emergency", "https://www.cdc.gov/radiation-emergencies/safety/food-drinking-water-medicine-safety.html"), checked: "2026-11-22" },
+  { ...federal("cdc-pets", "CDC", "How to Decontaminate Pets After a Radiation Emergency", "https://www.cdc.gov/radiation-emergencies/prevention/decontaminate-pets.html"), checked: "2026-11-22" },
+  { ...federal("cdc-crc", "CDC", "Community Reception Centers", "https://www.cdc.gov/radiation-emergencies/response/community-reception-centers.html"), checked: "2026-11-22" },
+  { ...federal("cdc-shelter", "CDC", "Go to an Emergency Shelter", "https://www.cdc.gov/radiation-emergencies/response/emergency-shelter.html"), checked: "2026-11-22" },
+  { ...federal("cdc-prevention", "CDC", "About Preventing and Treating Radiation Injuries and Illness", "https://www.cdc.gov/radiation-emergencies/prevention/index.html"), checked: "2026-11-22" },
+  { ...federal("cdc-caring", "CDC", "Radiation Emergencies: Caring for Yourself and Others", "https://www.cdc.gov/radiation-emergencies/caring/index.html"), checked: "2026-11-22" },
+  { ...federal("fema-nd-guide", "FEMA", "Planning Guidance for Response to a Nuclear Detonation, Third Edition", "https://www.fema.gov/sites/default/files/documents/fema_nuc-detonation-planning-guide.pdf"), checked: "2026-11-22" },
+  { ...federal("swpc-geostorm", "NOAA Space Weather Prediction Center", "Geomagnetic Storms", "https://www.spaceweather.gov/phenomena/geomagnetic-storms"), checked: "2026-11-22" },
+  { ...federal("swpc-scales", "NOAA Space Weather Prediction Center", "NOAA Space Weather Scales", "https://www.spaceweather.gov/noaa-scales-explanation"), checked: "2026-11-22" },
+  { ...federal("swpc-gps", "NOAA Space Weather Prediction Center", "Space Weather and GPS Systems", "https://www.spaceweather.gov/impacts/space-weather-and-gps-systems"), checked: "2026-11-22" },
+  { ...federal("swpc-awa", "NOAA Space Weather Prediction Center", "Alerts, Watches and Warnings", "https://www.spaceweather.gov/products/alerts-watches-and-warnings"), checked: "2026-11-22" },
+  { ...federal("swpc-subscribe", "NOAA Space Weather Prediction Center", "Subscription Services", "https://www.spaceweather.gov/content/subscription-services"), checked: "2026-11-22" },
+  // The National Risk Register gives the Open Government Licence v3.0, except where it states otherwise.
+  { id: "uk-nrr-2025", title: "National Risk Register 2025", url: "https://assets.publishing.service.gov.uk/media/67b5f85732b2aab18314bbe4/National_Risk_Register_2025.pdf", license: "ogl-uk-3.0", checked: "2026-11-22", by: "HM Government (Cabinet Office)" },
+  // The Swedish brochure and page give no license. Each step is a summary with a citation.
+  { id: "se-brochure-en", title: "In case of crisis or war", url: "https://rib.msb.se/filer/pdf/31523.pdf", license: "all-rights-reserved", checked: "2026-11-22", by: "Swedish Civil Defence and Resilience Agency (MCF)" },
+  { id: "se-shelters", title: "Good to know about civil defence shelters", url: "https://www.mcf.se/en/advice-for-individuals/civil-defence-shelters-evacuation-and-warning-systems/good-to-know-about-civil-defence-shelters/", license: "all-rights-reserved", checked: "2026-11-22", by: "Swedish Civil Defence and Resilience Agency (MCF)" },
 ];
