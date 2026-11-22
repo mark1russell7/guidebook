@@ -23,18 +23,18 @@ type Area = (typeof AREAS)[number];
 
 /** The bundles of the topics of each area, after the two Wikipedia bundles that each topic has. */
 const AREA_BUNDLES: Readonly<Record<Area, readonly string[]>> = {
-  water: ["appropedia"],
-  food: ["appropedia"],
-  farming: ["appropedia"],
-  medicine: ["wikipedia-medicine"],
-  sanitation: ["appropedia"],
-  shelter: ["appropedia"],
-  energy: ["energypedia", "appropedia"],
-  electronics: [],
+  water: ["appropedia", "stackexchange-outdoors", "stackexchange-sustainability"],
+  food: ["appropedia", "stackexchange-cooking"],
+  farming: ["appropedia", "stackexchange-gardening"],
+  medicine: ["wikipedia-medicine", "stackexchange-medicalsciences"],
+  sanitation: ["appropedia", "stackexchange-diy"],
+  shelter: ["appropedia", "stackexchange-diy", "stackexchange-outdoors"],
+  energy: ["energypedia", "appropedia", "stackexchange-sustainability"],
+  electronics: ["stackexchange-electronics"],
   metals: [],
-  tools: [],
-  chemistry: [],
-  communication: [],
+  tools: ["stackexchange-diy", "stackexchange-woodworking"],
+  chemistry: ["stackexchange-chemistry"],
+  communication: ["stackexchange-ham"],
 };
 
 /** The need code that the topics of each area help to keep. */
