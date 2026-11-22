@@ -2,7 +2,7 @@
 // The rates come from drives that run all the time in a data center. A drive that sits with no power can be different.
 
 import type { CitedUnit } from "@mark1russell7/guidebook";
-import type { MediumKind } from "@mark1russell7/guidebook-library";
+import type { MediumKind, MediumLife } from "@mark1russell7/guidebook-library";
 
 /** The fact units of the rates. */
 export const MEDIA_UNITS: readonly CitedUnit[] = [
@@ -57,9 +57,22 @@ export const MEDIUM_LOSSES: Readonly<Partial<Record<MediumKind, { readonly yearl
 };
 
 /**
- * The kinds with no cited rate. A plan of copies cannot use them until a source gives a rate.
- * - `optical`: the study of NIST and the Library of Congress gives a time to 5% failure, not a yearly rate. The units `media.optical.*` give its facts.
- *   An aging disc fails more frequently when it is old, so a constant yearly rate from that time is not a safe bound.
- * - `flash` and `paper`: no open source with a rate was found on 2026-11-22.
+ * The cited life of each type of medium with a life at a quantile, and the unit of the life.
+ * A disc fails more frequently when it is old, so the plan uses the life, not a yearly rate. Give it to `MediumOffer.life` and `Copy.life`.
+ * - `cd-r`: each of the 7 CD-R products of the study had a time to 5% failure of more than 30 years.
+ * - A recordable DVD has no life here. 2 of the 15 DVD products had less than 15 years, so the study gives no bound for an unknown product.
+ * The life holds only at 25 °C and 50% RH, away from light (the unit `media.optical.limits`).
  */
-export const MEDIUM_GAPS: readonly MediumKind[] = ["flash", "optical", "paper"];
+export const MEDIUM_LIVES: Readonly<Record<string, { readonly kind: MediumKind; readonly life: MediumLife; readonly unit: string }>> = {
+  "cd-r": {
+    kind: "optical",
+    life: { years: 30, quantile: 0.05, source: "NIST and the Library of Congress: a CD-R at 25 °C and 50% RH, with 95% confidence." },
+    unit: "media.optical.cdr",
+  },
+};
+
+/**
+ * The kinds with no cited rate and no cited life. A plan of copies cannot use them until a source gives one.
+ * `flash` and `paper`: no open source with a rate was found on 2026-11-22.
+ */
+export const MEDIUM_GAPS: readonly MediumKind[] = ["flash", "paper"];

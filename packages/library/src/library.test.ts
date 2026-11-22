@@ -111,6 +111,32 @@ describe("copyStates", () => {
   });
 });
 
+describe("the life of a medium", () => {
+  const life = { years: 30, quantile: 0.05, source: "An invented life for the test" };
+  const disc: Copy = { bundle: "all", medium: "cd-1", kind: "optical", place: "car", checked: "2026-11-01", life, written: "1990-01-01" };
+
+  it("does not count a copy older than its life, and gives a warning", () => {
+    const result = copyStates(bundles, [disc], rules, { at: "2026-11-21" });
+    expect(result.states[1]?.copies[0]?.status).toBe("aged");
+    expect(result.states[1]?.good).toBe(0);
+    expect(result.findings.map((f) => `${f.level} ${f.code} ${f.id}`)).toContain("warning past-life all@cd-1");
+  });
+
+  it("counts a younger copy, and does not count a copy with a life and no date of writing", () => {
+    const young = copyStates(bundles, [{ ...disc, written: "2020-01-01" }], rules, { at: "2026-11-21" });
+    expect(young.states[1]?.copies[0]?.status).toBe("good");
+    const { written: _, ...undated } = disc;
+    const result = copyStates(bundles, [undated], rules, { at: "2026-11-21" });
+    expect(result.states[1]?.copies[0]?.status).toBe("aged");
+    expect(result.findings.some((f) => f.code === "no-written-date")).toBe(true);
+  });
+
+  it("finds a bad date of writing and a bad life in the copy gate", () => {
+    const bad: Copy[] = [{ ...disc, written: "1990-02-30" }, { ...disc, medium: "cd-2", life: { ...life, quantile: 1.5 } }];
+    expect(checkCopies(bad, bundles, { at: "2026-11-21" }).map((f) => f.code)).toEqual(["bad-date", "bad-life"]);
+  });
+});
+
 describe("checksDue", () => {
   it("gives the last good date of each copy, the first due first", () => {
     expect(checksDue(bundles, copies, rules, { at: "2026-11-21", withinDays: 200 })).toEqual([
