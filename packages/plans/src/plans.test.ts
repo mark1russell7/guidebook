@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import type { Source } from "@mark1russell7/guidebook";
-import { HORIZONS, LADDER, PHASES, PHASE_BOUNDS, RULE_KINDS, chartOf, checkMasterChart, masterChartOf, checkCoverage, checkRules, checkSteps, coverageOf, phaseIn, phaseOf, phasesOf, planMatrix, stepsFor } from "./index.ts";
-import type { ChartNode, Ladder, Rule, Step, Tab } from "./index.ts";
+import { HORIZONS, LADDER, PHASES, PHASE_BOUNDS, RULE_KINDS, GRAPH_SCHEMA, chartOf, checkMasterChart, checkMasterGraph, masterChartOf, checkCoverage, checkRules, checkSteps, coverageOf, phaseIn, phaseOf, phasesOf, planMatrix, stepsFor } from "./index.ts";
+import type { ChartNode, Ladder, MasterGraph, Rule, Step, Tab } from "./index.ts";
 
 const MIN = 60;
 const HOUR = 3600;
@@ -281,6 +281,61 @@ describe("checkMasterChart", () => {
 
   it("finds a chart with no signal", () => {
     expect(codes(nodes.slice(1))).toEqual(expect.arrayContaining(["no-signal:chart"]));
+  });
+});
+
+describe("checkMasterGraph", () => {
+  const library = [step("a", "case.a", "P0", 1), step("b", "cut.b", "P3", 1)];
+  const graph: MasterGraph = {
+    schema: GRAPH_SCHEMA,
+    start: "chart",
+    catalog: "catalog",
+    societies: ["works", "partly", "none"],
+    nodes: [
+      { id: "smoke", kind: "signal", text: "You see smoke.", next: "danger" },
+      { id: "danger", kind: "question", text: "Is there an immediate danger?", sources: ["pd"], answers: [{ label: "Yes", next: "go-now" }, { label: "No", next: "go-help" }] },
+      { id: "go-now", kind: "goto", text: "Go to the tab Immediate danger.", tab: "now", card: true },
+      { id: "go-help", kind: "goto", text: "Go to the appendices.", tab: "help" },
+    ],
+    tabs: [
+      { id: "chart", title: "The chart", keys: [], phases: [] },
+      { id: "now", title: "Immediate danger", keys: ["cut.b"], phases: ["P3"] },
+      { id: "catalog", title: "The hazard catalog", keys: ["case.a"], phases: ["P0"] },
+      { id: "help", title: "The appendices", keys: [], phases: [] },
+    ],
+    hazards: [{ key: "case.a", title: "Case A", signals: ["smoke"], entry: "danger", card: ["a"] }],
+  };
+  const codes = (value: MasterGraph, cases = ["case.a"]) =>
+    checkMasterGraph(value, library, sources, { on: ["case.a", "cut.b"], cover: ["case.a", "cut.b"], cases }).findings.map((finding) => `${finding.code}:${finding.id}`);
+
+  it("finds no finding in a good graph, and the cards use the catalog tab", () => {
+    expect(codes(graph)).toEqual([]);
+    const noCard = { ...graph, nodes: graph.nodes.map((node) => (node.kind === "goto" ? { id: node.id, kind: node.kind, text: node.text, tab: node.tab } : node)) };
+    expect(codes(noCard)).toEqual(["unused-tab:catalog", "uncovered-key:case.a"]);
+  });
+
+  it("finds a wrong schema, an unknown start and an unknown catalog", () => {
+    expect(codes({ ...graph, schema: "guidebook-graph/2" as typeof GRAPH_SCHEMA, start: "nowhere", catalog: "none" })).toEqual(
+      expect.arrayContaining(["bad-schema:graph", "unknown-start:nowhere", "unknown-catalog:none"]),
+    );
+  });
+
+  it("finds bad hazard rows and a case with no row", () => {
+    const rows = [
+      { key: "case.a", title: "A", signals: ["danger"], entry: "ghost", card: ["b"] },
+      { key: "case.a", title: "A", signals: [], entry: "go-help", card: [] },
+      { key: "case.z", title: "Z", signals: ["smoke"], entry: "danger", card: [] },
+    ];
+    expect(codes({ ...graph, hazards: rows }, ["case.a", "case.y"])).toEqual([
+      "unknown-signal:case.a",
+      "unknown-entry:case.a",
+      "unknown-card-step:case.a",
+      "duplicate-hazard:case.a",
+      "unknown-signal:case.a",
+      "no-route:case.a",
+      "unknown-hazard:case.z",
+      "missing-hazard:case.y",
+    ]);
   });
 });
 

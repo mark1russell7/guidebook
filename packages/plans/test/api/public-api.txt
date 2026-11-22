@@ -15,9 +15,12 @@ type ChartQuestion: build/index.d.ts#ChartQuestion
 type CoverageFinding: build/index.d.ts#CoverageFinding
 type CoverageFindingCode: build/index.d.ts#CoverageFindingCode
 type CoverageOptions: build/index.d.ts#CoverageOptions
+GRAPH_SCHEMA: build/index.d.ts#GRAPH_SCHEMA
 type Gap: build/index.d.ts#Gap
 type GotoNode: build/index.d.ts#GotoNode
+type GraphGateOptions: build/index.d.ts#GraphGateOptions
 HORIZONS: build/index.d.ts#HORIZONS
+type HazardRow: build/index.d.ts#HazardRow
 type KeyCoverage: build/index.d.ts#KeyCoverage
 LADDER: build/index.d.ts#LADDER
 type Ladder: build/index.d.ts#Ladder
@@ -26,6 +29,7 @@ type MasterChart: build/index.d.ts#MasterChart
 type MasterFinding: build/index.d.ts#MasterFinding
 type MasterFindingCode: build/index.d.ts#MasterFindingCode
 type MasterGateOptions: build/index.d.ts#MasterGateOptions
+type MasterGraph: build/index.d.ts#MasterGraph
 PHASES: build/index.d.ts#PHASES
 PHASE_BOUNDS: build/index.d.ts#PHASE_BOUNDS
 PHASE_TITLES: build/index.d.ts#PHASE_TITLES
@@ -56,6 +60,7 @@ type Tab: build/index.d.ts#Tab
 chartOf: build/index.d.ts#chartOf
 checkCoverage: build/index.d.ts#checkCoverage
 checkMasterChart: build/index.d.ts#checkMasterChart
+checkMasterGraph: build/index.d.ts#checkMasterGraph
 checkRules: build/index.d.ts#checkRules
 checkSteps: build/index.d.ts#checkSteps
 coverageOf: build/index.d.ts#coverageOf
@@ -117,6 +122,9 @@ interface CoverageOptions<P extends string> {
   readonly gaps?: readonly Gap<P>[];
 }
 
+### build/index.d.ts#GRAPH_SCHEMA
+export declare const GRAPH_SCHEMA = "guidebook-graph/1";
+
 ### build/index.d.ts#Gap
 interface Gap<P extends string = Phase> {
   readonly on: string;
@@ -131,10 +139,25 @@ interface GotoNode {
   readonly text: string;
   readonly tab: string;
   readonly sources?: readonly string[];
+  readonly card?: true;
+}
+
+### build/index.d.ts#GraphGateOptions
+interface GraphGateOptions extends MasterGateOptions {
+  readonly cases: readonly string[];
 }
 
 ### build/index.d.ts#HORIZONS
 export declare const HORIZONS: readonly ["P0", "P1", "P2", "P3", "P4", "P5"];
+
+### build/index.d.ts#HazardRow
+interface HazardRow {
+  readonly key: string;
+  readonly title: string;
+  readonly signals: readonly string[];
+  readonly entry: string;
+  readonly card: readonly string[];
+}
 
 ### build/index.d.ts#KeyCoverage
 interface KeyCoverage<P extends string> {
@@ -158,7 +181,7 @@ interface Ladder<P extends string = string> {
 }
 
 ### build/index.d.ts#MASTER_FINDING_CODES
-export declare const MASTER_FINDING_CODES: readonly ["duplicate-id", "unknown-node", "unknown-tab", "unknown-key", "few-answers", "no-signal", "unreachable", "cycle", "too-deep", "too-many-nodes", "too-many-ends", "tab-without-steps", "unused-tab", "uncovered-key", "no-source", "unknown-source"];
+export declare const MASTER_FINDING_CODES: readonly ["duplicate-id", "unknown-node", "unknown-tab", "unknown-key", "few-answers", "no-signal", "unreachable", "cycle", "too-deep", "too-many-nodes", "too-many-ends", "tab-without-steps", "unused-tab", "uncovered-key", "no-source", "unknown-source", "bad-schema", "unknown-start", "unknown-catalog", "unknown-hazard", "duplicate-hazard", "missing-hazard", "unknown-signal", "unknown-entry", "unknown-card-step", "no-route"];
 
 ### build/index.d.ts#MasterChart
 interface MasterChart<P extends string = Phase> {
@@ -180,6 +203,18 @@ interface MasterGateOptions {
   readonly maxQuestions?: number;
   readonly maxNodes?: number;
   readonly maxEnds?: number;
+  readonly used?: readonly string[];
+}
+
+### build/index.d.ts#MasterGraph
+interface MasterGraph<P extends string = Phase> {
+  readonly schema: typeof GRAPH_SCHEMA;
+  readonly start: string;
+  readonly catalog: string;
+  readonly societies: readonly Society[];
+  readonly nodes: readonly ChartNode[];
+  readonly tabs: readonly Tab<P>[];
+  readonly hazards: readonly HazardRow[];
 }
 
 ### build/index.d.ts#PHASES
@@ -325,6 +360,9 @@ export declare function checkCoverage<P extends string>(steps: readonly Step<P>[
 
 ### build/index.d.ts#checkMasterChart
 export declare function checkMasterChart<P extends string>(nodes: readonly ChartNode[], tabs: readonly Tab<P>[], steps: readonly Step<P>[], sources: readonly Source[], options: MasterGateOptions): GateResult<MasterFinding>;
+
+### build/index.d.ts#checkMasterGraph
+export declare function checkMasterGraph<P extends string>(graph: MasterGraph<P>, steps: readonly Step<P>[], sources: readonly Source[], options: GraphGateOptions): GateResult<MasterFinding>;
 
 ### build/index.d.ts#checkRules
 export declare function checkRules<P extends string>(rules: readonly Rule<P>[], steps: readonly Step<P>[], sources: readonly Source[], options: RuleGateOptions): GateResult<RuleFinding>;

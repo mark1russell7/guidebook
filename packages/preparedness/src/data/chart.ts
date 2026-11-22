@@ -1,4 +1,5 @@
 // The master chart: one chart for any disaster. A reader starts at a signal, answers at most 2 questions and goes to a tab.
+// A goto with a card also sends the reader to the card of the event in the hazard catalog.
 // The chart asks for needs, not for kinds of event, so an event that nobody foresaw still has a route.
 // A broadcast is one source of information. No answer of the chart waits for officials.
 
@@ -24,7 +25,7 @@ export function tabsOf(cases: readonly string[], cuts: readonly string[]): reado
     { id: "security", title: "The safety of the people", keys: ["security.civil-unrest", "security.armed-conflict"], phases: ALL, pages: 6 },
     { id: "group", title: "Contact, the group and trade", keys: ["phone.network", "network.access", "cash.retail", "society.services"], phases: ALL, pages: 6 },
     { id: "long-term", title: "The long term: 5 weeks to 5 years", keys: cuts, phases: ["P3", "P4", "P5"], pages: 10 },
-    { id: "hazards", title: "The hazards, case by case", keys: cases, phases: ALL, pages: 24 },
+    { id: "catalog", title: "The hazard catalog", keys: cases, phases: ALL, pages: 8 },
     { id: "appendices", title: "The appendices", keys: [], phases: [], pages: 40 },
   ];
 }
@@ -32,13 +33,16 @@ export function tabsOf(cases: readonly string[], cuts: readonly string[]): reado
 /** The tab of the chart itself. It is the entry of the binder, so no path of the chart goes to it. */
 export const START_TAB = "start";
 
+/** The tab of the hazard catalog. An end with a card sends the reader to the card of the event in it. */
+export const CATALOG_TAB = "catalog";
+
 const NEEDS_FIRST = "Do the needs by their danger. Safety comes in minutes, heat and water in hours and days, food in weeks.";
 
-/** The nodes of the master chart: 3 signals, 5 questions and 12 ends. */
+/** The nodes of the master chart: 3 signals, 4 questions and 11 ends. */
 export const MASTER: readonly ChartNode[] = [
   // The signals: what a reader sees, hears, smells, feels or learns.
   { id: "sense", kind: "signal", text: "You see, hear, smell or feel a danger: fire, smoke, gas, shaking, a flash, rising water, a siren or shots.", next: "life" },
-  { id: "threat", kind: "signal", text: "You learn of a threat that comes: a storm, a flood, a fire, a disease, unrest, an attack or a war.", next: "known" },
+  { id: "threat", kind: "signal", text: "You learn of a threat that comes: a storm, a flood, a fire, a disease, unrest, an attack or a war.", next: "place" },
   { id: "supply", kind: "signal", text: "A supply stops, or help does not come: power, water, sewer, gas, phone, internet, fuel, food, cash, care or the law.", next: "society" },
 
   // The questions. Each one has an answer that a reader can see without help.
@@ -46,11 +50,6 @@ export const MASTER: readonly ChartNode[] = [
     id: "life", kind: "question", text: "Can the danger hurt you in the next minutes?", sources: [],
     reasoning: "A danger of minutes leaves no time to read. Do the reflex first, then come back to the chart.",
     answers: [{ label: "Yes", next: "to-72h" }, { label: "No", next: "place" }],
-  },
-  {
-    id: "known", kind: "question", text: "Does the hazards tab have a page for this event?", sources: [],
-    reasoning: "A page for the event gives its special risks. An event with no page still breaks down into needs, so the chart continues.",
-    answers: [{ label: "Yes", next: "to-hazards" }, { label: "No", next: "place" }],
   },
   {
     id: "place", kind: "question", text: "Is your place safe to stay in: no fire, gas, flood water, damage, bad air, violence or an illness that spreads?", sources: [],
@@ -81,10 +80,9 @@ export const MASTER: readonly ChartNode[] = [
   },
 
   // The ends: each one goes to a tab of the binder.
-  { id: "to-72h", kind: "goto", text: "Go to the tab: the first 72 hours.", tab: "first-72h" },
-  { id: "to-hazards", kind: "goto", text: "Go to the page of the event in the hazards tab.", tab: "hazards" },
-  { id: "to-stay", kind: "goto", text: "Go to the tab: stay.", tab: "stay" },
-  { id: "to-go", kind: "goto", text: "Go to the tab: go.", tab: "go" },
+  { id: "to-72h", kind: "goto", text: "Go to the tab: the first 72 hours. Read the card of the event too.", tab: "first-72h", card: true },
+  { id: "to-stay", kind: "goto", text: "Go to the tab: stay. Read the card of the event too.", tab: "stay", card: true },
+  { id: "to-go", kind: "goto", text: "Go to the tab: go. Read the card of the event too.", tab: "go", card: true },
   { id: "to-long", kind: "goto", text: "Go to the tab: the long term.", tab: "long-term" },
   { id: "to-security", kind: "goto", text: "Go to the tab: the safety of the people.", tab: "security" },
   { id: "to-heat", kind: "goto", text: "Go to the tab: heat, shelter and power.", tab: "heat" },

@@ -1,14 +1,17 @@
 // The preparedness content of the guidebook: the sources, the steps and the marked gaps of 12 cases and 12 cuts,
 // the topics of 12 areas, and the catalog of offline bundles.
 
-import type { Tab } from "@mark1russell7/guidebook-plans";
-import { tabsOf } from "./data/chart.ts";
+import { GRAPH_SCHEMA, SOCIETY_STATES } from "@mark1russell7/guidebook-plans";
+import type { HazardRow, MasterGraph, Tab } from "@mark1russell7/guidebook-plans";
+import { CATALOG_TAB, MASTER, START_TAB, tabsOf } from "./data/chart.ts";
+import { hazardsOf } from "./data/hazards.ts";
+import { CASE_STEPS } from "./data/steps.ts";
 export { CHECKED, SOURCES } from "./data/sources.ts";
 export { CASE_STEPS, CUT_STEPS, STEPS } from "./data/steps.ts";
 export { GAPS } from "./data/gaps.ts";
 export { OPEN_CELLS } from "./data/coverage.ts";
 export { RULES } from "./data/rules.ts";
-export { MASTER, START_TAB } from "./data/chart.ts";
+export { CATALOG_TAB, MASTER, START_TAB } from "./data/chart.ts";
 export { AREAS, TOPICS } from "./data/topics.ts";
 export { BUNDLES, BUNDLES_CHECKED, BUNDLE_LEVELS } from "./data/bundles.ts";
 export { MEDIA_UNITS, MEDIUM_GAPS, MEDIUM_LOSSES } from "./data/media.ts";
@@ -49,3 +52,17 @@ export const NEEDS = ["hydration.drink", "food.energy", "health.medicine", "powe
 export const SOCIETY_KEY = "society.services";
 
 export const TABS: readonly Tab[] = tabsOf([...CASES, ...MORE_CASES], [...CUTS, SOCIETY_KEY]);
+
+/** The rows of the hazard catalog: for each case, its signals, its entry node and its card. */
+export const HAZARDS: readonly HazardRow[] = hazardsOf(CASE_STEPS);
+
+/** The master graph: the one value that the printed binder and the app read. */
+export const GRAPH: MasterGraph = {
+  schema: GRAPH_SCHEMA,
+  start: START_TAB,
+  catalog: CATALOG_TAB,
+  societies: SOCIETY_STATES,
+  nodes: MASTER,
+  tabs: TABS,
+  hazards: HAZARDS,
+};

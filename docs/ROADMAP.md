@@ -19,3 +19,4 @@ This file is the plan of guidebook. The Status page of the site reads it, and th
 | G14 | The branch with no society | done | Each cut and the key `society.services` have steps for no emergency services, no shops, no grid and no law, from 5 days to 5 years, by need. Strategy steps give their reasoning. A number keeps its source. |
 | G15 | The reference appendices | next | The appendices as cited units: water, food storage, first aid, sanitation, heat and cold, radio and other references. |
 | G16 | No step that waits for officials | done | A gate refuses each step that tells the reader to obey, listen to or wait for officials. A broadcast is one source of information. |
+| G17 | The master graph | done | One value `GRAPH` of the schema `guidebook-graph/1` for the binder and the app: the chart, the tabs and the hazard catalog. Each hazard row has signals, an entry node and a card of its own facts. A gate checks each row. |

@@ -2,10 +2,10 @@ import { fileURLToPath } from "node:url";
 import { checkSources, checkUnits, permits } from "@mark1russell7/guidebook";
 import { bytesOf, checkCatalog, kiwixKeyOf } from "@mark1russell7/guidebook-library";
 import { checkTopics, printOrder } from "@mark1russell7/guidebook-topics";
-import { HORIZONS, PHASES, checkCoverage, checkSteps, planMatrix, stepsFor, chartOf, checkMasterChart, checkRules, masterChartOf } from "@mark1russell7/guidebook-plans";
+import { HORIZONS, PHASES, checkCoverage, checkSteps, planMatrix, stepsFor, chartOf, checkMasterGraph, checkRules, masterChartOf } from "@mark1russell7/guidebook-plans";
 import { Linter, loadConfig } from "@mark1russell7/ste-lint";
 import { describe, expect, it } from "vitest";
-import { AREAS, BUNDLES, BUNDLE_LEVELS, CASES, CUTS, GAPS, MEDIA_UNITS, MEDIUM_GAPS, MEDIUM_LOSSES, MASTER, MORE_CASES, NEEDS, OPEN_CELLS, RULES, SOCIETY_KEY, SOURCES, START_TAB, STEPS, TABS, TOPICS } from "./index.ts";
+import { AREAS, BUNDLES, CATALOG_TAB, GRAPH, HAZARDS, BUNDLE_LEVELS, CASES, CUTS, GAPS, MEDIA_UNITS, MEDIUM_GAPS, MEDIUM_LOSSES, MASTER, MORE_CASES, NEEDS, OPEN_CELLS, RULES, SOCIETY_KEY, SOURCES, START_TAB, STEPS, TABS, TOPICS } from "./index.ts";
 
 const ALL_CASES = [...CASES, ...MORE_CASES];
 const KEYS = [...ALL_CASES, ...CUTS, SOCIETY_KEY];
@@ -234,8 +234,17 @@ describe("the master chart", () => {
   const tabs = TABS.filter((tab) => tab.id !== START_TAB);
 
   it("finds no finding: each hazard and each part has a route, in 3 questions or fewer, on one page", () => {
-    const result = checkMasterChart(MASTER, tabs, STEPS, SOURCES, { on: [...KEYS, ...NEEDS], cover, maxQuestions: 3, maxNodes: 20, maxEnds: 13 });
+    const result = checkMasterGraph(GRAPH, STEPS, SOURCES, { on: [...KEYS, ...NEEDS], cover, cases: ALL_CASES, maxQuestions: 3, maxNodes: 20, maxEnds: 13 });
     expect(result.findings).toEqual([]);
+  });
+
+  it("gives each hazard a card of its own facts, and the cards fit the pages of the catalog", () => {
+    const empty = HAZARDS.filter((row) => row.card.length === 0).map((row) => row.key);
+    expect(empty).toEqual(["infra.power.outage", "infra.water.outage"]);
+    const cards = HAZARDS.reduce((sum, row) => sum + row.card.length, 0);
+    const pages = TABS.find((tab) => tab.id === CATALOG_TAB)?.pages ?? 0;
+    // A page of the catalog holds approximately 15 short steps.
+    expect(cards).toBeLessThanOrEqual(pages * 15);
   });
 
   it("asks for the state of society, with an answer for each state", () => {
@@ -245,6 +254,8 @@ describe("the master chart", () => {
 
   it("gives each tab of the binder a page budget, and sends the reader to each tab but the start", () => {
     expect(TABS.filter((tab) => tab.pages === undefined)).toEqual([]);
-    expect(masterChartOf(MASTER, TABS).tabs.map((tab) => tab.id)).toEqual(tabs.map((tab) => tab.id));
+    // The catalog has no end of its own: the ends with a card send the reader to it.
+    expect(masterChartOf(MASTER, TABS).tabs.map((tab) => tab.id)).toEqual(tabs.filter((tab) => tab.id !== CATALOG_TAB).map((tab) => tab.id));
+    expect(MASTER.some((node) => node.kind === "goto" && node.card === true)).toBe(true);
   });
 });
