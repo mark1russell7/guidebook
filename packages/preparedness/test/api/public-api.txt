@@ -16,6 +16,7 @@ CHECKED: build/index.d.ts#CHECKED
 CUTS: build/index.d.ts#CUTS
 CUT_STEPS: build/index.d.ts#CUT_STEPS
 GAPS: build/index.d.ts#GAPS
+MASTER: build/index.d.ts#MASTER
 MEDIA_UNITS: build/index.d.ts#MEDIA_UNITS
 MEDIUM_GAPS: build/index.d.ts#MEDIUM_GAPS
 MEDIUM_LOSSES: build/index.d.ts#MEDIUM_LOSSES
@@ -24,7 +25,9 @@ NEEDS: build/index.d.ts#NEEDS
 OPEN_CELLS: build/index.d.ts#OPEN_CELLS
 RULES: build/index.d.ts#RULES
 SOURCES: build/index.d.ts#SOURCES
+START_TAB: build/index.d.ts#START_TAB
 STEPS: build/index.d.ts#STEPS
+TABS: build/index.d.ts#TABS
 TOPICS: build/index.d.ts#TOPICS
 
 ## Declarations
@@ -59,6 +62,9 @@ export declare const CUT_STEPS: readonly Step[];
 ### build/index.d.ts#GAPS
 export declare const GAPS: readonly Gap[];
 
+### build/index.d.ts#MASTER
+export declare const MASTER: readonly ChartNode[];
+
 ### build/index.d.ts#MEDIA_UNITS
 export declare const MEDIA_UNITS: readonly CitedUnit[];
 
@@ -86,8 +92,14 @@ export declare const RULES: readonly Rule[];
 ### build/index.d.ts#SOURCES
 export declare const SOURCES: readonly Source[];
 
+### build/index.d.ts#START_TAB
+export declare const START_TAB = "start";
+
 ### build/index.d.ts#STEPS
 export declare const STEPS: readonly Step[];
+
+### build/index.d.ts#TABS
+export declare const TABS: readonly Tab[];
 
 ### build/index.d.ts#TOPICS
 export declare const TOPICS: readonly Topic[];
