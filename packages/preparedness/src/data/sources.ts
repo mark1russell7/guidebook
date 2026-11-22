@@ -66,6 +66,8 @@ export const SOURCES: readonly Source[] = [
   // Backblaze gives the failure rates of the drives of its data centers. The units cite each rate as a fact, so the license permits the use.
   { id: "backblaze-hdd-2026q2", title: "Backblaze Drive Stats for Q2 2026", url: "https://www.backblaze.com/blog/backblaze-drive-stats-for-q2-2026/", license: "all-rights-reserved", checked: CHECKED, by: "Backblaze" },
   { id: "backblaze-ssd-2023", title: "SSD Edition: 2023 Drive Stats Mid-Year Review", url: "https://www.backblaze.com/blog/ssd-edition-2023-mid-year-drive-stats-review/", license: "all-rights-reserved", checked: CHECKED, by: "Backblaze" },
+  // The joint report of NIST and the Library of Congress. Its authors are NIST employees, so it is a work of the US government. Read on 2026-11-22.
+  { ...federal("nist-lc-optical", "NIST and the Library of Congress", "NIST/Library of Congress (LC) Optical Disc Longevity Study: Final Report", "https://www.loc.gov/preservation/resources/rt/NIST_LC_OpticalDiscLongevity.pdf"), checked: "2026-11-22" },
   // The sources of the nuclear, EMP and solar storm cases, read on 2026-11-22.
   { ...federal("ready-nd-flyer", "Ready.gov", "Nuclear Detonation Safety: Food, Drinking Water and Medicine", "https://www.ready.gov/sites/default/files/2023-01/ready-gov_nuclear-detonation-safety_flyer1.pdf"), checked: "2026-11-22" },
   { ...federal("ready-space-weather", "Ready.gov", "Space Weather", "https://www.ready.gov/space-weather"), checked: "2026-11-22" },
