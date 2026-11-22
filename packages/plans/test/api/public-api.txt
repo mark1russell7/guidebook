@@ -57,6 +57,10 @@ type StepFindingCode: build/index.d.ts#StepFindingCode
 type StepGateOptions: build/index.d.ts#StepGateOptions
 type StepsForOptions: build/index.d.ts#StepsForOptions
 type Tab: build/index.d.ts#Tab
+type WalkEnd: build/index.d.ts#WalkEnd
+type WalkPhase: build/index.d.ts#WalkPhase
+type WalkState: build/index.d.ts#WalkState
+type WalkStep: build/index.d.ts#WalkStep
 chartOf: build/index.d.ts#chartOf
 checkCoverage: build/index.d.ts#checkCoverage
 checkMasterChart: build/index.d.ts#checkMasterChart
@@ -71,6 +75,10 @@ phasesOf: build/index.d.ts#phasesOf
 planMatrix: build/index.d.ts#planMatrix
 stepsFor: build/index.d.ts#stepsFor
 unitsOf: build/index.d.ts#unitsOf
+walkAnswer: build/index.d.ts#walkAnswer
+walkBack: build/index.d.ts#walkBack
+walkEnd: build/index.d.ts#walkEnd
+walkStart: build/index.d.ts#walkStart
 
 ## Declarations
 
@@ -352,6 +360,34 @@ interface Tab<P extends string = Phase> {
   readonly pages?: number;
 }
 
+### build/index.d.ts#WalkEnd
+interface WalkEnd<P extends string = Phase> {
+  readonly tab: Tab<P>;
+  readonly society?: Society;
+  readonly phases: readonly WalkPhase<P>[];
+  readonly card: readonly Step<P>[];
+}
+
+### build/index.d.ts#WalkPhase
+interface WalkPhase<P extends string = Phase> {
+  readonly phase: P;
+  readonly steps: readonly Step<P>[];
+}
+
+### build/index.d.ts#WalkState
+interface WalkState {
+  readonly at: string;
+  readonly hazard?: string;
+  readonly society?: Society;
+  readonly trail: readonly WalkStep[];
+}
+
+### build/index.d.ts#WalkStep
+interface WalkStep {
+  readonly at: string;
+  readonly society?: Society;
+}
+
 ### build/index.d.ts#chartOf
 export declare function chartOf<P extends string>(rules: readonly Rule<P>[]): readonly ChartQuestion<P>[];
 
@@ -393,3 +429,15 @@ export declare function stepsFor<P extends string>(library: readonly Step<P>[], 
 
 ### build/index.d.ts#unitsOf
 export declare function unitsOf<P extends string>(steps: readonly Step<P>[]): readonly CitedUnit[];
+
+### build/index.d.ts#walkAnswer
+export declare function walkAnswer<P extends string>(graph: MasterGraph<P>, state: WalkState, label?: string): WalkState | undefined;
+
+### build/index.d.ts#walkBack
+export declare function walkBack(state: WalkState): WalkState;
+
+### build/index.d.ts#walkEnd
+export declare function walkEnd<P extends string>(graph: MasterGraph<P>, state: WalkState, steps: readonly Step<P>[]): WalkEnd<P> | undefined;
+
+### build/index.d.ts#walkStart
+export declare function walkStart<P extends string>(graph: MasterGraph<P>, hazard?: string, signal?: string): WalkState | undefined;

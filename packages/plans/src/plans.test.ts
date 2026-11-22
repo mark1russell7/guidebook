@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import type { Source } from "@mark1russell7/guidebook";
-import { HORIZONS, LADDER, PHASES, PHASE_BOUNDS, RULE_KINDS, GRAPH_SCHEMA, chartOf, checkMasterChart, checkMasterGraph, masterChartOf, checkCoverage, checkRules, checkSteps, coverageOf, phaseIn, phaseOf, phasesOf, planMatrix, stepsFor } from "./index.ts";
+import { HORIZONS, LADDER, PHASES, PHASE_BOUNDS, RULE_KINDS, GRAPH_SCHEMA, chartOf, checkMasterChart, checkMasterGraph, masterChartOf, walkAnswer, walkBack, walkEnd, walkStart, checkCoverage, checkRules, checkSteps, coverageOf, phaseIn, phaseOf, phasesOf, planMatrix, stepsFor } from "./index.ts";
 import type { ChartNode, Ladder, MasterGraph, Rule, Step, Tab } from "./index.ts";
 
 const MIN = 60;
@@ -336,6 +336,64 @@ describe("checkMasterGraph", () => {
       "unknown-hazard:case.z",
       "missing-hazard:case.y",
     ]);
+  });
+});
+
+describe("the walk of the master graph", () => {
+  const library: Step[] = [
+    step("a", "case.a", "P0", 1),
+    { ...step("w", "cut.b", "P3", 1), society: ["works"] },
+    { ...step("n", "cut.b", "P3", 2), society: ["none"] },
+    step("all", "cut.b", "P4", 1),
+  ];
+  const graph: MasterGraph = {
+    schema: GRAPH_SCHEMA,
+    start: "chart",
+    catalog: "catalog",
+    societies: ["works", "partly", "none"],
+    nodes: [
+      { id: "smoke", kind: "signal", text: "You see smoke.", next: "society" },
+      { id: "society", kind: "question", text: "Does help come?", sources: ["pd"], answers: [{ label: "Yes", next: "go-long", society: "works" }, { label: "No", next: "go-long", society: "none" }] },
+      { id: "go-long", kind: "goto", text: "Go to the long term.", tab: "long", card: true },
+    ],
+    tabs: [
+      { id: "chart", title: "The chart", keys: [], phases: [] },
+      { id: "long", title: "The long term", keys: ["cut.b"], phases: ["P3", "P4", "P5"] },
+      { id: "catalog", title: "The hazard catalog", keys: ["case.a"], phases: ["P0"] },
+    ],
+    hazards: [{ key: "case.a", title: "Case A", signals: ["smoke"], entry: "society", card: ["a"] }],
+  };
+
+  it("walks from a signal to an end, with the steps of the state of society", () => {
+    const start = walkStart(graph);
+    expect(start).toEqual({ at: "smoke", trail: [] });
+    const asked = walkAnswer(graph, start!);
+    const none = walkAnswer(graph, asked!, "No");
+    expect(none).toEqual({ at: "go-long", society: "none", trail: [{ at: "smoke" }, { at: "society" }] });
+    const end = walkEnd(graph, none!, library);
+    expect(end?.tab.id).toBe("long");
+    expect(end?.phases.map((item) => [item.phase, item.steps.map((s) => s.id)])).toEqual([["P3", ["n"]], ["P4", ["all"]]]);
+    expect(end?.card).toEqual([]);
+  });
+
+  it("starts at the entry of a hazard and gives its card at an end with a card", () => {
+    const start = walkStart(graph, "case.a");
+    expect(start).toEqual({ at: "society", hazard: "case.a", trail: [] });
+    const end = walkEnd(graph, walkAnswer(graph, start!, "Yes")!, library);
+    expect(end?.society).toBe("works");
+    expect(end?.phases.map((item) => item.steps.map((s) => s.id))).toEqual([["w"], ["all"]]);
+    expect(end?.card.map((s) => s.id)).toEqual(["a"]);
+  });
+
+  it("goes back one node with the state of society at that node, and refuses unknown values", () => {
+    const at = walkAnswer(graph, walkStart(graph, "case.a")!, "No")!;
+    expect(walkBack(at)).toEqual({ at: "society", hazard: "case.a", trail: [] });
+    expect(walkBack(walkBack(at))).toEqual(walkBack(at));
+    expect(walkStart(graph, "case.z")).toBeUndefined();
+    expect(walkStart(graph, undefined, "ghost")).toBeUndefined();
+    expect(walkAnswer(graph, walkStart(graph, "case.a")!, "Maybe")).toBeUndefined();
+    expect(walkAnswer(graph, at, "Yes")).toBeUndefined();
+    expect(walkEnd(graph, walkStart(graph)!, library)).toBeUndefined();
   });
 });
 
