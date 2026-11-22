@@ -5,6 +5,7 @@ import { stronglyConnectedComponents } from "@mark1russell7/collections/graph";
 import { resultOf } from "@mark1russell7/guidebook";
 import type { Finding, GateResult, Source } from "@mark1russell7/guidebook";
 import type { Phase } from "./ladder.ts";
+import { stepsFor } from "./steps.ts";
 import type { Step } from "./steps.ts";
 
 /** The states of society after an event, from a society that works to a society that does not work. */
@@ -384,4 +385,97 @@ export function checkMasterGraph<P extends string>(
   }
   for (const key of options.cases) if (!rows.has(key)) error("missing-hazard", key, `The catalog has no row for the case "${key}".`);
   return resultOf(out);
+}
+
+/** A node that a walk left, with the state of society at that node. */
+export interface WalkStep {
+  readonly at: string;
+  readonly society?: Society;
+}
+
+/**
+ * The state of a walk of the master graph. It is plain data, so a reader can keep it in an address or a store.
+ * `at` is the id of the current node. `trail` holds the nodes before it, the first one first.
+ */
+export interface WalkState {
+  readonly at: string;
+  /** The key of the case of the reader, if the reader came from a row of the catalog. */
+  readonly hazard?: string;
+  /** The state of society that the answers told, if any. */
+  readonly society?: Society;
+  readonly trail: readonly WalkStep[];
+}
+
+/** The steps of one phase at the end of a walk. */
+export interface WalkPhase<P extends string = Phase> {
+  readonly phase: P;
+  readonly steps: readonly Step<P>[];
+}
+
+/** The end of a walk: the tab, its steps by phase for the state of society, and the card of the hazard. */
+export interface WalkEnd<P extends string = Phase> {
+  readonly tab: Tab<P>;
+  /** The state of society of the steps. No value means the steps of each state. */
+  readonly society?: Society;
+  readonly phases: readonly WalkPhase<P>[];
+  /** The steps of the card of the hazard, when the end has `card` and the walk has a hazard. */
+  readonly card: readonly Step<P>[];
+}
+
+/**
+ * This function gives the start of a walk.
+ * With a hazard, the walk starts at the entry of its row. With no hazard, it starts at `signal` or at the first signal.
+ * It gives `undefined` for an unknown hazard or signal.
+ */
+export function walkStart<P extends string>(graph: MasterGraph<P>, hazard?: string, signal?: string): WalkState | undefined {
+  if (hazard !== undefined) {
+    const row = graph.hazards.find((item) => item.key === hazard);
+    return row === undefined ? undefined : { at: row.entry, hazard, trail: [] };
+  }
+  const start = graph.nodes.find((node) => node.kind === "signal" && (signal === undefined || node.id === signal));
+  return start === undefined ? undefined : { at: start.id, trail: [] };
+}
+
+/**
+ * This function gives the state after an answer.
+ * At a signal, the walk goes to its next node, and the label is not used. At a question, the label selects the answer.
+ * An answer with a state of society sets it. The function gives `undefined` for an unknown label or at an end.
+ */
+export function walkAnswer<P extends string>(graph: MasterGraph<P>, state: WalkState, label?: string): WalkState | undefined {
+  const node = graph.nodes.find((item) => item.id === state.at);
+  const trail = [...state.trail, { at: state.at, ...(state.society === undefined ? {} : { society: state.society }) }];
+  const keep = state.hazard === undefined ? {} : { hazard: state.hazard };
+  if (node?.kind === "signal") return { at: node.next, ...keep, ...(state.society === undefined ? {} : { society: state.society }), trail };
+  if (node?.kind !== "question") return undefined;
+  const answer = node.answers.find((item) => item.label === label);
+  if (answer === undefined) return undefined;
+  const society = answer.society ?? state.society;
+  return { at: answer.next, ...keep, ...(society === undefined ? {} : { society }), trail };
+}
+
+/** This function gives the state one node back, with the state of society at that node. At the start, it gives the same state. */
+export function walkBack(state: WalkState): WalkState {
+  const last = state.trail.at(-1);
+  if (last === undefined) return state;
+  return { at: last.at, ...(state.hazard === undefined ? {} : { hazard: state.hazard }), ...(last.society === undefined ? {} : { society: last.society }), trail: state.trail.slice(0, -1) };
+}
+
+/**
+ * This function gives the end of a walk at a goto: its tab, the steps of the tab by phase, and the card.
+ * The steps are for the state of society of the walk. It gives `undefined` when the walk is not at a goto.
+ */
+export function walkEnd<P extends string>(graph: MasterGraph<P>, state: WalkState, steps: readonly Step<P>[]): WalkEnd<P> | undefined {
+  const node = graph.nodes.find((item) => item.id === state.at);
+  if (node?.kind !== "goto") return undefined;
+  const tab = graph.tabs.find((item) => item.id === node.tab);
+  if (tab === undefined) return undefined;
+  const options = state.society === undefined ? {} : { society: state.society };
+  const phases = tab.phases.map((phase) => ({ phase, steps: stepsFor(steps, tab.keys, [phase], options) })).filter((item) => item.steps.length > 0);
+  const row = node.card === true && state.hazard !== undefined ? graph.hazards.find((item) => item.key === state.hazard) : undefined;
+  const byId = new Map(steps.map((step) => [step.id, step] as const));
+  const card = (row?.card ?? []).flatMap((id) => {
+    const step = byId.get(id);
+    return step === undefined ? [] : [step];
+  });
+  return { tab, ...options, phases, card };
 }

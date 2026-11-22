@@ -190,6 +190,25 @@ import { checkMasterGraph } from "@mark1russell7/guidebook-plans";
 const gate = checkMasterGraph(graph, library, sources, { on: keys, cover: hazards, cases, maxNodes: 20, maxEnds: 13 });
 ```
 
+### The walk of the graph
+
+The walk functions give one query over the graph for each reader: the app and the converter of the binder. The state of a walk `WalkState` is plain data: the node `at`, the `hazard`, the state of `society` and the `trail`.
+
+| Function | Result |
+| --- | --- |
+| `walkStart(graph, hazard?, signal?)` | The start: the entry of the row of the hazard, or a signal. |
+| `walkAnswer(graph, state, label?)` | The state after an answer. An answer with a state of society sets it. |
+| `walkBack(state)` | The state one node back, with the state of society at that node. |
+| `walkEnd(graph, state, steps)` | At a goto: the tab, the steps of its keys by phase for the state of society, and the card of the hazard. |
+
+```ts
+import { walkAnswer, walkEnd, walkStart } from "@mark1russell7/guidebook-plans";
+
+const start = walkStart(graph, "met.flood"); // At the entry of the row of the flood.
+const next = start && walkAnswer(graph, start, "No");
+const end = next && walkEnd(graph, next, steps); // The tab, its steps by phase and the card of the flood.
+```
+
 ## Limits
 
 - The gate does not evaluate `when`. The planner of an app evaluates it over the live state.
