@@ -1,3 +1,5 @@
+@import "@mark1russell7/site-pages/scroll-cue.css";
+
 :root {
   --page: #fbfbfa;
   --panel: #f0f0ed;
@@ -379,7 +381,7 @@ select {
 }
 
 .matrix-wrap {
-  overflow-x: auto;
+  --scroll-cue-bg: var(--page);
   border: 1px solid var(--line);
   border-radius: 0.6rem;
 }
