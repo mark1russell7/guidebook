@@ -12,7 +12,7 @@ The core and the plans add-on name no topic. This package is the first topic.
 
 | Name | What it is |
 | --- | --- |
-| `SOURCES` | The 39 sources. The 32 sources of the steps are 29 pages of US federal agencies in the US public domain, and 3 pages of the Finnish 72 hours guidance. A step is a summary of its sources, never a quote. The 5 sources of the bundles are 4 open wikis and the Stack Exchange network, under CC BY-SA 4.0. The 2 sources of the media rates are reports of Backblaze. |
+| `SOURCES` | The 39 sources. The 32 sources of the steps are 29 pages of US federal agencies in the US public domain, and 3 pages of the Finnish 72 hours guidance. A step is a summary of its sources, not a quote. The 5 sources of the bundles are 4 open wikis and the Stack Exchange network, under CC BY-SA 4.0. The 2 sources of the media rates are reports of Backblaze. |
 | `CASE_STEPS` | The steps of the 12 cases and of the 3 more cases |
 | `CUT_STEPS` | The steps of the 6 cuts |
 | `STEPS` | All the steps |
@@ -49,7 +49,7 @@ The code `health.medical-emergency` is new in the taxonomy. A household starts t
 
 An evacuation is a set of steps of the hurricane, the flood and the wildfire, not a case. The power outage and the water outage use the steps of their cuts.
 
-The 3 more cases are `cbrne.hazardous-materials`, `cbrne.radiological` and `civic.ai-collapse`. The case `civic.ai-collapse` is a collapse that AI causes: a loss of jobs and income, fraud with cloned voices and false images, and attacks on accounts. Its steps go from `ready` to `P5`.
+The 3 more cases are `cbrne.hazardous-materials`, `cbrne.radiological` and `civic.ai-collapse`. The case `civic.ai-collapse` is a collapse that AI causes. It includes a loss of jobs and income, fraud with cloned voices and false images, and attacks on accounts and homes. Its steps go from `ready` to `P5`.
 
 The 6 cuts are the services that an event stops:
 

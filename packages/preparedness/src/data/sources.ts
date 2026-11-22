@@ -48,7 +48,7 @@ export const SOURCES: readonly Source[] = [
   { ...federal("dol-ui", "U.S. Department of Labor", "How Do I File for Unemployment Insurance?", "https://www.dol.gov/general/topic/unemployment-insurance"), checked: "2026-11-22" },
   { ...federal("ftc-voice", "FTC Consumer Advice", "Scammers use AI to enhance their family emergency schemes", "https://consumer.ftc.gov/consumer-alerts/2023/03/scammers-use-ai-enhance-their-family-emergency-schemes"), checked: "2026-11-22" },
   // The 72 hours guidance of SPEK, the Finnish National Rescue Association, with the Finnish government. The pages give no license.
-  // Thus each step is a summary with a citation, never a quote.
+  // Thus each step is a summary with a citation, not a quote.
   { id: "fi-72h-shelter", title: "Sheltering indoors", url: "https://72tuntia.fi/en/sheltering-indoors/", license: "all-rights-reserved", checked: "2026-11-22", by: "SPEK, 72 hours" },
   { id: "fi-72h-info", title: "Communication in a disruption and reliable information", url: "https://72tuntia.fi/en/communication-in-a-disruption-and-reliable-information/", license: "all-rights-reserved", checked: "2026-11-22", by: "SPEK, 72 hours" },
   { id: "fi-72h-cyber", title: "Cybersecurity", url: "https://72tuntia.fi/en/cybersecurity/", license: "all-rights-reserved", checked: "2026-11-22", by: "SPEK, 72 hours" },
