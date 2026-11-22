@@ -52,6 +52,13 @@ export const SOURCES: readonly Source[] = [
   { id: "fi-72h-shelter", title: "Sheltering indoors", url: "https://72tuntia.fi/en/sheltering-indoors/", license: "all-rights-reserved", checked: "2026-11-22", by: "SPEK, 72 hours" },
   { id: "fi-72h-info", title: "Communication in a disruption and reliable information", url: "https://72tuntia.fi/en/communication-in-a-disruption-and-reliable-information/", license: "all-rights-reserved", checked: "2026-11-22", by: "SPEK, 72 hours" },
   { id: "fi-72h-cyber", title: "Cybersecurity", url: "https://72tuntia.fi/en/cybersecurity/", license: "all-rights-reserved", checked: "2026-11-22", by: "SPEK, 72 hours" },
+  { ...federal("ready-shelter", "Ready.gov", "Shelter", "https://www.ready.gov/shelter"), checked: "2026-11-22" },
+  { ...federal("ready-food", "Ready.gov", "Food", "https://www.ready.gov/food"), checked: "2026-11-22" },
+  { ...federal("cdc-resp", "CDC", "Preventing Respiratory Illnesses", "https://www.cdc.gov/respiratory-viruses/prevention/index.html"), checked: "2026-11-22" },
+  { ...federal("fdic-insurance", "FDIC", "Understanding Deposit Insurance", "https://www.fdic.gov/resources/deposit-insurance/understanding-deposit-insurance"), checked: "2026-11-22" },
+  // The Be Ready pages of the UK Government. The site gives the Open Government Licence v3.0.
+  { id: "uk-hazards", title: "Be informed about hazards", url: "https://beready.campaign.gov.uk/be-informed-about-hazards/", license: "ogl-uk-3.0", checked: "2026-11-22", by: "UK Government, Be Ready" },
+  { id: "uk-ready", title: "Be ready for emergencies", url: "https://beready.campaign.gov.uk/be-ready-for-emergencies/", license: "ogl-uk-3.0", checked: "2026-11-22", by: "UK Government, Be Ready" },
   { ...federal("snap-apply", "USDA Food and Nutrition Service", "SNAP: Applicant and Participant", "https://www.fns.usda.gov/snap/applicant-recipient"), checked: "2026-11-22" },
   // The data dump of Stack Exchange, Inc. on archive.org gives CC BY-SA 4.0 for all user content of the network.
   // A use shows the network as the source, links each question, and shows and links the name of each author.
