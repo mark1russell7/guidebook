@@ -276,6 +276,10 @@ describe("the master chart", () => {
     expect(inside?.kind === "question" && inside.answers.find((answer) => answer.label === "Yes")?.next).toBe("to-seal");
   });
 
+  it("indexes a death and a birth, and sends them to the tab health", () => {
+    expect((GRAPH.index ?? []).map((entry) => `${entry.title}>${entry.tab}`)).toEqual(["A death in the household>health", "Pregnancy and birth>health"]);
+  });
+
   it("gives each card of a release of radiation the time to stay inside", () => {
     const byId = new Map(STEPS.map((step) => [step.id, step] as const));
     for (const key of ["cbrne.radiological", "cbrne.nuclear-detonation"]) {

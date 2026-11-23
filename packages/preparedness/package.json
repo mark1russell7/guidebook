@@ -1,7 +1,7 @@
 {
   "$schema": "https://json.schemastore.org/package",
   "name": "@mark1russell7/guidebook-preparedness",
-  "version": "0.7.0",
+  "version": "0.7.1",
   "description": "The preparedness content of the guidebook: cited sources, the steps and marked gaps of 12 cases and 6 cuts, 40 topics in 12 areas, and the catalog of offline bundles.",
   "keywords": [
     "guidebook",

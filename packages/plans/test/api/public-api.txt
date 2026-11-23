@@ -21,6 +21,7 @@ type GotoNode: build/index.d.ts#GotoNode
 type GraphGateOptions: build/index.d.ts#GraphGateOptions
 HORIZONS: build/index.d.ts#HORIZONS
 type HazardRow: build/index.d.ts#HazardRow
+type IndexEntry: build/index.d.ts#IndexEntry
 type KeyCoverage: build/index.d.ts#KeyCoverage
 LADDER: build/index.d.ts#LADDER
 type Ladder: build/index.d.ts#Ladder
@@ -168,6 +169,13 @@ interface HazardRow {
   readonly card: readonly string[];
 }
 
+### build/index.d.ts#IndexEntry
+interface IndexEntry {
+  readonly title: string;
+  readonly tab: string;
+  readonly about: string;
+}
+
 ### build/index.d.ts#KeyCoverage
 interface KeyCoverage<P extends string> {
   readonly on: string;
@@ -190,7 +198,7 @@ interface Ladder<P extends string = string> {
 }
 
 ### build/index.d.ts#MASTER_FINDING_CODES
-export declare const MASTER_FINDING_CODES: readonly ["duplicate-id", "unknown-node", "unknown-tab", "unknown-key", "few-answers", "no-signal", "unreachable", "cycle", "too-deep", "too-many-nodes", "too-many-ends", "tab-without-steps", "unused-tab", "uncovered-key", "no-source", "unknown-source", "bad-schema", "unknown-start", "unknown-catalog", "unknown-hazard", "duplicate-hazard", "missing-hazard", "unknown-signal", "unknown-entry", "unknown-card-step", "no-route"];
+export declare const MASTER_FINDING_CODES: readonly ["duplicate-id", "unknown-node", "unknown-tab", "unknown-key", "few-answers", "no-signal", "unreachable", "cycle", "too-deep", "too-many-nodes", "too-many-ends", "tab-without-steps", "unused-tab", "uncovered-key", "no-source", "unknown-source", "bad-schema", "unknown-start", "unknown-catalog", "unknown-hazard", "duplicate-hazard", "missing-hazard", "unknown-signal", "unknown-entry", "unknown-card-step", "no-route", "unknown-index-tab", "duplicate-index"];
 
 ### build/index.d.ts#MasterChart
 interface MasterChart<P extends string = Phase> {
@@ -224,6 +232,7 @@ interface MasterGraph<P extends string = Phase> {
   readonly nodes: readonly ChartNode[];
   readonly tabs: readonly Tab<P>[];
   readonly hazards: readonly HazardRow[];
+  readonly index?: readonly IndexEntry[];
 }
 
 ### build/index.d.ts#PHASES
