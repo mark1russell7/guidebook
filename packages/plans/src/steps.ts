@@ -65,22 +65,39 @@ export interface StepsForOptions {
 /**
  * This function gives the steps whose `on` is in `on` and whose phase is in `phases`.
  * The sequence is by `on`, then by `phases`, then by `order`. A step that matches two entries of `on` comes one time.
+ * Steps with the same text are one step: the first, with the sources, the needs and the states of society of each.
  */
 export function stepsFor<P extends string>(library: readonly Step<P>[], on: readonly string[], phases: readonly P[], options: StepsForOptions = {}): readonly Step<P>[] {
   const { society } = options;
   const fits = (step: Step<P>): boolean => society === undefined || step.society === undefined || step.society.includes(society);
   const out: Step<P>[] = [];
   const seen = new Set<string>();
+  const byText = new Map<string, number>();
   for (const key of on) {
     for (const phase of phases) {
       const hits = library.filter((step) => step.on === key && step.phase === phase && !seen.has(step.id) && fits(step)).sort(byOrder);
       for (const step of hits) {
         seen.add(step.id);
-        out.push(step);
+        const at = byText.get(step.do);
+        if (at === undefined) {
+          byText.set(step.do, out.length);
+          out.push(step);
+        } else {
+          out[at] = mergeSteps(out[at] as Step<P>, step);
+        }
       }
     }
   }
   return out;
+}
+
+const union = <T>(a: readonly T[], b: readonly T[]): readonly T[] => [...new Set([...a, ...b])];
+
+/** This function gives one step for two steps with the same text. It keeps the first, with the sources, needs and states of society of both. */
+function mergeSteps<P extends string>(first: Step<P>, second: Step<P>): Step<P> {
+  const { society, ...rest } = first;
+  const merged = { ...rest, sources: union(first.sources, second.sources), needs: union(first.needs, second.needs) };
+  return society === undefined || second.society === undefined ? merged : { ...merged, society: union(society, second.society) };
 }
 
 /** This function gives the matrix of a library: one row for each key of `on`, with one cell for each phase of `phases`. */

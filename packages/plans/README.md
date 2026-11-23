@@ -40,7 +40,7 @@ Many cases stop the same service. So most steps belong to a cut, and each case t
 | --- | --- |
 | `Step` | One action: `id`, the key `on`, `phase`, `needs`, an optional condition `when`, the text `do`, `uses`, `order` and `sources` |
 | `Gap` | A key and a phase that have no step on purpose, with the reason `why` |
-| `stepsFor(library, on, phases)` | The steps of the keys in the phases, by key, then by phase, then by order. A step comes one time. |
+| `stepsFor(library, on, phases)` | The steps of the keys in the phases, by key, then by phase, then by order. A step comes one time, and steps with the same text are one step. |
 | `planMatrix(library, gaps, on, phases)` | One row for each key, with one cell for each phase: its steps, or its marked gap |
 | `checkSteps(steps, sources, options)` | The step gate |
 | `checkCoverage(steps, options)` | The coverage gate: each key has steps in each phase |

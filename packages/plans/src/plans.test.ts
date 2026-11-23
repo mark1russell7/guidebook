@@ -79,6 +79,16 @@ describe("stepsFor", () => {
     expect(stepsFor(library, ["b", "b"], ["P1"]).map((s) => s.id)).toEqual(["b1", "b2"]);
   });
 
+  it("gives one step for steps of two keys with the same text, with the sources and needs of each", () => {
+    const first: Step = { ...step("a-go", "a", "P1", 1, ["pa"]), do: "Go now.", needs: ["life"], society: ["works"] };
+    const second: Step = { ...step("b-go", "b", "P1", 1, ["pb"]), do: "Go now.", needs: ["life", "shelter"], society: ["none"] };
+    const all: Step = { ...step("c-go", "c", "P1", 1, ["pa"]), do: "Go now." };
+    const merged = stepsFor([first, second, step("b1", "b", "P1", 2)], ["a", "b"], ["P1"]);
+    expect(merged.map((s) => s.id)).toEqual(["a-go", "b1"]);
+    expect(merged[0]).toMatchObject({ sources: ["pa", "pb"], needs: ["life", "shelter"], society: ["works", "none"] });
+    expect(stepsFor([first, all], ["a", "c"], ["P1"])[0]?.society).toBeUndefined();
+  });
+
   it("gives nothing for a key or a phase with no step", () => {
     expect(stepsFor(library, ["z"], ["P0"])).toEqual([]);
     expect(stepsFor(library, ["a"], [])).toEqual([]);
