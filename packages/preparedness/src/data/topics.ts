@@ -1,7 +1,8 @@
 // The topics of the preparedness content: 40 topics in 12 areas, as a graph of prerequisites.
-// Each topic names the bundles that hold it. The cited units of each topic come later.
+// Each topic names the bundles that hold it, and its cited units: the units whose id starts with the topic id and a dot.
 
 import type { Topic } from "@mark1russell7/guidebook-topics";
+import { TOPIC_UNITS } from "./units.ts";
 
 /** The areas of the topics. */
 export const AREAS = [
@@ -52,7 +53,7 @@ const topic = (id: string, title: string, requires: readonly string[] = [], extr
     title,
     area,
     requires,
-    units: [],
+    units: TOPIC_UNITS.filter((unit) => unit.id.startsWith(`${id}.`)).map((unit) => unit.id),
     bundles: ["wikipedia-mini", "wikipedia-all", ...AREA_BUNDLES[area], ...(extra.bundles ?? [])],
     serves: extra.serves ?? (serve === undefined ? [] : [serve]),
   };

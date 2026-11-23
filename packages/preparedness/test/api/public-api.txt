@@ -34,6 +34,7 @@ START_TAB: build/index.d.ts#START_TAB
 STEPS: build/index.d.ts#STEPS
 TABS: build/index.d.ts#TABS
 TOPICS: build/index.d.ts#TOPICS
+TOPIC_UNITS: build/index.d.ts#TOPIC_UNITS
 
 ## Declarations
 
@@ -127,3 +128,6 @@ export declare const TABS: readonly Tab[];
 
 ### build/index.d.ts#TOPICS
 export declare const TOPICS: readonly Topic[];
+
+### build/index.d.ts#TOPIC_UNITS
+export declare const TOPIC_UNITS: readonly CitedUnit[];

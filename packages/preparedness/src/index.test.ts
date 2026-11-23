@@ -6,7 +6,7 @@ import { HORIZONS, PHASES, checkCoverage, checkSteps, planMatrix, stepsFor, char
 import { Linter, loadConfig } from "@mark1russell7/ste-lint";
 import type { WalkState } from "@mark1russell7/guidebook-plans";
 import { describe, expect, it } from "vitest";
-import { AREAS, BUNDLES, CATALOG_TAB, GRAPH, HAZARDS, BUNDLE_LEVELS, CASES, CUTS, GAPS, MEDIA_UNITS, MEDIUM_GAPS, MEDIUM_LIVES, MEDIUM_LOSSES, MASTER, MORE_CASES, NEEDS, OPEN_CELLS, RULES, SOCIETY_KEY, SOURCES, START_TAB, STEPS, TABS, TOPICS } from "./index.ts";
+import { AREAS, BUNDLES, CATALOG_TAB, GRAPH, HAZARDS, BUNDLE_LEVELS, CASES, CUTS, GAPS, MEDIA_UNITS, MEDIUM_GAPS, MEDIUM_LIVES, MEDIUM_LOSSES, MASTER, MORE_CASES, NEEDS, OPEN_CELLS, RULES, SOCIETY_KEY, SOURCES, START_TAB, STEPS, TABS, TOPICS, TOPIC_UNITS } from "./index.ts";
 
 const ALL_CASES = [...CASES, ...MORE_CASES];
 const KEYS = [...ALL_CASES, ...CUTS, SOCIETY_KEY];
@@ -24,7 +24,7 @@ describe("the source gate", () => {
   });
 
   it("uses each source in a step, a bundle or a unit", () => {
-    const cited = new Set([...STEPS.flatMap((step) => step.sources), ...BUNDLES.map((bundle) => bundle.source), ...MEDIA_UNITS.map((unit) => unit.source)]);
+    const cited = new Set([...STEPS.flatMap((step) => step.sources), ...BUNDLES.map((bundle) => bundle.source), ...MEDIA_UNITS.map((unit) => unit.source), ...TOPIC_UNITS.map((unit) => unit.source)]);
     expect(SOURCES.map((source) => source.id).filter((id) => !cited.has(id))).toEqual([]);
   });
 });
@@ -69,7 +69,19 @@ describe("the bundle catalog", () => {
 
 describe("the topics", () => {
   it("finds no finding in the graph of the topics", () => {
-    expect(checkTopics(TOPICS, { areas: AREAS, bundles: BUNDLES.map((bundle) => bundle.id), serves: NEEDS })).toEqual([]);
+    expect(checkTopics(TOPICS, { areas: AREAS, units: TOPIC_UNITS.map((unit) => unit.id), bundles: BUNDLES.map((bundle) => bundle.id), serves: NEEDS })).toEqual([]);
+  });
+
+  it("finds no finding in the units of the topics, for a commercial guidebook", () => {
+    expect(checkUnits(TOPIC_UNITS, SOURCES, { commercial: true })).toEqual([]);
+  });
+
+  it("gives each unit of a topic to exactly one topic", () => {
+    expect(TOPIC_UNITS.filter((unit) => TOPICS.filter((topic) => topic.units.includes(unit.id)).length !== 1).map((unit) => unit.id)).toEqual([]);
+  });
+
+  it("gives each water topic at least 3 units", () => {
+    expect(TOPICS.filter((topic) => topic.area === "water" && topic.units.length < 3).map((topic) => topic.id)).toEqual([]);
   });
 
   it("has 40 topics in 12 areas, each area with a topic", () => {
