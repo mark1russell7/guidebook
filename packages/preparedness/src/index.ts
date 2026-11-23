@@ -65,4 +65,8 @@ export const GRAPH: MasterGraph = {
   nodes: MASTER,
   tabs: TABS,
   hazards: HAZARDS,
+  index: [
+    { title: "A death in the household", tab: "health", about: "the record of the death, gloves, and the place and depth of a grave" },
+    { title: "Pregnancy and birth", tab: "health", about: "the danger signs, contraception, and a course for a birth with no doctor" },
+  ],
 };

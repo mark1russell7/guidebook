@@ -113,6 +113,8 @@ export const MASTER_FINDING_CODES = [
   "unknown-entry",
   "unknown-card-step",
   "no-route",
+  "unknown-index-tab",
+  "duplicate-index",
 ] as const;
 
 /** A code of a finding of the chart gate. */
@@ -331,6 +333,17 @@ export interface MasterGraph<P extends string = Phase> {
   readonly nodes: readonly ChartNode[];
   readonly tabs: readonly Tab<P>[];
   readonly hazards: readonly HazardRow[];
+  /** The index of the subjects that are not hazards. No value means an empty index. */
+  readonly index?: readonly IndexEntry[];
+}
+
+/** An entry of the index: a subject that is not a hazard, and the tab that holds its steps. */
+export interface IndexEntry {
+  readonly title: string;
+  /** The id of the tab that holds the steps of the subject. */
+  readonly tab: string;
+  /** The parts of the tab for the subject, in a few words. */
+  readonly about: string;
 }
 
 /** The options of the graph gate: the options of the chart gate and the cases that the catalog must index. */
@@ -387,6 +400,12 @@ export function checkMasterGraph<P extends string>(
     if (!byId.has(row.entry)) error("unknown-entry", row.key, `The row names the unknown entry "${row.entry}".`);
     else if (!routes(row.entry)) error("no-route", row.key, "No path from the entry of the row goes to a tab with keys.");
     for (const id of row.card) if (stepById.get(id)?.on !== row.key) error("unknown-card-step", row.key, `The card names "${id}", which is not a step of the case.`);
+  }
+  const titles = new Set([...graph.hazards.map((row) => row.title)]);
+  for (const entry of graph.index ?? []) {
+    if (titles.has(entry.title)) error("duplicate-index", entry.title, `Two entries of the catalog have the title "${entry.title}".`);
+    titles.add(entry.title);
+    if (!tabById.has(entry.tab)) error("unknown-index-tab", entry.title, `The index entry names the unknown tab "${entry.tab}".`);
   }
   for (const key of options.cases) if (!rows.has(key)) error("missing-hazard", key, `The catalog has no row for the case "${key}".`);
   return resultOf(out);

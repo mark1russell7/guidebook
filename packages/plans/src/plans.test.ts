@@ -337,6 +337,15 @@ describe("checkMasterGraph", () => {
       "missing-hazard:case.y",
     ]);
   });
+
+  it("finds an index entry with an unknown tab or the title of another entry", () => {
+    const index = [
+      { title: "A death in the household", tab: "chart", about: "the record" },
+      { title: "A death in the household", tab: "chart", about: "the record" },
+      { title: "Birth", tab: "ghost", about: "the signs" },
+    ];
+    expect(codes({ ...graph, index })).toEqual(["duplicate-index:A death in the household", "unknown-index-tab:Birth"]);
+  });
 });
 
 describe("the walk of the master graph", () => {

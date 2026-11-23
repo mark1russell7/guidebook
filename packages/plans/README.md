@@ -170,6 +170,7 @@ The master graph `MasterGraph` is the one value that a printed binder and an app
 | `societies` | The states of society, in the sequence of the sections of each tab. |
 | `nodes`, `tabs` | The nodes and the tabs of the chart. The edges come from `masterChartOf`, so no second list can disagree. |
 | `hazards` | The rows of the hazard catalog. Each row has a case `key`, a `title`, its `signals`, its `entry` node and its `card`: the ids of the steps unique to the case. |
+| `index` | The subjects of the catalog that are not hazards. Each entry has a `title`, the `tab` of its steps, and `about`: the parts of the tab. |
 
 The graph holds ids. A reader gets the steps and the sources from their own exports. The ids of the nodes, the tabs and the steps are stable. A change of an id is a new major version of the schema.
 
@@ -183,6 +184,7 @@ The graph gate `checkMasterGraph` applies the chart gate. It also gives these co
 | `unknown-signal`, `unknown-entry` | A row names no signal, a node that is not a signal, or an unknown entry. |
 | `unknown-card-step` | A card names a step that is not a step of its case. |
 | `no-route` | No path from the entry of a row goes to a tab with keys. |
+| `unknown-index-tab`, `duplicate-index` | An index entry names an unknown tab, or two entries of the catalog have one title. |
 
 ```ts
 import { checkMasterGraph } from "@mark1russell7/guidebook-plans";

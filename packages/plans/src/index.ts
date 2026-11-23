@@ -10,4 +10,4 @@ export type { CoverageFinding, CoverageFindingCode, CoverageOptions, KeyCoverage
 export { RULE_FINDING_CODES, RULE_KINDS, RULE_KIND_TITLES, chartOf, checkRules } from "./rules.ts";
 export type { ChartQuestion, Rule, RuleFinding, RuleFindingCode, RuleGateOptions, RuleKind, RuleTarget } from "./rules.ts";
 export { GRAPH_SCHEMA, MASTER_FINDING_CODES, SOCIETY_STATES, SOCIETY_TITLES, checkMasterChart, checkMasterGraph, masterChartOf, walkAnswer, walkBack, walkEnd, walkStart } from "./master.ts";
-export type { ChartAnswer, ChartEdge, ChartNode, GotoNode, GraphGateOptions, HazardRow, MasterChart, MasterFinding, MasterFindingCode, MasterGateOptions, MasterGraph, PlacedNode, WalkEnd, WalkPhase, WalkState, WalkStep, QuestionNode, SignalNode, Society, Tab } from "./master.ts";
+export type { ChartAnswer, ChartEdge, ChartNode, GotoNode, GraphGateOptions, HazardRow, IndexEntry, MasterChart, MasterFinding, MasterFindingCode, MasterGateOptions, MasterGraph, PlacedNode, WalkEnd, WalkPhase, WalkState, WalkStep, QuestionNode, SignalNode, Society, Tab } from "./master.ts";
