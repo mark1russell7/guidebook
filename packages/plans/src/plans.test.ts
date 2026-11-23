@@ -315,7 +315,7 @@ describe("checkMasterGraph", () => {
   });
 
   it("finds a wrong schema, an unknown start and an unknown catalog", () => {
-    expect(codes({ ...graph, schema: "guidebook-graph/2" as typeof GRAPH_SCHEMA, start: "nowhere", catalog: "none" })).toEqual(
+    expect(codes({ ...graph, schema: "guidebook-graph/1" as typeof GRAPH_SCHEMA, start: "nowhere", catalog: "none" })).toEqual(
       expect.arrayContaining(["bad-schema:graph", "unknown-start:nowhere", "unknown-catalog:none"]),
     );
   });
@@ -383,6 +383,28 @@ describe("the walk of the master graph", () => {
     expect(end?.society).toBe("works");
     expect(end?.phases.map((item) => item.steps.map((s) => s.id))).toEqual([["w"], ["all"]]);
     expect(end?.card.map((s) => s.id)).toEqual(["a"]);
+  });
+
+  it("leads on from an end with next, and counts no question after the first end", () => {
+    const nodes = [
+      { id: "smoke", kind: "signal", text: "You see smoke.", next: "inside" },
+      { id: "inside", kind: "question", text: "Is it inside?", sources: ["pd"], answers: [{ label: "Yes", next: "go-out" }, { label: "No", next: "go-long" }] },
+      { id: "go-out", kind: "goto", text: "Go out, then go on.", tab: "long", next: "society" },
+      { id: "society", kind: "question", text: "Does help come?", sources: ["pd"], answers: [{ label: "Yes", next: "go-long" }, { label: "No", next: "go-more" }] },
+      { id: "go-more", kind: "goto", text: "More.", tab: "long", next: "again" },
+      { id: "again", kind: "question", text: "Again?", sources: ["pd"], answers: [{ label: "Yes", next: "go-long" }, { label: "No", next: "go-long" }] },
+      { id: "go-long", kind: "goto", text: "Go to the long term.", tab: "long" },
+    ] as const satisfies readonly ChartNode[];
+    const on = { ...graph, nodes };
+    const result = checkMasterChart(nodes, on.tabs.filter((tab) => tab.id === "long"), library, sources, { on: ["cut.b"], cover: ["cut.b"], maxQuestions: 1 });
+    expect(result.findings.map((f) => f.code)).toEqual([]);
+    const out = walkAnswer(on, walkAnswer(on, walkStart(on)!, undefined)!, "Yes")!;
+    expect(out.at).toBe("go-out");
+    expect(walkEnd(on, out, library)?.tab.id).toBe("long");
+    expect(walkAnswer(on, out)?.at).toBe("society");
+    expect(walkAnswer(on, { at: "go-long", trail: [] })).toBeUndefined();
+    const loop = nodes.map((node) => (node.id === "go-long" ? { ...node, next: "smoke" } : node));
+    expect(checkMasterChart(loop, on.tabs, library, sources, { on: ["cut.b"], cover: ["cut.b"] }).findings.some((f) => f.code === "cycle")).toBe(true);
   });
 
   it("goes back one node with the state of society at that node, and refuses unknown values", () => {

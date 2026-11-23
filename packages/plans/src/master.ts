@@ -66,7 +66,10 @@ export interface QuestionNode {
   readonly reasoning?: string;
 }
 
-/** An end of the chart: an instruction that sends the reader to a tab. */
+/**
+ * An end of the chart: an instruction that sends the reader to a tab.
+ * An end with `next` leads on: after the tab, the reader goes to that node.
+ */
 export interface GotoNode {
   readonly id: string;
   readonly kind: "goto";
@@ -75,6 +78,8 @@ export interface GotoNode {
   readonly sources?: readonly string[];
   /** The end also shows the card of the hazard of the reader, if the reader came with one. */
   readonly card?: true;
+  /** The node that the reader goes to after the tab. No value means that the walk ends at the tab. */
+  readonly next?: string;
 }
 
 /** A node of the master chart. */
@@ -136,7 +141,7 @@ export interface MasterGateOptions {
 function nextOf(node: ChartNode): readonly string[] {
   if (node.kind === "signal") return [node.next];
   if (node.kind === "question") return node.answers.map((answer) => answer.next);
-  return [];
+  return node.next === undefined ? [] : [node.next];
 }
 
 /** The nodes in a cycle. A chart with a cycle has no end on that path. */
@@ -153,14 +158,14 @@ function cycleNodes(nodes: readonly ChartNode[], byId: ReadonlyMap<string, Chart
   return out;
 }
 
-/** The most questions from each node to an end, on a chart with no cycle. */
+/** The most questions from each node to the first end, on a chart with no cycle. The questions after an end do not count. */
 function questionsToEnd(byId: ReadonlyMap<string, ChartNode>, skip: ReadonlySet<string>): Map<string, number> {
   const memo = new Map<string, number>();
   const walk = (id: string): number => {
     const known = memo.get(id);
     if (known !== undefined) return known;
     const node = byId.get(id);
-    if (node === undefined || skip.has(id)) return 0;
+    if (node === undefined || skip.has(id) || node.kind === "goto") return 0;
     const rest = Math.max(0, ...nextOf(node).map(walk));
     const value = (node.kind === "question" ? 1 : 0) + rest;
     memo.set(id, value);
@@ -296,7 +301,7 @@ export function masterChartOf<P extends string>(nodes: readonly ChartNode[], tab
 }
 
 /** The name and the major version of the schema of the master graph. A reader refuses a graph with another value. */
-export const GRAPH_SCHEMA = "guidebook-graph/1";
+export const GRAPH_SCHEMA = "guidebook-graph/2";
 
 /** A row of the hazard catalog: an index into the graph, with the facts that are unique to the hazard. */
 export interface HazardRow {
@@ -438,14 +443,14 @@ export function walkStart<P extends string>(graph: MasterGraph<P>, hazard?: stri
 
 /**
  * This function gives the state after an answer.
- * At a signal, the walk goes to its next node, and the label is not used. At a question, the label selects the answer.
- * An answer with a state of society sets it. The function gives `undefined` for an unknown label or at an end.
+ * At a signal or at an end with `next`, the walk goes to the next node, and the label is not used. At a question, the label selects the answer.
+ * An answer with a state of society sets it. The function gives `undefined` for an unknown label, or at an end with no `next`.
  */
 export function walkAnswer<P extends string>(graph: MasterGraph<P>, state: WalkState, label?: string): WalkState | undefined {
   const node = graph.nodes.find((item) => item.id === state.at);
   const trail = [...state.trail, { at: state.at, ...(state.society === undefined ? {} : { society: state.society }) }];
   const keep = state.hazard === undefined ? {} : { hazard: state.hazard };
-  if (node?.kind === "signal") return { at: node.next, ...keep, ...(state.society === undefined ? {} : { society: state.society }), trail };
+  if (node?.kind === "signal" || (node?.kind === "goto" && node.next !== undefined)) return { at: node.next ?? state.at, ...keep, ...(state.society === undefined ? {} : { society: state.society }), trail };
   if (node?.kind !== "question") return undefined;
   const answer = node.answers.find((item) => item.label === label);
   if (answer === undefined) return undefined;

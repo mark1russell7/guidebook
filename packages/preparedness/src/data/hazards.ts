@@ -4,7 +4,7 @@
 import type { HazardRow, Phase, Step } from "@mark1russell7/guidebook-plans";
 
 /** The node where each signal joins the graph. */
-const ENTRY: Readonly<Record<string, string>> = { sense: "life", threat: "place", supply: "society" };
+const ENTRY: Readonly<Record<string, string>> = { sense: "life", threat: "to-window", supply: "society" };
 
 /** Each case: its title and its signals. The first signal gives the entry. */
 const TABLE: readonly (readonly [key: string, title: string, signals: readonly string[]])[] = [
@@ -36,13 +36,13 @@ const TABLE: readonly (readonly [key: string, title: string, signals: readonly s
   ["security.armed-conflict", "Armed conflict", ["threat", "sense"]],
 ];
 
-/** The phases of the first actions of a card, in the sequence of their use. */
+/** The phases of the actions of a card: the first 72 hours. */
 const FIRST: readonly Phase[] = ["P0", "P1", "P2"];
 
 /**
  * This function gives the rows of the hazard catalog.
  * A card holds the steps of the case with a text that no other case has.
- * These are the first actions, and the steps for a society with no service.
+ * These are the actions of the first 72 hours, and the steps for a society with no service.
  */
 export function hazardsOf(steps: readonly Step[]): readonly HazardRow[] {
   const cases = new Map<string, Set<string>>();
@@ -50,8 +50,7 @@ export function hazardsOf(steps: readonly Step[]): readonly HazardRow[] {
   const unique = (step: Step): boolean => (cases.get(step.do)?.size ?? 0) === 1;
   return TABLE.map(([key, title, signals]) => {
     const own = steps.filter((step) => step.on === key && unique(step));
-    const first = FIRST.find((phase) => own.some((step) => step.phase === phase));
-    const card = own.filter((step) => step.phase === first || (step.society?.includes("none") === true && !step.society.includes("works")));
+    const card = own.filter((step) => FIRST.includes(step.phase) || (step.society?.includes("none") === true && !step.society.includes("works")));
     return { key, title, signals, entry: ENTRY[signals[0] ?? ""] ?? "", card: card.map((step) => step.id) };
   });
 }
