@@ -21,7 +21,7 @@ The core and the plans add-on name no topic. This package is the first topic.
 | `MASTER` | The master chart for any disaster: 4 signals, 5 questions and 13 ends. Each path has at most 3 questions before its first end. Each walk then goes on to society and the needs. No answer waits for officials. |
 | `TABS`, `START_TAB` | The 13 tabs of the printed plan, each with its keys, its phases and its page budget. The chart is the start tab. |
 | `GRAPH` | The master graph `guidebook-graph/2`: the chart, the tabs and the hazard catalog, in one value for the binder and the app. |
-| `HAZARDS`, `CATALOG_TAB` | The 26 rows of the hazard catalog: the signals, the entry node and the card of each case. The catalog has 15 pages. The index of `GRAPH` adds a death and a birth. |
+| `HAZARDS`, `CATALOG_TAB` | The 26 rows of the hazard catalog: the signals, the entry node and the card of each case. The catalog has 15 pages. The index of `GRAPH` adds carbon monoxide, a death and a birth. |
 | `SOCIETY_KEY` | The key of the cut of all the services of society. Its steps are for a society with no service. |
 | `CASES` | The codes of the 12 cases |
 | `MORE_CASES` | The codes of 14 more cases, with the same gates |

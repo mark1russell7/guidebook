@@ -276,8 +276,8 @@ describe("the master chart", () => {
     expect(inside?.kind === "question" && inside.answers.find((answer) => answer.label === "Yes")?.next).toBe("to-seal");
   });
 
-  it("indexes a death and a birth, and sends them to the tab health", () => {
-    expect((GRAPH.index ?? []).map((entry) => `${entry.title}>${entry.tab}`)).toEqual(["A death in the household>health", "Pregnancy and birth>health"]);
+  it("indexes carbon monoxide, a death and a birth, and sends each to the tab of its steps", () => {
+    expect((GRAPH.index ?? []).map((entry) => `${entry.title}>${entry.tab}`)).toEqual(["Carbon monoxide>first-72h", "A death in the household>health", "Pregnancy and birth>health"]);
   });
 
   it("gives each card of a release of radiation the time to stay inside", () => {
