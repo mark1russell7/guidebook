@@ -66,6 +66,7 @@ export const GRAPH: MasterGraph = {
   tabs: TABS,
   hazards: HAZARDS,
   index: [
+    { title: "Carbon monoxide", tab: "first-72h", about: "the steps at a carbon monoxide alarm or its signs" },
     { title: "A death in the household", tab: "health", about: "the record of the death, gloves, and the place and depth of a grave" },
     { title: "Pregnancy and birth", tab: "health", about: "the danger signs, contraception, and a course for a birth with no doctor" },
   ],

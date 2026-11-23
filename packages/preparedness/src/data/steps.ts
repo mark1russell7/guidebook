@@ -702,6 +702,8 @@ export const CUT_STEPS: readonly Step[] = [
     ["P0", "leave", "If you smell gas or hear a hiss, open a window, and get all persons out quickly.", ["ready-safety"]],
     ["P0", "sparks", "Do not light a flame. Do not use a switch, a phone, a doorbell or an elevator near the smell.", ["cpsc-winter-2026","ready-safety"], { reasoning: "A spark or a flame can set fire to the gas." }],
     ["P0", "warn", "Use the stairs. Knock on the doors of your floor to warn the others. Do not ring the bells.", [], { reasoning: "A bell or an elevator makes a spark. A knock makes none." }],
+    ["P0", "co-air", "At a carbon monoxide alarm, or with headache, dizziness, nausea or confusion, take each person into fresh air immediately.", ["cdc-co", "cpsc-co-qa"]],
+    ["P0", "co-call", "From the fresh air, call 9-1-1. Do not go back in to look for the source.", ["cpsc-co-qa"], { society: SERVICES }],
     ["P0", "valve", "If you can do it safely, close the gas valve of the appliance or of your home. Call the gas company from outside.", ["ready-safety","cpsc-winter-2026"], { society: SERVICES }],
     ["P1", "restore", "Do not turn the gas on again yourself. Only a qualified professional can do this.", ["ready-safety"], { society: SERVICES }],
     ["P1", "keep-off", "With no gas company, keep the gas off, and do not light it again. Heat with the steps of the heat tab.", [], { reasoning: "No person can examine the pipes for a leak, and one leak can destroy the building.", society: NONE }],
