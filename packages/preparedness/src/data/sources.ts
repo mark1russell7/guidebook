@@ -68,6 +68,14 @@ export const SOURCES: readonly Source[] = [
   { id: "army-fm21-18", title: "FM 21-18, Foot Marches (1990)", url: "https://elon.edu/assets/docs/rotc/FM%2021-18%20Foot%20Marches.pdf", license: "us-public-domain", checked: "2026-11-22", by: "Department of the Army" },
   { ...federal("fhwa-nonmotorized", "FHWA, US DOT", "Guidebook on Methods to Estimate Non-Motorized Travel: Supporting Documentation (1999)", "https://www.fhwa.dot.gov/publications/research/safety/pedbike/98166/sec2.3.cfm"), checked: "2026-11-22" },
   { ...federal("fueleconomy-myths", "US DOE and US EPA, fueleconomy.gov", "Fuel Economy Myths and Misconceptions", "https://fueleconomy.gov/feg/myths.shtml"), checked: "2026-11-22" },
+  // The sources of the tab first-72h, read on 2026-11-22 and 2026-11-23. The pages of MedlinePlus and the Red Cross give no license, so their units are a summary.
+  { id: "mlp-choking-adult", title: "Choking - adult or child over 1 year (MedlinePlus Medical Encyclopedia)", url: "https://medlineplus.gov/ency/article/000049.htm", license: "all-rights-reserved", checked: "2026-11-22", by: "A.D.A.M., Inc., for the U.S. National Library of Medicine" },
+  { id: "mlp-choking-infant", title: "Choking - infant under 1 year (MedlinePlus Medical Encyclopedia)", url: "https://medlineplus.gov/ency/article/000048.htm", license: "all-rights-reserved", checked: "2026-11-23", by: "A.D.A.M., Inc., for the U.S. National Library of Medicine" },
+  { id: "redcross-cpr", title: "CPR Steps", url: "https://www.redcross.org/take-a-class/cpr/performing-cpr/cpr-steps", license: "all-rights-reserved", checked: "2026-11-22", by: "American Red Cross" },
+  { ...federal("cdc-seizure", "CDC", "First Aid for Seizures", "https://www.cdc.gov/epilepsy/first-aid-for-seizures/index.html"), checked: "2026-11-22" },
+  { ...federal("hrsa-poison-help", "HRSA", "Calling Poison Help", "https://poisonhelp.hrsa.gov/faqs/calling-poison-help/index.html"), checked: "2026-11-21" },
+  { ...federal("usfa-apartment", "U.S. Fire Administration", "Apartment fire safety", "https://www.usfa.fema.gov/downloads/fief/apartment_fire_safety.pdf"), checked: "2026-11-22" },
+  { ...federal("cdc-co-psa", "CDC", "Avoiding Carbon Monoxide Poisoning", "https://www.cdc.gov/natural-disasters/psa-toolkit/avoiding-carbon-monoxide-poisoning.html"), checked: "2026-11-21" },
   // The 72 hours guidance of SPEK, the Finnish National Rescue Association, with the Finnish government. The pages give no license.
   // Thus each step is a summary with a citation, not a quote.
   { id: "fi-72h-shelter", title: "Sheltering indoors", url: "https://72tuntia.fi/en/sheltering-indoors/", license: "all-rights-reserved", checked: "2026-11-22", by: "SPEK, 72 hours" },
