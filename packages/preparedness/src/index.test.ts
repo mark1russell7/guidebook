@@ -241,7 +241,7 @@ describe("the master chart", () => {
   const tabs = TABS.filter((tab) => tab.id !== START_TAB);
 
   it("finds no finding: each hazard and each part has a route, in 3 questions or fewer, on one page", () => {
-    const result = checkMasterGraph(GRAPH, STEPS, SOURCES, { on: [...KEYS, ...NEEDS], cover, cases: ALL_CASES, maxQuestions: 3, maxNodes: 21, maxEnds: 13 });
+    const result = checkMasterGraph(GRAPH, STEPS, SOURCES, { on: [...KEYS, ...NEEDS], cover, cases: ALL_CASES, maxQuestions: 3, maxNodes: 22, maxEnds: 13 });
     expect(result.findings).toEqual([]);
   });
 

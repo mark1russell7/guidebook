@@ -315,7 +315,7 @@ describe("checkMasterGraph", () => {
   });
 
   it("finds a wrong schema, an unknown start and an unknown catalog", () => {
-    expect(codes({ ...graph, schema: "guidebook-graph/2" as typeof GRAPH_SCHEMA, start: "nowhere", catalog: "none" })).toEqual(
+    expect(codes({ ...graph, schema: "guidebook-graph/1" as typeof GRAPH_SCHEMA, start: "nowhere", catalog: "none" })).toEqual(
       expect.arrayContaining(["bad-schema:graph", "unknown-start:nowhere", "unknown-catalog:none"]),
     );
   });

@@ -39,7 +39,7 @@ export const CATALOG_TAB = "catalog";
 const NEEDS_FIRST = "Do the needs by their danger. Safety comes in minutes, heat and water in hours and days, food in weeks.";
 
 /**
- * The nodes of the master chart: 3 signals, 5 questions and 13 ends.
+ * The nodes of the master chart: 4 signals, 5 questions and 13 ends.
  * The ends of the first questions lead on, so each walk also reaches the question of society and the needs.
  */
 export const MASTER: readonly ChartNode[] = [
@@ -47,6 +47,7 @@ export const MASTER: readonly ChartNode[] = [
   { id: "sense", kind: "signal", text: "You see, hear, smell or feel a danger: fire, smoke, gas, shaking, a flash, rising water, a siren or shots.", next: "life" },
   { id: "threat", kind: "signal", text: "You learn of a threat that comes: a storm, a flood, a fire, a disease, unrest, an attack or a war.", next: "to-window" },
   { id: "supply", kind: "signal", text: "A supply stops, or help does not come: power, water, sewer, gas, phone, internet, fuel, food, cash, care or the law.", next: "society" },
+  { id: "missing", kind: "signal", text: "A person of the household is missing, or does not come back at the agreed time.", next: "society" },
 
   // The questions. Each one has an answer that a reader can see without help.
   {
@@ -77,10 +78,10 @@ export const MASTER: readonly ChartNode[] = [
     id: "need", kind: "question", text: "Which need is short first? When the tab of the need says go, go to the tab go.", sources: [],
     reasoning: NEEDS_FIRST,
     answers: [
-      { label: "Safety of the people", next: "to-security" },
+      { label: "Safety of the people, or a person who is missing", next: "to-security" },
       { label: "Heat, shelter, power or fuel", next: "to-heat" },
       { label: "Water or a toilet", next: "to-water" },
-      { label: "Health or medicine", next: "to-health" },
+      { label: "Health, medicine or a crisis of the mind", next: "to-health" },
       { label: "Food", next: "to-food" },
       { label: "Contact, money or trade", next: "to-group" },
       { label: "A plan from week 5, or a life on your land", next: "to-long" },
