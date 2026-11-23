@@ -297,6 +297,16 @@ describe("the master chart", () => {
     expect(cards).toBeLessThanOrEqual(pages * 15);
   });
 
+  it("gives each end that leads on an edge to its next node, so the layers follow the reading order", () => {
+    const chart = masterChartOf(MASTER, TABS);
+    const ends = MASTER.flatMap((node) => (node.kind === "goto" && node.next !== undefined ? [`${node.id}>${node.next}`] : []));
+    expect(ends.filter((end) => !chart.edges.some((edge) => `${edge.from}>${edge.to}` === end))).toEqual([]);
+    const layer = new Map(chart.nodes.map((placed) => [placed.node.id, placed.layer] as const));
+    const order = ["life", "inside", "outside", "society", "need"].map((id) => layer.get(id) ?? -1);
+    expect(order).toEqual([...order].sort((a, b) => a - b));
+    expect(new Set(order).size).toBe(order.length);
+  });
+
   it("asks for the state of society, with an answer for each state", () => {
     const states = MASTER.flatMap((node) => (node.kind === "question" ? node.answers.flatMap((answer) => answer.society ?? []) : []));
     expect([...new Set(states)].sort()).toEqual(["none", "partly", "works"]);

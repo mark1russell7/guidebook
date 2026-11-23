@@ -412,6 +412,10 @@ describe("the walk of the master graph", () => {
     expect(walkEnd(on, out, library)?.tab.id).toBe("long");
     expect(walkAnswer(on, out)?.at).toBe("society");
     expect(walkAnswer(on, { at: "go-long", trail: [] })).toBeUndefined();
+    const chart = masterChartOf(nodes, on.tabs);
+    expect(chart.edges.filter((edge) => edge.from.startsWith("go-"))).toEqual([{ from: "go-out", to: "society" }, { from: "go-more", to: "again" }]);
+    const layer = new Map(chart.nodes.map((placed) => [placed.node.id, placed.layer] as const));
+    expect([layer.get("inside"), layer.get("go-out"), layer.get("society"), layer.get("go-more"), layer.get("again")]).toEqual([1, 2, 3, 4, 5]);
     const loop = nodes.map((node) => (node.id === "go-long" ? { ...node, next: "smoke" } : node));
     expect(checkMasterChart(loop, on.tabs, library, sources, { on: ["cut.b"], cover: ["cut.b"] }).findings.some((f) => f.code === "cycle")).toBe(true);
   });
