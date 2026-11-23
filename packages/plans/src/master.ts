@@ -283,7 +283,7 @@ export function masterChartOf<P extends string>(nodes: readonly ChartNode[], tab
   const edges: ChartEdge[] = nodes.flatMap((node): ChartEdge[] => {
     if (node.kind === "signal") return [{ from: node.id, to: node.next }];
     if (node.kind === "question") return node.answers.map((answer) => ({ from: node.id, to: answer.next, label: answer.label }));
-    return [];
+    return node.next === undefined ? [] : [{ from: node.id, to: node.next }];
   });
   const layer = new Map<string, number>();
   const into = new Map<string, string[]>();
