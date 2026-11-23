@@ -171,5 +171,142 @@ const WATER: readonly CitedUnit[] = [
   },
 ];
 
+/** The units of the food topics. */
+const FOOD: readonly CitedUnit[] = [
+  {
+    id: "food.store.stock",
+    use: "summary",
+    text: "Store food for several days that needs no refrigeration, cooking, water or special preparation. Choose food that your family eats. Include a manual can opener.",
+    source: "ready-food",
+    locator: "Suggested Emergency Food Supplies",
+  },
+  {
+    id: "food.store.outage",
+    use: "fact",
+    text: "Keep the doors closed. Then food stays safe for 4 hours in a refrigerator. It stays safe for 48 hours in a full freezer and 24 hours in a half-full freezer.",
+    source: "cdc-food-safe",
+    locator: "Steps to take during a power outage",
+  },
+  {
+    id: "food.store.throw",
+    use: "summary",
+    text: "After 4 hours with no power or cold source, throw out meat, fish, eggs, milk, cut produce and leftovers. Never taste food to find out if it is safe.",
+    source: "cdc-food-safe",
+    locator: "Steps to take after a power outage",
+  },
+  {
+    id: "food.store.refreeze",
+    use: "fact",
+    text: "You can refreeze or cook thawed frozen food that still has ice crystals or is at 40 °F or below.",
+    source: "cdc-food-safe",
+    locator: "Steps to take after a power outage",
+  },
+  {
+    id: "food.store.dry-ice",
+    use: "fact",
+    text: "25 pounds of dry ice keep a freezer of 10 cubic feet below freezing for 3 to 4 days. Do not let dry ice touch the food. Wear dry, heavy gloves.",
+    source: "ready-food",
+    locator: "Managing Food without Power",
+  },
+  {
+    id: "food.store.flood",
+    use: "summary",
+    text: "Throw out food that touched flood water. Also throw out food in cardboard, or in containers with screw caps, snap lids or twist caps. Unsafe food can look and smell normal.",
+    source: "cdc-food-safe",
+    locator: "Steps to take after a flood",
+  },
+  {
+    id: "food.cook.offgrid.indoors",
+    use: "fact",
+    text: "Never burn charcoal indoors, and never use a portable gas camp stove indoors. Do not cook on a stove or fireplace that has no vent.",
+    source: "cdc-co",
+    locator: "Chimneys, charcoal, and portable appliances, and Oil and gas furnaces and other household appliances",
+  },
+  {
+    id: "food.cook.offgrid.cans",
+    use: "summary",
+    text: "You can eat commercially canned food from the can with no heat. To heat food in its can, wash and disinfect the can, then open it before you heat it.",
+    source: "ready-food",
+    locator: "Food Safety and Sanitation",
+  },
+  {
+    id: "food.cook.offgrid.solar",
+    use: "fact",
+    text: "A solar box cooker gets as hot as 165 °C (325 °F). It cooks bread, vegetables and meat in some hours.",
+    source: "wikipedia-en",
+    locator: wiki("Solar cooker", "Advantages", 1386716905),
+  },
+  {
+    id: "food.cook.offgrid.solar-limits",
+    use: "summary",
+    text: "A solar cooker works badly in cloudy weather and far from the equator, so keep a second way to cook. Very hot food continues to cook for hours in a container with good insulation, such as a basket of straw.",
+    source: "wikipedia-en",
+    locator: wiki("Solar cooker", "Disadvantages", 1386716905),
+  },
+  {
+    id: "food.preserve.dry.how",
+    use: "summary",
+    text: "Drying keeps food because bacteria, yeasts and mold cannot grow without water. You can dry food in the sun, in the wind or in an electric dehydrator.",
+    source: "wikipedia-en",
+    locator: wiki("Food drying", "Preparation", 1382126699),
+  },
+  {
+    id: "food.preserve.dry.jerky",
+    use: "fact",
+    text: "Before you dry meat, heat it to 160 °F, or poultry to 165 °F. Then dry it at a constant 130 °F to 140 °F.",
+    source: "fsis-jerky",
+    locator: "Why is temperature important when making jerky?",
+  },
+  {
+    id: "food.preserve.dry.sun",
+    use: "fact",
+    text: "Do not dry meat in the sun. The heat is not constant, and animals, insects, dust and bacteria get on the meat. Sun drying is for fruits.",
+    source: "fsis-jerky",
+    locator: "What are the types of food drying?",
+  },
+  {
+    id: "food.preserve.dry.weight",
+    use: "fact",
+    text: "A pound of meat or poultry weighs approximately 4 ounces after it becomes jerky.",
+    source: "fsis-jerky",
+    locator: "What is jerky?",
+  },
+  {
+    id: "food.preserve.can.low-acid",
+    use: "fact",
+    text: "Low-acid foods have a pH higher than 4.6: all fresh vegetables, figs, meat, poultry, fish, seafood and some tomatoes. Can them only in a pressure canner.",
+    source: "cdc-home-canned",
+    locator: "Use the right equipment for the food you're canning",
+  },
+  {
+    id: "food.preserve.can.recipes",
+    use: "summary",
+    text: "Use only recipes that follow the USDA Complete Guide to Home Canning. Do not use an electric multi-cooker, also one with a canning button.",
+    source: "cdc-home-canned",
+    locator: "Carefully follow instructions, and Use the right equipment for the food you're canning",
+  },
+  {
+    id: "food.preserve.can.boil",
+    use: "fact",
+    text: "Before you eat home-canned low-acid food or home-canned tomatoes, boil it for 10 minutes. Add 1 minute for each 1,000 feet above 1,000 feet.",
+    source: "cdc-home-canned",
+    locator: "Boil home-canned foods before eating",
+  },
+  {
+    id: "food.preserve.can.signs",
+    use: "summary",
+    text: "Throw out the food if the container leaks, bulges or is damaged. Throw it out if liquid or foam spurts out at the opening. Throw it out if the food is moldy, discolored or smells bad.",
+    source: "cdc-home-canned",
+    locator: "Look for signs of contamination",
+  },
+  {
+    id: "food.preserve.can.store",
+    use: "summary",
+    text: "Can only the food that you use in 1 year. Label and date the jars. Keep them clean, cool and dark, below 95 °F and out of direct sunlight.",
+    source: "cdc-home-canned",
+    locator: "Safely store food",
+  },
+];
+
 /** The cited units of the topics. The units of the other areas come in later changes. */
-export const TOPIC_UNITS: readonly CitedUnit[] = [...WATER];
+export const TOPIC_UNITS: readonly CitedUnit[] = [...WATER, ...FOOD];

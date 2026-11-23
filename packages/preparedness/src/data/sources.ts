@@ -30,6 +30,7 @@ export const SOURCES: readonly Source[] = [
   federal("cdc-co", "CDC", "Carbon Monoxide Poisoning Basics", "https://www.cdc.gov/carbon-monoxide/about/index.html"),
   federal("cdc-water", "CDC", "How to Make Water Safe in an Emergency", "https://www.cdc.gov/water-emergency/about/index.html"),
   { ...federal("cdc-water-store", "CDC", "How to Create an Emergency Water Supply", "https://www.cdc.gov/water-emergency/about/how-to-create-and-store-an-emergency-water-supply.html"), checked: "2026-11-23" },
+  { ...federal("fsis-jerky", "USDA Food Safety and Inspection Service", "Jerky and Food Safety", "https://www.fsis.usda.gov/food-safety/safe-food-handling-and-preparation/meat-fish/jerky"), checked: "2026-11-23" },
   { ...federal("epa-water-disinfect", "U.S. Environmental Protection Agency", "Emergency Disinfection of Drinking Water", "https://www.epa.gov/ground-water-and-drinking-water/emergency-disinfection-drinking-water"), checked: "2026-11-23" },
   federal("fda-drugs", "FDA", "Safe Drug Use After a Natural Disaster", "https://www.fda.gov/drugs/emergency-preparedness-drugs/safe-drug-use-after-natural-disaster"),
   // The text of the Wikimedia projects is CC BY-SA 4.0 (Terms of Use, section 7, in effect from 2023-06-07).
