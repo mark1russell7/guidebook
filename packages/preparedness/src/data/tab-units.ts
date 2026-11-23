@@ -15,7 +15,7 @@ const GO: readonly CitedUnit[] = [
   {
     id: "tab.go.when.chemical-outside",
     use: "summary",
-    text: "When a chemical is outside, do not wait outside. Go to the nearest building of brick or concrete.",
+    text: "When a chemical is outside, do not wait outside. Go inside the nearest building.",
     source: "ready-hazmat",
   },
   {
