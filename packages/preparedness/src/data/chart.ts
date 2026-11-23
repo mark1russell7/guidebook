@@ -14,7 +14,7 @@ const ALL: readonly Phase[] = ["ready", "warned", "P0", "P1", "P2", "P3", "P4", 
  */
 export function tabsOf(cases: readonly string[], cuts: readonly string[]): readonly Tab[] {
   return [
-    { id: "start", title: "Start: the master chart", keys: [], phases: [], pages: 2 },
+    { id: "start", title: "Start: the master chart", keys: [], phases: [], pages: 4 },
     { id: "first-72h", title: "The first 72 hours", keys: [...cases, "gas.main"], phases: ["warned", "P0", "P1", "P2"], pages: 4 },
     { id: "stay", title: "Stay: the home and the building", keys: ["home.dwelling"], phases: ALL, pages: 8 },
     { id: "go", title: "Go: the routes and the other places", keys: ["road.local"], phases: ALL, pages: 4 },
