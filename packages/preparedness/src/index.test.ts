@@ -119,6 +119,16 @@ describe("the step gate", () => {
     expect(STEPS.flatMap((step) => step.needs).filter((need) => !(NEEDS as readonly string[]).includes(need))).toEqual([]);
   });
 
+  it("gives no text two times in a phase at the end of a walk, also in a tab of all the cases", () => {
+    const repeats = GRAPH.tabs.flatMap((tab) =>
+      tab.phases.flatMap((phase) => {
+        const texts = stepsFor(STEPS, tab.keys, [phase]).map((step) => step.do);
+        return texts.filter((text, index) => texts.indexOf(text) !== index).map((text) => `${tab.id} ${phase}: ${text}`);
+      }),
+    );
+    expect(repeats).toEqual([]);
+  });
+
   it("gives no step of a plan two times when a case and its cuts share a text", () => {
     for (const key of ALL_CASES) {
       const texts = stepsFor(STEPS, [key, ...CUTS], PHASES).map((step) => step.do);
