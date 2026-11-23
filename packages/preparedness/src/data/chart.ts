@@ -56,7 +56,7 @@ export const MASTER: readonly ChartNode[] = [
     answers: [{ label: "Yes", next: "to-72h" }, { label: "No", next: "inside" }],
   },
   {
-    id: "inside", kind: "question", text: "Is the danger inside your place: fire, gas, flood water or damage to the building?", sources: [],
+    id: "inside", kind: "question", text: "Is the danger inside the place where you are: fire, gas, flood water or damage to the building?", sources: [],
     reasoning: "Your place holds your supplies, so leave it only when the place itself is the danger.",
     answers: [{ label: "Yes", next: "to-go" }, { label: "No", next: "outside" }],
   },
@@ -94,7 +94,7 @@ export const MASTER: readonly ChartNode[] = [
   { id: "to-72h", kind: "goto", text: "Do the reflex of the tab the first 72 hours and of the card of the event. For a siren with no known cause, go inside, close the windows, and get news from two inputs.", tab: "first-72h", card: true, next: "inside" },
   { id: "to-seal", kind: "goto", text: "Stay inside, close the windows, and seal one room. Go out only when the card of the event says so.", tab: "stay", card: true, next: "society" },
   { id: "to-stay", kind: "goto", text: "Go to the tab: stay. Read the card of the event too.", tab: "stay", card: true, next: "society" },
-  { id: "to-go", kind: "goto", text: "Go to the tab: go. Read the card of the event too. At the other place, start the chart again.", tab: "go", card: true, next: "society" },
+  { id: "to-go", kind: "goto", text: "Go to the tab: go. Read the card of the event too. Is fallout or a chemical outside too? Then go to the center or the basement of this building, away from the fire. Or go to the nearest strong building. Do not wait in the open. At the other place, start the chart again.", sources: ["ready-radiation", "ready-hazmat"], tab: "go", card: true, next: "society" },
   { id: "to-long", kind: "goto", text: "Go to the tab: the long term.", tab: "long-term" },
   { id: "to-security", kind: "goto", text: "Go to the tab: the safety of the people.", tab: "security" },
   { id: "to-heat", kind: "goto", text: "Go to the tab: heat, shelter and power.", tab: "heat" },

@@ -276,6 +276,19 @@ describe("the master chart", () => {
     expect(inside?.kind === "question" && inside.answers.find((answer) => answer.label === "Yes")?.next).toBe("to-seal");
   });
 
+  it("keeps the household out of the open at the end go when fallout or a chemical is outside too", () => {
+    const go = MASTER.find((node) => node.id === "to-go");
+    expect(go?.text).toMatch(/Is fallout or a chemical outside too?/);
+    expect(go?.text).toMatch(/Do not wait in the open/);
+    expect(go?.sources).toEqual(["ready-radiation", "ready-hazmat"]);
+  });
+
+  it("gives CPR with no team the stop rule of the health tab, with its sources", () => {
+    const step = STEPS.find((row) => row.id.endsWith("cpr-none"));
+    expect(step?.do).toMatch(/breathes or moves.*exhausted or in danger.*30 minutes/);
+    expect(step?.sources).toEqual(["mra-cpr", "naemsp-wilderness"]);
+  });
+
   it("indexes carbon monoxide, a death and a birth, and sends each to the tab of its steps", () => {
     expect((GRAPH.index ?? []).map((entry) => `${entry.title}>${entry.tab}`)).toEqual(["Carbon monoxide>first-72h", "A death in the household>health", "Pregnancy and birth>health"]);
   });
