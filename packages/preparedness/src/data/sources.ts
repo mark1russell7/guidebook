@@ -54,6 +54,14 @@ export const SOURCES: readonly Source[] = [
   { ...federal("nws-nwr", "NOAA National Weather Service", "NOAA Weather Radio All Hazards", "https://www.weather.gov/nwr/"), checked: "2026-11-22" },
   { ...federal("dol-ui", "U.S. Department of Labor", "How Do I File for Unemployment Insurance?", "https://www.dol.gov/general/topic/unemployment-insurance"), checked: "2026-11-22" },
   { ...federal("ftc-voice", "FTC Consumer Advice", "Scammers use AI to enhance their family emergency schemes", "https://consumer.ftc.gov/consumer-alerts/2023/03/scammers-use-ai-enhance-their-family-emergency-schemes"), checked: "2026-11-22" },
+  // The sources of the tab go, read on 2026-11-22. The fuel sheet of the extension service gives no license, so its units are a summary or a fact.
+  { ...federal("cdc-winter-prevention", "CDC", "Preventing Hypothermia", "https://www.cdc.gov/winter-weather/prevention/index.html"), checked: "2026-11-22" },
+  { ...federal("fema-winter-older", "FEMA", "7 Winter Safety Tips for Older Adults", "https://fema.gov/fr/node/674100"), checked: "2026-11-22" },
+  { ...federal("fda-nutrition-label", "FDA", "How to Understand and Use the Nutrition Facts Label", "https://www.fda.gov/food/nutrition-facts-label/how-understand-and-use-nutrition-facts-label"), checked: "2026-11-22" },
+  { id: "auburn-gas-pump", title: "Dos and Don'ts at the Gas Pump", url: "https://cws.auburn.edu/shared/content/files/1496/gas-pump-safety.pdf", license: "all-rights-reserved", checked: "2026-11-22", by: "Purdue University Cooperative Extension Service, from Auburn University Risk Management and Safety" },
+  { id: "army-fm21-18", title: "FM 21-18, Foot Marches (1990)", url: "https://elon.edu/assets/docs/rotc/FM%2021-18%20Foot%20Marches.pdf", license: "us-public-domain", checked: "2026-11-22", by: "Department of the Army" },
+  { ...federal("fhwa-nonmotorized", "FHWA, US DOT", "Guidebook on Methods to Estimate Non-Motorized Travel: Supporting Documentation (1999)", "https://www.fhwa.dot.gov/publications/research/safety/pedbike/98166/sec2.3.cfm"), checked: "2026-11-22" },
+  { ...federal("fueleconomy-myths", "US DOE and US EPA, fueleconomy.gov", "Fuel Economy Myths and Misconceptions", "https://fueleconomy.gov/feg/myths.shtml"), checked: "2026-11-22" },
   // The 72 hours guidance of SPEK, the Finnish National Rescue Association, with the Finnish government. The pages give no license.
   // Thus each step is a summary with a citation, not a quote.
   { id: "fi-72h-shelter", title: "Sheltering indoors", url: "https://72tuntia.fi/en/sheltering-indoors/", license: "all-rights-reserved", checked: "2026-11-22", by: "SPEK, 72 hours" },
