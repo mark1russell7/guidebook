@@ -6,7 +6,7 @@ import { HORIZONS, PHASES, checkCoverage, checkSteps, planMatrix, stepsFor, char
 import { Linter, loadConfig } from "@mark1russell7/ste-lint";
 import type { WalkState } from "@mark1russell7/guidebook-plans";
 import { describe, expect, it } from "vitest";
-import { AREAS, BUNDLES, CATALOG_TAB, GRAPH, HAZARDS, BUNDLE_LEVELS, CASES, CUTS, GAPS, MEDIA_UNITS, MEDIUM_GAPS, MEDIUM_LIVES, MEDIUM_LOSSES, MASTER, MORE_CASES, NEEDS, OPEN_CELLS, RULES, SOCIETY_KEY, SOURCES, START_TAB, STEPS, TABS, TOPICS, TOPIC_UNITS } from "./index.ts";
+import { AREAS, BUNDLES, CATALOG_TAB, GRAPH, HAZARDS, BUNDLE_LEVELS, CASES, CUTS, GAPS, MEDIA_UNITS, MEDIUM_GAPS, MEDIUM_LIVES, MEDIUM_LOSSES, MASTER, MORE_CASES, NEEDS, OPEN_CELLS, RULES, SOCIETY_KEY, SOURCES, START_TAB, STEPS, TAB_UNITS, TABS, TOPICS, TOPIC_UNITS } from "./index.ts";
 
 const ALL_CASES = [...CASES, ...MORE_CASES];
 const KEYS = [...ALL_CASES, ...CUTS, SOCIETY_KEY];
@@ -24,7 +24,7 @@ describe("the source gate", () => {
   });
 
   it("uses each source in a step, a bundle or a unit", () => {
-    const cited = new Set([...STEPS.flatMap((step) => step.sources), ...BUNDLES.map((bundle) => bundle.source), ...MEDIA_UNITS.map((unit) => unit.source), ...TOPIC_UNITS.map((unit) => unit.source)]);
+    const cited = new Set([...STEPS.flatMap((step) => step.sources), ...BUNDLES.map((bundle) => bundle.source), ...MEDIA_UNITS.map((unit) => unit.source), ...TOPIC_UNITS.map((unit) => unit.source), ...TAB_UNITS.map((unit) => unit.source)]);
     expect(SOURCES.map((source) => source.id).filter((id) => !cited.has(id))).toEqual([]);
   });
 });
@@ -93,6 +93,22 @@ describe("the topics", () => {
     const order = printOrder(TOPICS).map((topic) => topic.id);
     expect(order).toHaveLength(TOPICS.length);
     for (const topic of TOPICS) for (const need of topic.requires) expect(order.indexOf(need), `${need} before ${topic.id}`).toBeLessThan(order.indexOf(topic.id));
+  });
+});
+
+describe("the tab units", () => {
+  it("finds no finding in the units of the tabs, for a commercial guidebook", () => {
+    expect(checkUnits(TAB_UNITS, SOURCES, { commercial: true })).toEqual([]);
+  });
+
+  it("starts each id with tab, the id of a tab of the binder, and a dot", () => {
+    const tabs = GRAPH.tabs.map((tab) => tab.id);
+    expect(TAB_UNITS.filter((unit) => !tabs.some((id) => unit.id.startsWith(`tab.${id}.`))).map((unit) => unit.id)).toEqual([]);
+  });
+
+  it("gives no unit the text of a step", () => {
+    const steps = new Set(STEPS.map((step) => step.do));
+    expect(TAB_UNITS.filter((unit) => steps.has(unit.text)).map((unit) => unit.id)).toEqual([]);
   });
 });
 
@@ -172,6 +188,7 @@ describe("the words of the steps", () => {
     ...RULES.flatMap((rule) => [[`${rule.id}.when`, rule.when] as const, [`${rule.id}.then`, rule.then] as const]),
     ...MASTER.map((node) => [`chart.${node.id}`, node.text] as const),
     ...MASTER.flatMap((node) => (node.kind === "question" && node.reasoning !== undefined ? [[`chart.${node.id}.reasoning`, node.reasoning] as const] : [])),
+    ...TAB_UNITS.map((unit) => [unit.id, unit.text] as const),
   ];
 
   it("obey the rules of Simplified Technical English", () => {

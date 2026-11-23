@@ -33,6 +33,7 @@ The core and the plans add-on name no topic. This package is the first topic.
 | `BUNDLE_LEVELS` | The levels of the bundles: `pocket` fits on one flash drive of 32 GB, and `shelf` needs a larger drive |
 | `BUNDLES_CHECKED` | The date of the last read of the Kiwix catalog |
 | `MEDIA_UNITS` | The cited fact units of the loss rates of the media |
+| `TAB_UNITS` | The cited units of the tabs of the binder. Each id starts with `tab.` and the id of its tab. The tab go comes first. |
 | `MEDIUM_LOSSES` | The yearly loss of each kind of medium with a cited rate: hard drives and SSDs |
 | `MEDIUM_LIVES` | The cited life of each type of medium at a quantile: CD-R, 30 years to 5% failure |
 | `MEDIUM_GAPS` | The kinds of medium with no cited rate and no cited life: flash and paper |
