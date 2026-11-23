@@ -278,7 +278,7 @@ describe("the master chart", () => {
 
   it("keeps the household out of the open at the end go when fallout or a chemical is outside too", () => {
     const go = MASTER.find((node) => node.id === "to-go");
-    expect(go?.text).toMatch(/fallout or a chemical is outside too/);
+    expect(go?.text).toMatch(/Is fallout or a chemical outside too?/);
     expect(go?.text).toMatch(/Do not wait in the open/);
     expect(go?.sources).toEqual(["ready-radiation", "ready-hazmat"]);
   });
