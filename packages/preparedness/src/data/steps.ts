@@ -287,7 +287,7 @@ export const CASE_STEPS: readonly Step[] = [
     ["P0", "ambulance", "Do not drive a person with the signs of a stroke to the hospital. Call for an ambulance.", ["cdc-stroke"], { society: ["works"] }],
     ["P0", "drive", "When the ambulance cannot come soon, drive the person to the nearest hospital that operates. Take a second person to give care.", [], { reasoning: "Care for a stroke or a heart attack works best when it starts early. A late ambulance costs more time than the trip.", society: ["partly"] }],
     ["P0", "cpr", "If you know CPR, give it until the emergency team arrives.", ["cdc-heart"], { society: SERVICES }],
-    ["P0", "cpr-none", "With no emergency team, give CPR until the person breathes, another person takes over, or you cannot continue.", [], { reasoning: "CPR moves blood to the brain. With no team to take over, the rescuer decides when it stops.", society: NONE }],
+    ["P0", "cpr-none", "With no emergency team, give CPR. Stop when the person breathes or moves, or when you are exhausted or in danger. Stop also after 30 minutes with no response.", ["mra-cpr", "naemsp-wilderness"], { reasoning: "CPR moves blood to the brain. With no team to take over, the rescuer decides when it stops.", society: NONE }],
     ...RECOVERY,
   ]),
   ...stepsOf("civic.ai-collapse", [

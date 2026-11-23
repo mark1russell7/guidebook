@@ -140,4 +140,7 @@ export const SOURCES: readonly Source[] = [
   { id: "cdc-air", title: "Cleaner Air for Respiratory Virus Prevention", url: "https://www.cdc.gov/respiratory-viruses/prevention/air-quality.html", license: "us-public-domain", checked: "2026-11-22", by: "CDC" },
   { id: "cdc-h1n1-homecare", title: "Taking Care of a Sick Person in Your Home (2009 H1N1)", url: "https://archive.cdc.gov/www_cdc_gov/h1n1flu/homecare/English_FactSheets1.html", license: "us-public-domain", checked: "2026-11-22", by: "CDC (archived page)" },
   { id: "cpsc-co-qa", title: "Carbon Monoxide Questions and Answers", url: "https://www.cpsc.gov/Safety-Education/Safety-Education-Centers/Carbon-Monoxide-Information-Center/Carbon-Monoxide-Questions-and-Answers", license: "us-public-domain", checked: "2026-11-22", by: "U.S. Consumer Product Safety Commission" },
+  // The stop rules of CPR with no emergency team. The pages give no license, so the steps give a summary only.
+  { id: "mra-cpr", title: "On the CPR Debate", url: "https://mra.org/on-the-cpr-debate/", license: "all-rights-reserved", checked: "2026-11-22", by: "Mountain Rescue Association" },
+  { id: "naemsp-wilderness", title: "Wilderness EMS Systems", url: "https://naemsp.org/wp-content/uploads/2025/07/2025_75_Wilderness.pdf", license: "all-rights-reserved", checked: "2026-11-22", by: "National Association of EMS Physicians" },
 ];
