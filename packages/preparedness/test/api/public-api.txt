@@ -19,6 +19,7 @@ CUT_STEPS: build/index.d.ts#CUT_STEPS
 GAPS: build/index.d.ts#GAPS
 GRAPH: build/index.d.ts#GRAPH
 HAZARDS: build/index.d.ts#HAZARDS
+LINKS: build/index.d.ts#LINKS
 MASTER: build/index.d.ts#MASTER
 MEDIA_UNITS: build/index.d.ts#MEDIA_UNITS
 MEDIUM_GAPS: build/index.d.ts#MEDIUM_GAPS
@@ -77,6 +78,9 @@ export declare const GRAPH: MasterGraph;
 
 ### build/index.d.ts#HAZARDS
 export declare const HAZARDS: readonly HazardRow[];
+
+### build/index.d.ts#LINKS
+export declare const LINKS: readonly Link[];
 
 ### build/index.d.ts#MASTER
 export declare const MASTER: readonly ChartNode[];
