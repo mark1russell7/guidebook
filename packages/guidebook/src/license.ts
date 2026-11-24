@@ -11,6 +11,7 @@ export const LICENSES = [
   "cc-by-sa-3.0",
   "cc-by-nc-sa-3.0",
   "ogl-uk-3.0",
+  "gutenberg",
   "all-rights-reserved",
   "link-only",
   "invented",
@@ -60,6 +61,8 @@ export interface LicenseRule {
  * - A US federal work (17 USC 105), a work in the public domain and a CC0 work permit each use.
  * - A CC BY work permits each use with a credit line. A CC BY-SA quote also needs its own layer.
  * - A CC BY-NC-SA work permits a bundle only while the guidebook is not commercial. The gate refuses a quote of it.
+ * - The Project Gutenberg License covers works that are in the US public domain. A copy keeps the full license and the name.
+ *   A copy for a fee pays the royalty of the trademark license, or it removes each reference to Project Gutenberg.
  * - A work with all rights reserved permits only a summary and a fact, with a citation.
  * - A link-only work permits no use of its text. A guidebook can only link to it, for example when its publisher refuses each AI use.
  */
@@ -134,6 +137,17 @@ export const LICENSE_RULES: Readonly<Record<License, LicenseRule>> = {
   "ogl-uk-3.0": {
     title: "Open Government Licence v3.0",
     url: "https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/",
+    quote: true,
+    bundle: true,
+    units: true,
+    nonCommercial: false,
+    layer: "main",
+    credit: true,
+    real: true,
+  },
+  gutenberg: {
+    title: "Project Gutenberg License",
+    url: "https://www.gutenberg.org/policy/license.html",
     quote: true,
     bundle: true,
     units: true,
