@@ -93,6 +93,26 @@ export function stepsFor<P extends string>(library: readonly Step<P>[], on: read
 
 const union = <T>(a: readonly T[], b: readonly T[]): readonly T[] => [...new Set([...a, ...b])];
 
+/**
+ * This function gives the steps that each key of `on` has. An example is a kit step that each case has.
+ * The sequence is the sequence of the library. Each text comes one time, as its first step.
+ * A sheet for a group of cases prints these steps one time, and not again for each case.
+ */
+export function commonSteps<P extends string>(library: readonly Step<P>[], on: readonly string[]): readonly Step<P>[] {
+  const keys = new Set(on);
+  const first = new Map<string, Step<P>>();
+  const keysOf = new Map<string, Set<string>>();
+  for (const step of library) {
+    if (!keys.has(step.on)) continue;
+    if (!first.has(step.do)) first.set(step.do, step);
+    const seen = keysOf.get(step.do) ?? new Set<string>();
+    seen.add(step.on);
+    keysOf.set(step.do, seen);
+  }
+  if (keys.size === 0) return [];
+  return [...first].filter(([text]) => keysOf.get(text)?.size === keys.size).map(([, step]) => step);
+}
+
 /** This function gives one step for two steps with the same text. It keeps the first, with the sources, needs and states of society of both. */
 function mergeSteps<P extends string>(first: Step<P>, second: Step<P>): Step<P> {
   const { society, ...rest } = first;

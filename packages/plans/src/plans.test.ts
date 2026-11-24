@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import type { Source } from "@mark1russell7/guidebook";
-import { HORIZONS, LADDER, PHASES, PHASE_BOUNDS, RULE_KINDS, GRAPH_SCHEMA, chartOf, checkMasterChart, checkMasterGraph, masterChartOf, walkAnswer, walkBack, walkEnd, walkStart, checkCoverage, checkRules, checkSteps, coverageOf, phaseIn, phaseOf, phasesOf, planMatrix, stepsFor } from "./index.ts";
+import { HORIZONS, LADDER, PHASES, PHASE_BOUNDS, RULE_KINDS, GRAPH_SCHEMA, chartOf, checkMasterChart, checkMasterGraph, masterChartOf, walkAnswer, walkBack, walkEnd, walkStart, checkCoverage, checkRules, checkSteps, commonSteps, coverageOf, phaseIn, phaseOf, phasesOf, planMatrix, stepsFor } from "./index.ts";
 import type { ChartNode, Ladder, MasterGraph, Rule, Step, Tab } from "./index.ts";
 
 const MIN = 60;
@@ -65,6 +65,19 @@ describe("phaseOf", () => {
     expect(phaseIn(ladder, HOUR - 1)).toBe("now");
     expect(phaseIn(ladder, HOUR)).toBe("later");
     expect(() => phaseIn({ ...ladder, timed: [{ phase: "later", from: 10 }] }, 1)).toThrow(/starts at 0/u);
+  });
+});
+
+describe("commonSteps", () => {
+  it("gives each text that is a step of each key, one time, in the sequence of the library", () => {
+    const kit = (id: string, on: string): Step => ({ ...step(id, on, "P4", 1), do: "Replace the items of the kit." });
+    const library = [step("a1", "a", "P1", 1), kit("a4", "a"), kit("b4", "b"), step("b1", "b", "P1", 1), kit("c4", "c")];
+    expect(commonSteps(library, ["a", "b"]).map((s) => s.id)).toEqual(["a4"]);
+    expect(commonSteps(library, ["a", "b", "c"]).map((s) => s.do)).toEqual(["Replace the items of the kit."]);
+    // A key with no step of the text removes the text. A repeated key counts one time.
+    expect(commonSteps(library, ["a", "b", "d"])).toEqual([]);
+    expect(commonSteps(library, ["a", "a"]).map((s) => s.id)).toEqual(["a1", "a4"]);
+    expect(commonSteps(library, [])).toEqual([]);
   });
 });
 
