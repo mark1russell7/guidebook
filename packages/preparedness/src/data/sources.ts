@@ -288,6 +288,13 @@ export const SOURCES: readonly Source[] = [
   { ...federal("fema-cert-2019", "FEMA", "CERT Basic Training Participant Manual (August 2019)", "https://www.ready.gov/sites/default/files/2019.CERT_.Basic_.PM_FINAL_508c.pdf"), checked: "2026-11-24" },
   { ...federal("dhs-stb-tourniquet", "U.S. Department of Homeland Security", "Stop the Bleed: Applying a Tourniquet (2018)", "https://www.dhs.gov/sites/default/files/publications/STB_Applying_Tourniquet_08-06-2018_0.pdf"), checked: "2026-11-24" },
   { ...federal("cdc-hear-her", "CDC (Hear Her campaign)", "Urgent Maternal Warning Signs and Symptoms", "https://www.cdc.gov/hearher/maternal-warning-signs/index.html"), checked: "2026-11-24", note: "The CDC page gives the list of the Alliance for Innovation on Maternal Health (AIM)" },
+  { ...federal("fda-otc-children", "U.S. Food and Drug Administration", "Got a Sick Kid? Don't Guess. Read the Label. (2018)", "https://www.fda.gov/drugs/safe-use-over-counter-otc-medicines-children/got-sick-kid-dont-guess-read-label-make-sure-youre-giving-your-children-right-medicine-and-right"), checked: "2026-11-24" },
+  { ...federal("cdc-ors-poster", "CDC", "How to make oral rehydration solution (ORS) and How to use oral rehydration solution (ORS) (2012, CDC Stacks)", "https://stacks.cdc.gov/view/cdc/41302"), checked: "2026-11-24" },
+  { ...federal("cdc-prescriptions-2019", "CDC, Prepare Your Health (archived page)", "Prescriptions (January 2019, archived copy)", "https://web.archive.org/web/20190111145212/https://www.cdc.gov/cpr/prepareyourhealth/Prescriptions.htm"), checked: "2026-11-24" },
+  // The sources of the appendices of the binder.
+  { ...federal("cpsc-generators", "U.S. Consumer Product Safety Commission", "Generators and Engine-Driven Tools", "https://www.cpsc.gov/Safety-Education/Safety-Guides/Carbon-Monoxide-Home/Generators-and-Engine-Driven-Tools"), checked: "2026-11-24" },
+  { ...federal("cdc-yellow-heat-cold", "CDC Yellow Book", "Heat and Cold Illness in Travelers", "https://www.cdc.gov/yellow-book/hcp/environmental-hazards-risks/heat-and-cold-illness-in-travelers.html"), checked: "2026-11-24" },
+  { ...federal("cdc-rainwater", "CDC", "Collecting Rainwater and Your Health: An Overview", "https://www.cdc.gov/drinking-water/about/collecting-rainwater-and-your-health-an-overview.html"), checked: "2026-11-24" },
   // The sources of the appendices of the binder, part 2.
   { ...federal("cdc-tetanus-about", "CDC", "About Tetanus", "https://www.cdc.gov/tetanus/about/index.html"), checked: "2026-11-24" },
   { ...federal("cdc-tetanus-wounds", "CDC", "Clinical Guidance for Wound Management to Prevent Tetanus", "https://www.cdc.gov/tetanus/hcp/clinical-guidance/index.html"), checked: "2026-11-24" },
