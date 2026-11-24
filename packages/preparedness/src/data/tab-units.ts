@@ -905,5 +905,146 @@ const SECURITY: readonly CitedUnit[] = [
   },
 ];
 
+/** The units of the tab group: contact with no phone network, the radio services, and the training of volunteers. */
+const GROUP: readonly CitedUnit[] = [
+  {
+    id: "tab.group.phone.short-calls",
+    use: "summary",
+    text: "Keep each phone call short. Wait 10 seconds before you dial a number again.",
+    source: "ready-comm-plan",
+    locator: "Other important tips for communicating in disasters",
+  },
+  {
+    id: "tab.group.phone.out-of-town-contact",
+    use: "summary",
+    text: "Choose one contact out of the town to help the household reconnect. In a disaster, a long-distance call can be easier than a local call.",
+    source: "ready-comm-plan",
+    locator: "Out-of-town contact",
+  },
+  {
+    id: "tab.group.phone.video-games",
+    use: "summary",
+    text: "In a disaster, limit video and games on the phone. They add to the load on the network.",
+    source: "ready-comm-plan",
+    locator: "Other important tips for communicating in disasters",
+  },
+  {
+    id: "tab.group.phone.text-waits",
+    use: "fact",
+    text: "A text can wait in the phone. It can go out by itself when the network has space.",
+    source: "ready-comm-plan",
+    locator: "Text is best!",
+  },
+  {
+    id: "tab.group.phone.other-services",
+    use: "summary",
+    text: "When mobile phone service stops, use another service: email, social media, or a landline with an analog phone.",
+    source: "ready-comm-plan",
+    locator: "Other important tips for communicating in disasters",
+  },
+  {
+    id: "tab.group.plan.card",
+    use: "summary",
+    text: "Write the contact plan on a card for each person. Make sure that each person carries the card.",
+    source: "ready-comm-plan",
+    locator: "Share",
+  },
+  {
+    id: "tab.group.plan.contact-details",
+    use: "summary",
+    text: "Put the contact out of the town on the card of the contact plan. Write the name, the phones, the email and the address.",
+    source: "ready-comm-plan",
+    locator: "Family emergency communication plan, out-of-town contact",
+  },
+  {
+    id: "tab.group.plan.review",
+    use: "summary",
+    text: "Examine the contact plan at least once each year, and when a fact in it changes.",
+    source: "ready-comm-plan",
+    locator: "Now it's time to practice!",
+  },
+  {
+    id: "tab.group.frs.channels",
+    use: "fact",
+    text: "The Family Radio Service (FRS) has 22 channels.",
+    source: "cfr-47-95-563",
+  },
+  {
+    id: "tab.group.frs.power",
+    use: "fact",
+    text: "The FRS power limit is 2 watts on channels 1 to 7 and 15 to 22, and 0.5 watt on channels 8 to 14.",
+    source: "cfr-47-95-567",
+  },
+  {
+    id: "tab.group.gmrs.fee",
+    use: "fact",
+    text: "The FCC application fee for a new GMRS license is $35. A regulatory fee can also be due.",
+    source: "cfr-47-1-1102",
+    locator: "Paragraph (c), table 2",
+  },
+  {
+    id: "tab.group.gmrs.term",
+    use: "fact",
+    text: "Only a person who is 18 or older can get a new GMRS license. The license usually lasts 10 years.",
+    source: "cfr-47-95-1705",
+    locator: "Paragraphs (a) and (e)",
+  },
+  {
+    id: "tab.group.gmrs.family",
+    use: "fact",
+    text: "The holder of a GMRS license can let the immediate family use the GMRS radios of the license. The rule lists the spouse, the children, the parents, the brothers and sisters, and other relatives.",
+    source: "cfr-47-95-1705",
+    locator: "Paragraph (c)(2)",
+  },
+  {
+    id: "tab.group.gmrs.emergency",
+    use: "fact",
+    text: "In an emergency, the holder of a GMRS license can let any person send an emergency message on the radio.",
+    source: "cfr-47-95-1705",
+    locator: "Paragraph (c)(3)",
+  },
+  {
+    id: "tab.group.gmrs.power",
+    use: "fact",
+    text: "On the main channels, a GMRS base, mobile or repeater station can send with up to 50 watts.",
+    source: "cfr-47-95-1767",
+    locator: "Paragraph (a)(1)",
+  },
+  {
+    id: "tab.group.amateur.technician-exam",
+    use: "fact",
+    text: "The Technician exam of amateur radio has 35 questions. To pass, 26 answers must be correct.",
+    source: "cfr-47-97-503",
+    locator: "Paragraph (a)",
+  },
+  {
+    id: "tab.group.amateur.examiners",
+    use: "fact",
+    text: "A team of 3 or more volunteer examiners gives each exam for an amateur radio license.",
+    source: "cfr-47-97-509",
+    locator: "Paragraph (a)",
+  },
+  {
+    id: "tab.group.amateur.fee",
+    use: "fact",
+    text: "The FCC application fee for a new amateur radio license is $35.",
+    source: "cfr-47-1-1102",
+    locator: "Paragraph (c), table 2",
+  },
+  {
+    id: "tab.group.mesh.lora",
+    use: "summary",
+    text: "A mesh of LoRa radios sends text messages between the members of a group with no phone network. Each radio sends again the messages that it receives.",
+    source: "meshtastic-intro",
+    locator: "How it works",
+  },
+  {
+    id: "tab.group.cert.training",
+    use: "fact",
+    text: "A Community Emergency Response Team (CERT) trains volunteers in basic disaster response skills. These are fire safety, light search and rescue, team organization and disaster medical operations.",
+    source: "fema-cert",
+  },
+];
+
 /** The cited units of the tabs of the binder. The units of the other tabs come in later changes. */
-export const TAB_UNITS: readonly CitedUnit[] = [...GO, ...FIRST_72H, ...STAY, ...HEAT, ...SECURITY];
+export const TAB_UNITS: readonly CitedUnit[] = [...GO, ...FIRST_72H, ...STAY, ...HEAT, ...SECURITY, ...GROUP];
