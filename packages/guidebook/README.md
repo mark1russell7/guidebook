@@ -57,15 +57,25 @@ The gate gives each finding as data, with a level, a code, the record and a mess
 | --- | --- | --- |
 | `duplicate-id` | `error` | Two sources or two units have the same `id`. |
 | `empty-title`, `empty-text` | `error` | A source has no title, or a unit has no text. |
-| `bad-url` | `error` | The address of a source does not start with `https:` or `http:`. |
+| `bad-url` | `error` | The address or the terms address of a source does not start with `https:` or `http:`. With the option `https`, it does not start with `https:`. |
 | `bad-date` | `error` | The check date is not a real date `YYYY-MM-DD`. |
 | `unknown-license` | `error` | The license is not in `LICENSES`. |
 | `checked-in-future` | `error` | The check date is after the date `at` of the gate. |
 | `updated-after-check` | `error` | The change date `updated` is after the check date. |
 | `bad-sha256` | `error` | The hash `sha256` is not 64 lowercase hexadecimal digits. |
+| `missing-field` | `error` | A source has no text in a field of the option `require`. |
 | `stale` | `warning` | The check is older than `maxAgeDays` (365 by default) before `at`. |
 | `missing-source` | `error` | A unit cites a source that is not in the list. |
 | `use-refused` | `error` | The license of the source refuses the use of the unit. |
+
+A dataset adds its own rules with two options of `checkSources` and `gate`:
+
+- `require` is a list of optional fields that each source must have, from `SOURCE_FIELDS`: `by`, `note`, `terms`, `updated` and `sha256`.
+- `https: true` accepts only addresses with `https:`, for the address and the terms address.
+
+```ts
+checkSources(sources, { require: ["by", "terms"], https: true });
+```
 
 `layerOf(unit, source)` gives the layer of a printed unit. A share-alike quote prints in its own layer, so the rest of the guidebook keeps its own license.
 

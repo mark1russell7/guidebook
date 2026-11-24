@@ -16,6 +16,7 @@ export const FINDING_CODES = [
   "checked-in-future",
   "updated-after-check",
   "bad-sha256",
+  "missing-field",
   "stale",
   "missing-source",
   "use-refused",
@@ -38,12 +39,25 @@ export interface Finding<C extends string = FindingCode, R extends string = "sou
   readonly message: string;
 }
 
+/** The optional fields of a source, in the order of the findings of the option `require`. */
+export const SOURCE_FIELDS: readonly ["by", "note", "terms", "updated", "sha256"] = ["by", "note", "terms", "updated", "sha256"];
+
+/** An optional field of a source that the option `require` of the gate can make necessary. */
+export type SourceField = (typeof SOURCE_FIELDS)[number];
+
 /** The options of the gate. */
 export interface GateOptions extends UseContext {
   /** The date of the gate. Without it, the gate does not examine the age of the checks. */
   readonly at?: IsoDate;
   /** A source whose check is older than this number of days gets the warning `stale`. The default is 365. */
   readonly maxAgeDays?: number;
+  /**
+   * The optional fields that each source must have. A field with no text gets the error `missing-field`.
+   * A dataset uses it for its own rules, for example `["by", "terms"]` for the credit and the evidence of a license.
+   */
+  readonly require?: readonly SourceField[];
+  /** When this option is true, the address and the terms address of each source must start with `https:`. The default is false. */
+  readonly https?: boolean;
 }
 
 /** The result of a gate. */
@@ -91,6 +105,11 @@ export function isWebAddress(url: string): boolean {
 /** The form of a SHA-256 hash: 64 lowercase hexadecimal digits. */
 const SHA256 = /^[0-9a-f]{64}$/u;
 
+/** This function tells if a web address starts with `https:`, in any case of the letters. */
+function isSecure(url: string): boolean {
+  return url.slice(0, 8).toLowerCase() === "https://";
+}
+
 /** This function tells if a text is a SHA-256 hash in the form that the gate accepts: 64 lowercase hexadecimal digits. */
 export function isSha256(text: string): boolean {
   return SHA256.test(text);
@@ -99,6 +118,8 @@ export function isSha256(text: string): boolean {
 /**
  * This function gives the findings of the sources: duplicate ids, empty titles, bad addresses, bad dates, unknown licenses and old checks.
  * It also examines the optional fields: the address `terms`, the date `updated` and the form of the hash `sha256`.
+ * The options `require` and `https` add the rules of a dataset: the fields that each source must have, and addresses with `https:` only.
+ * It throws a `RangeError` for a bad date of the gate or an unknown field in `require`.
  */
 export function checkSources(sources: readonly Source[], options: GateOptions = {}): readonly Finding[] {
   const out: Finding[] = [];
@@ -108,14 +129,25 @@ export function checkSources(sources: readonly Source[], options: GateOptions = 
   const at = options.at === undefined ? undefined : timeOf(options.at);
   if (options.at !== undefined && at === undefined) throw new RangeError(`checkSources: the date "${options.at}" of the gate is not a date YYYY-MM-DD.`);
   const maxAge = options.maxAgeDays ?? 365;
+  const unknown = (options.require ?? []).filter((field) => !(SOURCE_FIELDS as readonly string[]).includes(field));
+  if (unknown.length > 0) throw new RangeError(`checkSources: the option require has the unknown fields ${unknown.join(", ")}.`);
+  const necessary = SOURCE_FIELDS.filter((field) => options.require?.includes(field) === true);
   const seen = new Set<SourceId>();
   for (const source of sources) {
     if (seen.has(source.id)) error("duplicate-id", source.id, `Two sources have the id "${source.id}".`);
     seen.add(source.id);
     if (source.title.trim() === "") error("empty-title", source.id, `The source "${source.id}" has no title.`);
     if (!isWebAddress(source.url)) error("bad-url", source.id, `The source "${source.id}" has the address "${source.url}". It needs an address with https: or http:.`);
+    else if (options.https === true && !isSecure(source.url)) error("bad-url", source.id, `The source "${source.id}" has the address "${source.url}". The gate accepts only an address with https:.`);
     if (!isLicense(source.license)) error("unknown-license", source.id, `The source "${source.id}" has the unknown license "${String(source.license)}".`);
+    for (const field of necessary) {
+      const value: unknown = source[field];
+      if (typeof value !== "string" || value.trim() === "") error("missing-field", source.id, `The source "${source.id}" has no field "${field}". The gate makes it necessary.`);
+    }
     if (source.terms !== undefined && !isWebAddress(source.terms)) error("bad-url", source.id, `The source "${source.id}" has the terms address "${source.terms}". It needs an address with https: or http:.`);
+    else if (source.terms !== undefined && options.https === true && !isSecure(source.terms)) {
+      error("bad-url", source.id, `The source "${source.id}" has the terms address "${source.terms}". The gate accepts only an address with https:.`);
+    }
     if (source.sha256 !== undefined && !isSha256(source.sha256)) error("bad-sha256", source.id, `The hash of the source "${source.id}" is not 64 lowercase hexadecimal digits.`);
     const checked = timeOf(source.checked);
     const updated = source.updated === undefined ? undefined : timeOf(source.updated);
