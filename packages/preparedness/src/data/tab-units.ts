@@ -1046,5 +1046,117 @@ const GROUP: readonly CitedUnit[] = [
   },
 ];
 
+/** The units of the tab long-term: a base, water, heat and wood, food, sanitation and power, from week 5 to year 5. */
+const LONG_TERM: readonly CitedUnit[] = [
+  {
+    id: "tab.long-term.base.chemical-heater",
+    use: "summary",
+    text: "Do not use a portable flameless chemical heater indoors.",
+    source: "cdc-co",
+  },
+  {
+    id: "tab.long-term.base.co-no-smell",
+    use: "fact",
+    text: "Carbon monoxide has no smell and no color, and it can cause death.",
+    source: "cdc-co",
+  },
+  {
+    id: "tab.long-term.water.home-use",
+    use: "fact",
+    text: "In good times, a person in the US uses on average 82 gallons of water each day at home.",
+    source: "epa-watersense-stats",
+  },
+  {
+    id: "tab.long-term.water.well-test",
+    use: "summary",
+    text: "Test a private well each year for total coliform bacteria, nitrates, total dissolved solids and pH.",
+    source: "epa-well-testing",
+    locator: "Testing frequency",
+  },
+  {
+    id: "tab.long-term.water.well-contaminants",
+    use: "fact",
+    text: "The effluent of a septic leach field can put germs into a well. Nitrates from animal waste can also contaminate a private well.",
+    source: "epa-well-contaminants",
+    locator: "Potential Sources",
+  },
+  {
+    id: "tab.long-term.heat.snag-machine",
+    use: "summary",
+    text: "OSHA tells loggers to bring down a standing dead tree with a machine.",
+    source: "osha-felling-hazards",
+  },
+  {
+    id: "tab.long-term.heat.storm-tree-alone",
+    use: "summary",
+    text: "Do not cut a broken or uprooted storm tree alone. With no training, call a professional.",
+    source: "uconn-storm-trees",
+  },
+  {
+    id: "tab.long-term.heat.two-tree-lengths",
+    use: "fact",
+    text: "No other person comes within 2 tree lengths of a tree that falls, until the feller says it is safe.",
+    source: "osha-1910-266",
+    locator: "Paragraph (h)(1)(iv)",
+  },
+  {
+    id: "tab.long-term.heat.retreat-path",
+    use: "summary",
+    text: "Before you cut a tree, plan and clear a retreat path at 45 degrees to the back. Walk away on it to 20 feet from the tree.",
+    source: "osha-felling-retreat",
+  },
+  {
+    id: "tab.long-term.food.calories-active",
+    use: "fact",
+    text: "A person with a high level of physical activity can need more than 2,000 calories each day.",
+    source: "fda-nutrition-label",
+    locator: "Calories",
+  },
+  {
+    id: "tab.long-term.food.zone-find",
+    use: "summary",
+    text: "Before you plant a garden, find the hardiness zone of the land on the USDA Plant Hardiness Zone Map.",
+    source: "usda-hardiness",
+  },
+  {
+    id: "tab.long-term.food.zone-basis",
+    use: "fact",
+    text: "The hardiness zone comes from the average coldest winter temperature of each year. It tells which perennial plants are most likely to grow well at a place.",
+    source: "usda-hardiness",
+  },
+  {
+    id: "tab.long-term.food.pressure-heat",
+    use: "fact",
+    text: "Low-acid foods must reach 240 to 250 °F in the canner. A pressure canner gives this heat at 10 to 15 pounds per square inch.",
+    source: "nchfp-canned-safe",
+  },
+  {
+    id: "tab.long-term.food.botulism",
+    use: "fact",
+    text: "Botulism can grow in a moist, low-acid food with almost no oxygen.",
+    source: "nchfp-canned-safe",
+  },
+  {
+    id: "tab.long-term.food.canned-temperature",
+    use: "summary",
+    text: "For best quality, store home-canned food at 50 to 70 °F.",
+    source: "nchfp-canned-store",
+  },
+  {
+    id: "tab.long-term.sanitation.septic",
+    use: "fact",
+    text: "A household septic system needs an inspection at least every 3 years. The tank usually needs a pump-out every 3 to 5 years.",
+    source: "epa-septic-care",
+    locator: "Inspect and Pump Frequently",
+  },
+  {
+    id: "tab.long-term.power.lfp-charge",
+    use: "fact",
+    text: "Do not charge a lithium iron phosphate battery below the limit of its manual. One maker gives +5 °C (41 °F).",
+    source: "victron-lfp",
+    locator: "Operating conditions",
+  },
+];
+
 /** The cited units of the tabs of the binder. The units of the other tabs come in later changes. */
-export const TAB_UNITS: readonly CitedUnit[] = [...GO, ...FIRST_72H, ...STAY, ...HEAT, ...SECURITY, ...GROUP];
+export const TAB_UNITS: readonly CitedUnit[] = [...GO, ...FIRST_72H, ...STAY, ...HEAT, ...SECURITY, ...GROUP, ...LONG_TERM];
