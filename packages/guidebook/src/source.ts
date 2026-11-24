@@ -20,6 +20,8 @@ export interface Source {
   readonly checked: IsoDate;
   /** The name that a credit line gives, for example the agency or the authors. The default is the title. */
   readonly by?: string;
+  /** A term of the publisher in addition to the license, with its date, for example "No AI ingestion (publisher, 2026-11-23)". */
+  readonly note?: string;
 }
 
 /** The use of a cited unit. A bundle is a copy of a full source, so a unit cannot have the use `bundle`. */

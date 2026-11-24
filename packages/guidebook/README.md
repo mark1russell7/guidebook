@@ -32,9 +32,10 @@ A unit has one of three uses:
 | `cc-by-sa-4.0`, `cc-by-sa-3.0` | yes | yes | yes | yes | `share-alike` |
 | `cc-by-nc-sa-3.0` | no | only when not commercial | yes | yes | `share-alike` |
 | `all-rights-reserved` | no | no | yes | no | `main` |
+| `link-only` | no | no | no | no | `main` |
 | `invented` | only in a fixture | only in a fixture | only in a fixture | no | `main` |
 
-A US federal work is in the public domain under 17 USC 105. A summary and a fact are the words of the guidebook, so each real license permits them.
+A US federal work is in the public domain under 17 USC 105. A summary and a fact are the words of the guidebook, so each real license permits them, but `link-only` does not. Use `link-only` when the publisher permits only a link, for example when it refuses each AI use of its text. Put the word of the publisher and its date in the field `note` of the source.
 
 ## The source gate
 

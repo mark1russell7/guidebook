@@ -3,7 +3,7 @@
 import { LICENSES, isWebAddress, permits, timeOf } from "@mark1russell7/guidebook";
 import type { Finding, License, Source, UseContext } from "@mark1russell7/guidebook";
 import { MEDIUM_KINDS } from "./records.ts";
-import type { Bundle, Copy, CopyRule } from "./records.ts";
+import type { Bundle, Copy, CopyRule, Link } from "./records.ts";
 
 /** The codes of the findings of the catalog gate. */
 export const LIBRARY_CODES = [
@@ -28,7 +28,7 @@ export const LIBRARY_CODES = [
 export type LibraryCode = (typeof LIBRARY_CODES)[number];
 
 /** A finding of the catalog gate, on a bundle or on a copy. */
-export type LibraryFinding = Finding<LibraryCode, "bundle" | "copy">;
+export type LibraryFinding = Finding<LibraryCode, "bundle" | "copy" | "link">;
 
 /** The options of the catalog gate. */
 export interface CatalogOptions extends UseContext {
@@ -71,6 +71,30 @@ export function checkCatalog(bundles: readonly Bundle[], options: CatalogOptions
     }
     if (sources !== undefined && !sources.has(bundle.source)) error("missing-source", bundle.id, `The bundle "${bundle.id}" names the unknown source "${bundle.source}".`);
     if (levels !== undefined && !levels.has(bundle.level)) error("unknown-level", bundle.id, `The bundle "${bundle.id}" has the level "${bundle.level}", and no copy rule has it.`);
+  }
+  return out;
+}
+
+/** The options of the check of the links. */
+export interface LinksOptions {
+  /** The sources of the core. With them, a link must name a known source. */
+  readonly sources?: readonly Source[];
+}
+
+/** This function gives the findings of the links of a catalog: a duplicate id, an empty title, a bad address and an unknown source. */
+export function checkLinks(links: readonly Link[], options: LinksOptions = {}): readonly LibraryFinding[] {
+  const out: LibraryFinding[] = [];
+  const error = (code: LibraryCode, id: string, message: string): void => {
+    out.push({ level: "error", code, record: "link", id, message });
+  };
+  const sources = options.sources === undefined ? undefined : new Set(options.sources.map((source) => source.id));
+  const seen = new Set<string>();
+  for (const link of links) {
+    if (seen.has(link.id)) error("duplicate-id", link.id, `Two links have the id "${link.id}".`);
+    seen.add(link.id);
+    if (link.title.trim() === "") error("empty-title", link.id, `The link "${link.id}" has no title.`);
+    if (!isWebAddress(link.url)) error("bad-url", link.id, `The link "${link.id}" has the address "${link.url}". It needs an address with https: or http:.`);
+    if (sources !== undefined && !sources.has(link.source)) error("missing-source", link.id, `The link "${link.id}" names the unknown source "${link.source}".`);
   }
   return out;
 }

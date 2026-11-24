@@ -12,6 +12,7 @@ export const LICENSES = [
   "cc-by-nc-sa-3.0",
   "ogl-uk-3.0",
   "all-rights-reserved",
+  "link-only",
   "invented",
 ] as const;
 
@@ -41,6 +42,8 @@ export interface LicenseRule {
   readonly quote: boolean;
   /** This field is true when a guidebook can keep an offline copy of the full source. */
   readonly bundle: boolean;
+  /** This field is true when a guidebook can write a summary or a fact of the source. It is false when a guidebook can only link to the source. */
+  readonly units: boolean;
   /** This field is true when the license permits only a use that is not commercial. */
   readonly nonCommercial: boolean;
   /** The layer of a quote. A share-alike license needs its own layer, so the rest of the guidebook keeps its own license. */
@@ -58,6 +61,7 @@ export interface LicenseRule {
  * - A CC BY work permits each use with a credit line. A CC BY-SA quote also needs its own layer.
  * - A CC BY-NC-SA work permits a bundle only while the guidebook is not commercial. The gate refuses a quote of it.
  * - A work with all rights reserved permits only a summary and a fact, with a citation.
+ * - A link-only work permits no use of its text. A guidebook can only link to it, for example when its publisher refuses each AI use.
  */
 export const LICENSE_RULES: Readonly<Record<License, LicenseRule>> = {
   "us-public-domain": {
@@ -65,17 +69,19 @@ export const LICENSE_RULES: Readonly<Record<License, LicenseRule>> = {
     url: "https://www.law.cornell.edu/uscode/text/17/105",
     quote: true,
     bundle: true,
+    units: true,
     nonCommercial: false,
     layer: "main",
     credit: false,
     real: true,
   },
-  "public-domain": { title: "Public domain", url: "", quote: true, bundle: true, nonCommercial: false, layer: "main", credit: false, real: true },
+  "public-domain": { title: "Public domain", url: "", quote: true, bundle: true, units: true, nonCommercial: false, layer: "main", credit: false, real: true },
   cc0: {
     title: "CC0 1.0",
     url: "https://creativecommons.org/publicdomain/zero/1.0/",
     quote: true,
     bundle: true,
+    units: true,
     nonCommercial: false,
     layer: "main",
     credit: false,
@@ -86,6 +92,7 @@ export const LICENSE_RULES: Readonly<Record<License, LicenseRule>> = {
     url: "https://creativecommons.org/licenses/by/4.0/",
     quote: true,
     bundle: true,
+    units: true,
     nonCommercial: false,
     layer: "main",
     credit: true,
@@ -96,6 +103,7 @@ export const LICENSE_RULES: Readonly<Record<License, LicenseRule>> = {
     url: "https://creativecommons.org/licenses/by-sa/4.0/",
     quote: true,
     bundle: true,
+    units: true,
     nonCommercial: false,
     layer: "share-alike",
     credit: true,
@@ -106,6 +114,7 @@ export const LICENSE_RULES: Readonly<Record<License, LicenseRule>> = {
     url: "https://creativecommons.org/licenses/by-sa/3.0/",
     quote: true,
     bundle: true,
+    units: true,
     nonCommercial: false,
     layer: "share-alike",
     credit: true,
@@ -116,6 +125,7 @@ export const LICENSE_RULES: Readonly<Record<License, LicenseRule>> = {
     url: "https://creativecommons.org/licenses/by-nc-sa/3.0/",
     quote: false,
     bundle: true,
+    units: true,
     nonCommercial: true,
     layer: "share-alike",
     credit: true,
@@ -126,13 +136,15 @@ export const LICENSE_RULES: Readonly<Record<License, LicenseRule>> = {
     url: "https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/",
     quote: true,
     bundle: true,
+    units: true,
     nonCommercial: false,
     layer: "main",
     credit: true,
     real: true,
   },
-  "all-rights-reserved": { title: "All rights reserved", url: "", quote: false, bundle: false, nonCommercial: false, layer: "main", credit: false, real: true },
-  invented: { title: "Invented for a test", url: "", quote: false, bundle: false, nonCommercial: false, layer: "main", credit: false, real: false },
+  "all-rights-reserved": { title: "All rights reserved", url: "", quote: false, bundle: false, units: true, nonCommercial: false, layer: "main", credit: false, real: true },
+  "link-only": { title: "Link only", url: "", quote: false, bundle: false, units: false, nonCommercial: false, layer: "main", credit: false, real: true },
+  invented: { title: "Invented for a test", url: "", quote: false, bundle: false, units: true, nonCommercial: false, layer: "main", credit: false, real: false },
 };
 
 /** The context of a use. A guidebook that is sold, or that shows paid advertisements, is commercial. */
@@ -145,13 +157,13 @@ export interface UseContext {
 
 /**
  * This function tells if a license permits a use.
- * A summary and a fact are the words of the guidebook, so each real license permits them.
+ * A summary and a fact are the words of the guidebook, so each real license permits them, but a link-only license refuses them.
  * A non-commercial license refuses each use of its text in a commercial guidebook. A summary and a fact are not its text, so they stay.
  */
 export function permits(license: License, use: Use, context: UseContext = {}): boolean {
   const rule = LICENSE_RULES[license];
   if (!rule.real) return context.fixture === true;
-  if (use === "summary" || use === "fact") return true;
+  if (use === "summary" || use === "fact") return rule.units;
   if (rule.nonCommercial && context.commercial === true) return false;
   return use === "quote" ? rule.quote : rule.bundle;
 }

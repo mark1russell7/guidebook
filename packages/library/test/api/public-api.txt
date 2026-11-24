@@ -28,6 +28,8 @@ type KiwixEntry: build/index.d.ts#KiwixEntry
 LIBRARY_CODES: build/index.d.ts#LIBRARY_CODES
 type LibraryCode: build/index.d.ts#LibraryCode
 type LibraryFinding: build/index.d.ts#LibraryFinding
+type Link: build/index.d.ts#Link
+type LinksOptions: build/index.d.ts#LinksOptions
 MEDIUM_KINDS: build/index.d.ts#MEDIUM_KINDS
 type MediumKind: build/index.d.ts#MediumKind
 type MediumLife: build/index.d.ts#MediumLife
@@ -41,6 +43,7 @@ type ReleaseOptions: build/index.d.ts#ReleaseOptions
 bytesOf: build/index.d.ts#bytesOf
 checkCatalog: build/index.d.ts#checkCatalog
 checkCopies: build/index.d.ts#checkCopies
+checkLinks: build/index.d.ts#checkLinks
 checkReleases: build/index.d.ts#checkReleases
 checksDue: build/index.d.ts#checksDue
 copiesLayer: build/index.d.ts#copiesLayer
@@ -212,7 +215,20 @@ export declare const LIBRARY_CODES: readonly ["duplicate-id", "empty-title", "ba
 type LibraryCode = (typeof LIBRARY_CODES)[number];
 
 ### build/index.d.ts#LibraryFinding
-type LibraryFinding = Finding<LibraryCode, "bundle" | "copy">;
+type LibraryFinding = Finding<LibraryCode, "bundle" | "copy" | "link">;
+
+### build/index.d.ts#Link
+interface Link {
+  readonly id: string;
+  readonly title: string;
+  readonly source: SourceId;
+  readonly url: string;
+}
+
+### build/index.d.ts#LinksOptions
+interface LinksOptions {
+  readonly sources?: readonly Source[];
+}
 
 ### build/index.d.ts#MEDIUM_KINDS
 export declare const MEDIUM_KINDS: readonly ["flash", "ssd", "hdd", "optical", "paper"];
@@ -276,6 +292,9 @@ export declare function checkCatalog(bundles: readonly Bundle[], options?: Catal
 
 ### build/index.d.ts#checkCopies
 export declare function checkCopies(copies: readonly Copy[], bundles: readonly Bundle[], options?: CopiesOptions): readonly LibraryFinding[];
+
+### build/index.d.ts#checkLinks
+export declare function checkLinks(links: readonly Link[], options?: LinksOptions): readonly LibraryFinding[];
 
 ### build/index.d.ts#checkReleases
 export declare function checkReleases(bundles: readonly Bundle[], entries: readonly KiwixEntry[], options: ReleaseOptions): readonly ReleaseFinding[];
