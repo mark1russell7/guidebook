@@ -1254,6 +1254,19 @@ const WATER: readonly CitedUnit[] = [
     source: "usarice-cook",
   },
   {
+    id: "tab.water.budget.rice-cup",
+    use: "fact",
+    text: "One cup of dry rice weighs approximately 7 ounces.",
+    source: "usarice-cook",
+  },
+  {
+    id: "tab.water.budget.gallon-weight",
+    use: "fact",
+    text: "Water weighs approximately 8.34 pounds for each gallon.",
+    source: "usgs-water-weight",
+    locator: "A million gallons of water weighs",
+  },
+  {
     id: "tab.water.budget.rice-lid",
     use: "summary",
     text: "Keep the lid on the pot while the rice cooks, so that the steam does not go out.",
@@ -1378,6 +1391,13 @@ const FOOD: readonly CitedUnit[] = [
     text: "In the US, the recommended daily amount of thiamin is 1.2 mg for an adult man and 1.1 mg for an adult woman.",
     source: "wikipedia-en",
     locator: "Thiamine, table of US dietary recommendations (revision 1385912513)",
+  },
+  {
+    id: "tab.food.weeks.protein",
+    use: "fact",
+    text: "For adults, the acceptable range of protein is 10 to 35% of the calories of each day.",
+    source: "dga-goals",
+    locator: "Appendix 1, Table A1-2, Daily Nutritional Goals, Ages 2 and Older: Protein, AMDR, ages 19 and older",
   },
   {
     id: "tab.food.weeks.sprouts",
@@ -1896,6 +1916,20 @@ const HEALTH: readonly CitedUnit[] = [
     text: "For adults, the maximum approved daily dose of loperamide without a prescription is 8 mg.",
     source: "fda-loperamide",
     locator: "Safety Announcement",
+  },
+  {
+    id: "tab.health.illness.loperamide-dose",
+    use: "fact",
+    text: "A loperamide caplet has 2 mg of loperamide HCl. Adults take 2 caplets after the first loose stool, then 1 caplet after each loose stool that follows. Do not take more than 4 caplets in 24 hours.",
+    source: "dailymed-loperamide",
+    locator: "Drug Facts: Active ingredient and Directions, adults and children 12 years and over",
+  },
+  {
+    id: "tab.health.illness.ibuprofen-dose",
+    use: "fact",
+    text: "An ibuprofen tablet has 200 mg. Adults take 1 tablet every 4 to 6 hours while symptoms continue. If 1 tablet does not help, take 2 tablets. Do not take more than 6 tablets in 24 hours, unless a doctor tells you.",
+    source: "fda-ibuprofen-label",
+    locator: "Drug Facts: Active ingredient and Directions, adults and children 12 years and over",
   },
   {
     id: "tab.health.illness.loperamide-heart",
@@ -3702,7 +3736,7 @@ const APPENDICES: readonly CitedUnit[] = [
   {
     id: "tab.appendices.health-4.ors-babies",
     use: "summary",
-    text: "A baby younger than 2 years gets 1 teaspoon of ORS every 1 to 2 minutes. The total is one quarter to one half cup after each loose bowel movement.",
+    text: "A baby younger than 2 years gets 1 teaspoon of ORS every 1 to 2 minutes. The total is 1/4 to 1/2 cup after each loose bowel movement.",
     source: "wikipedia-en",
     locator: "Oral rehydration therapy, section Administration (revision 1386078379)",
   },
