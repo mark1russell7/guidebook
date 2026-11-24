@@ -28,14 +28,14 @@ A unit has one of three uses:
 | License | `quote` | `bundle` | `summary` and `fact` | Credit line | Layer of a quote |
 | --- | --- | --- | --- | --- | --- |
 | `us-public-domain`, `public-domain`, `cc0` | yes | yes | yes | no | `main` |
-| `cc-by-4.0`, `ogl-uk-3.0` | yes | yes | yes | yes | `main` |
+| `cc-by-4.0`, `ogl-uk-3.0`, `gutenberg` | yes | yes | yes | yes | `main` |
 | `cc-by-sa-4.0`, `cc-by-sa-3.0` | yes | yes | yes | yes | `share-alike` |
 | `cc-by-nc-sa-3.0` | no | only when not commercial | yes | yes | `share-alike` |
 | `all-rights-reserved` | no | no | yes | no | `main` |
 | `link-only` | no | no | no | no | `main` |
 | `invented` | only in a fixture | only in a fixture | only in a fixture | no | `main` |
 
-A US federal work is in the public domain under 17 USC 105. A summary and a fact are the words of the guidebook, so each real license permits them, but `link-only` does not. Use `link-only` when the publisher permits only a link, for example when it refuses each AI use of its text. Put the word of the publisher and its date in the field `note` of the source.
+A US federal work is in the public domain under 17 USC 105. The Project Gutenberg License covers works in the US public domain. A copy for a fee pays the royalty of its trademark license, or removes the name. A summary and a fact are the words of the guidebook, so each real license permits them, but `link-only` does not. Use `link-only` when the publisher permits only a link, for example when it refuses each AI use of its text. Put the word of the publisher and its date in the field `note` of the source.
 
 ## The source gate
 

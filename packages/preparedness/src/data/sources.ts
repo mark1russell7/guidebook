@@ -200,6 +200,8 @@ export const SOURCES: readonly Source[] = [
   { ...federal("snap-apply", "USDA Food and Nutrition Service", "SNAP: Applicant and Participant", "https://www.fns.usda.gov/snap/applicant-recipient"), checked: "2026-11-22" },
   // The data dump of Stack Exchange, Inc. on archive.org gives CC BY-SA 4.0 for all user content of the network.
   // A use shows the network as the source, links each question, and shows and links the name of each author.
+  // gutenberg.org answered 503 (maintenance) on 2026-11-21 and 2026-11-24. The license was read in the full license of eBook 11 from the PGLAF mirror.
+  { id: "gutenberg", title: "Project Gutenberg", url: "https://www.gutenberg.org/", license: "gutenberg", checked: "2026-11-24", by: "Project Gutenberg Literary Archive Foundation" },
   { id: "stackexchange", title: "The Stack Exchange network", url: "https://archive.org/details/stackexchange", license: "cc-by-sa-4.0", checked: CHECKED, by: "Stack Exchange contributors" },
   // Backblaze gives the failure rates of the drives of its data centers. The units cite each rate as a fact, so the license permits the use.
   { id: "backblaze-hdd-2026q2", title: "Backblaze Drive Stats for Q2 2026", url: "https://www.backblaze.com/blog/backblaze-drive-stats-for-q2-2026/", license: "all-rights-reserved", checked: CHECKED, by: "Backblaze" },

@@ -32,7 +32,7 @@ const AREA_BUNDLES: Readonly<Record<Area, readonly string[]>> = {
   shelter: ["appropedia", "stackexchange-diy", "stackexchange-outdoors"],
   energy: ["energypedia", "appropedia", "stackexchange-sustainability"],
   electronics: ["stackexchange-electronics"],
-  metals: [],
+  metals: ["gutenberg-all"],
   tools: ["stackexchange-diy", "stackexchange-woodworking"],
   chemistry: ["stackexchange-chemistry"],
   communication: ["stackexchange-ham"],

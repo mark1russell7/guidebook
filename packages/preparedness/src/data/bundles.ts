@@ -36,6 +36,7 @@ export const BUNDLES: readonly Bundle[] = [
   { id: "stackexchange-electronics", title: "Stack Exchange: Electronics Q&A", bytes: 4_261_397_539, license: "cc-by-sa-4.0", level: "pocket", source: "stackexchange", version: "2026-10", sha256: "b28e58b24ed55c602265729b34b0c6cc4e12228e6fe2f55df5b5e9eae169b266", url: `${ZIM}/stack_exchange/electronics.stackexchange.com_en_all_2026-10.zim` },
   { id: "wikipedia-mini", title: "Wikipedia: the introduction of each article", bytes: 14_386_799_064, license: "cc-by-sa-4.0", level: "pocket", source: "wikipedia-en", version: "2026-09", sha256: "350d8956ee3d7abe2839c464c3a983f93d6934a16c7f04b10715b49439dfd349", url: `${ZIM}/wikipedia/wikipedia_en_all_mini_2026-09.zim` },
   { id: "wikipedia-all", title: "Wikipedia: all articles, with no pictures", bytes: 52_690_706_555, license: "cc-by-sa-4.0", level: "shelf", source: "wikipedia-en", version: "2026-06", sha256: "441a56d9e05b2d98f8ae9acb7986a513ed47904d73852c92dc6b7d50baa122e5", url: `${ZIM}/wikipedia/wikipedia_en_all_nopic_2026-06.zim` },
+  { id: "gutenberg-all", title: "Project Gutenberg: the books in English", bytes: 221_251_590_584, license: "gutenberg", level: "shelf", source: "gutenberg", version: "2025-11", sha256: "01677c8d554a1cab2cbfd020ac99ebca7dd6c74d3ce0d13f266a2ba603dfaf28", url: `${ZIM}/gutenberg/gutenberg_en_all_2025-11.zim` },
 ];
 
 /**

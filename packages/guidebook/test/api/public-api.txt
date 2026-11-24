@@ -87,7 +87,7 @@ interface GateResult<F extends Finding<string, string> = Finding> {
 type IsoDate = string;
 
 ### build/index.d.ts#LICENSES
-export declare const LICENSES: readonly ["us-public-domain", "public-domain", "cc0", "cc-by-4.0", "cc-by-sa-4.0", "cc-by-sa-3.0", "cc-by-nc-sa-3.0", "ogl-uk-3.0", "all-rights-reserved", "link-only", "invented"];
+export declare const LICENSES: readonly ["us-public-domain", "public-domain", "cc0", "cc-by-4.0", "cc-by-sa-4.0", "cc-by-sa-3.0", "cc-by-nc-sa-3.0", "ogl-uk-3.0", "gutenberg", "all-rights-reserved", "link-only", "invented"];
 
 ### build/index.d.ts#LICENSE_RULES
 export declare const LICENSE_RULES: Readonly<Record<License, LicenseRule>>;
