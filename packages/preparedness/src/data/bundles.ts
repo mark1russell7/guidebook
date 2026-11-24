@@ -46,4 +46,8 @@ export const BUNDLES: readonly Bundle[] = [
 export const LINKS: readonly Link[] = [
   { id: "hesperian-doctor", title: "Hesperian: Where There Is No Doctor (buy the book or its PDF)", source: "hesperian-doctor", url: "https://store.hesperian.org/products/where-there-is-no-doctor" },
   { id: "hesperian-dentist", title: "Hesperian: Where There Is No Dentist (buy the book or its PDF)", source: "hesperian-dentist", url: "https://store.hesperian.org/products/where-there-is-no-dentist" },
+  { id: "mlp-bleeding", title: "MedlinePlus: Bleeding (first aid)", source: "mlp-bleeding", url: "https://medlineplus.gov/ency/article/000045.htm" },
+  { id: "mlp-dehydration", title: "MedlinePlus: Dehydration", source: "mlp-dehydration", url: "https://medlineplus.gov/ency/article/000982.htm" },
+  { id: "mlp-choking-adult", title: "MedlinePlus: Choking, adult or child over 1 year", source: "mlp-choking-adult", url: "https://medlineplus.gov/ency/article/000049.htm" },
+  { id: "mlp-choking-infant", title: "MedlinePlus: Choking, infant under 1 year", source: "mlp-choking-infant", url: "https://medlineplus.gov/ency/article/000048.htm" },
 ];
