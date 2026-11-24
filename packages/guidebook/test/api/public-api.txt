@@ -30,6 +30,7 @@ checkSources: build/index.d.ts#checkSources
 checkUnits: build/index.d.ts#checkUnits
 creditOf: build/index.d.ts#creditOf
 gate: build/index.d.ts#gate
+isSha256: build/index.d.ts#isSha256
 isWebAddress: build/index.d.ts#isWebAddress
 layerOf: build/index.d.ts#layerOf
 permits: build/index.d.ts#permits
@@ -52,7 +53,7 @@ interface CitedUnit {
 export declare const DAY_MS = 864e5;
 
 ### build/index.d.ts#FINDING_CODES
-export declare const FINDING_CODES: readonly ["duplicate-id", "empty-title", "empty-text", "bad-url", "bad-date", "unknown-license", "checked-in-future", "stale", "missing-source", "use-refused"];
+export declare const FINDING_CODES: readonly ["duplicate-id", "empty-title", "empty-text", "bad-url", "bad-date", "unknown-license", "checked-in-future", "updated-after-check", "bad-sha256", "stale", "missing-source", "use-refused"];
 
 ### build/index.d.ts#Finding
 interface Finding<C extends string = FindingCode, R extends string = "source" | "unit"> {
@@ -115,6 +116,9 @@ interface Source {
   readonly checked: IsoDate;
   readonly by?: string;
   readonly note?: string;
+  readonly terms?: string | undefined;
+  readonly updated?: IsoDate | undefined;
+  readonly sha256?: string | undefined;
 }
 
 ### build/index.d.ts#SourceId
@@ -149,6 +153,9 @@ export declare function creditOf(source: Source): string;
 
 ### build/index.d.ts#gate
 export declare function gate(units: readonly CitedUnit[], sources: readonly Source[], options?: GateOptions): GateResult;
+
+### build/index.d.ts#isSha256
+export declare function isSha256(text: string): boolean;
 
 ### build/index.d.ts#isWebAddress
 export declare function isWebAddress(url: string): boolean;

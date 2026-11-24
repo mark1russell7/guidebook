@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { DAY_MS, LICENSES, LICENSE_RULES, USES, assertGate, checkSources, checkUnits, creditOf, gate, isWebAddress, layerOf, permits, timeOf } from "./index.ts";
+import { DAY_MS, LICENSES, LICENSE_RULES, USES, assertGate, checkSources, checkUnits, creditOf, gate, isSha256, isWebAddress, layerOf, permits, timeOf } from "./index.ts";
 import type { CitedUnit, License, Source } from "./index.ts";
 
 const source = (id: string, license: License, extra: Partial<Source> = {}): Source => ({
@@ -89,6 +89,23 @@ describe("checkSources", () => {
 
   it("throws when the date of the gate is not a date", () => {
     expect(() => checkSources([], { at: "21 November" })).toThrow(RangeError);
+  });
+
+  it("examines the optional terms address, change date and hash of a source", () => {
+    const hash = "ceea04ce1a7c13a95a170f3548ed3926ad6dd49599bd730fb58bc9c02711d16e";
+    const good = source("good", "us-public-domain", { terms: "https://www.fema.gov/about/website-information#copyright", updated: "2026-10-30", sha256: hash });
+    expect(checkSources([good], { at: "2026-11-21" })).toEqual([]);
+    // A change on the day of the check is not after the check.
+    expect(checkSources([source("day", "cc0", { updated: "2026-11-01" })], { at: "2026-11-21" })).toEqual([]);
+    const bad = [
+      source("terms", "cc0", { terms: "fema.gov/terms" }),
+      source("form", "cc0", { updated: "20 November" }),
+      source("late", "cc0", { updated: "2026-11-02" }),
+      source("upper", "cc0", { sha256: hash.toUpperCase() }),
+      source("short", "cc0", { sha256: hash.slice(1) }),
+    ];
+    expect([isSha256(hash), isSha256(hash.toUpperCase()), isSha256("")]).toEqual([true, false, false]);
+    expect(checkSources(bad).map((finding) => `${finding.id}:${finding.code}`)).toEqual(["terms:bad-url", "form:bad-date", "late:updated-after-check", "upper:bad-sha256", "short:bad-sha256"]);
   });
 });
 
