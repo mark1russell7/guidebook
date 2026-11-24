@@ -12,7 +12,7 @@ import { AREAS, BUNDLES, LINKS, CATALOG_TAB, GRAPH, HAZARDS, BUNDLE_LEVELS, CASE
 
 const ALL_CASES = [...CASES, ...MORE_CASES];
 const KEYS = [...ALL_CASES, ...CUTS, SOCIETY_KEY];
-const AT = "2026-11-23";
+const AT = "2026-11-24";
 const FULL = ["ready", "warned", "P0", "P1", "P2", "P3"] as const;
 
 describe("the source gate", () => {
@@ -59,9 +59,9 @@ describe("the bundle catalog", () => {
     expect(checkLinks(LINKS, { sources: SOURCES })).toEqual([]);
   });
 
-  it("refuses each unit and each bundle of a link-only source, for example Hesperian", () => {
+  it("refuses each unit and each bundle of a link-only source, for example Hesperian and the A.D.A.M. pages of MedlinePlus", () => {
     const linkOnly = SOURCES.filter((source) => source.license === "link-only");
-    expect(linkOnly.map((source) => source.id).sort()).toEqual(["hesperian-dentist", "hesperian-doctor"]);
+    expect(linkOnly.map((source) => source.id).sort()).toEqual(["hesperian-dentist", "hesperian-doctor", "mlp-bleeding", "mlp-choking-adult", "mlp-choking-infant", "mlp-dehydration"]);
     for (const source of linkOnly) {
       const units = (["quote", "summary", "fact"] as const).map((use) => ({ id: `${source.id}.${use}`, use, text: "A test text.", source: source.id }));
       expect(checkUnits(units, SOURCES, { commercial: true }).map((finding) => finding.code)).toEqual(["use-refused", "use-refused", "use-refused"]);
