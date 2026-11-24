@@ -112,7 +112,7 @@ interface LicenseRule {
 }
 
 ### build/index.d.ts#SOURCE_FIELDS
-export declare const SOURCE_FIELDS: readonly SourceField[];
+export declare const SOURCE_FIELDS: readonly ["by", "note", "terms", "updated", "sha256"];
 
 ### build/index.d.ts#Source
 interface Source {
@@ -129,7 +129,7 @@ interface Source {
 }
 
 ### build/index.d.ts#SourceField
-type SourceField = "by" | "note" | "terms" | "updated" | "sha256";
+type SourceField = (typeof SOURCE_FIELDS)[number];
 
 ### build/index.d.ts#SourceId
 type SourceId = string;

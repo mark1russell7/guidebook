@@ -39,11 +39,11 @@ export interface Finding<C extends string = FindingCode, R extends string = "sou
   readonly message: string;
 }
 
-/** An optional field of a source that the option `require` of the gate can make necessary. */
-export type SourceField = "by" | "note" | "terms" | "updated" | "sha256";
-
 /** The optional fields of a source, in the order of the findings of the option `require`. */
-export const SOURCE_FIELDS: readonly SourceField[] = ["by", "note", "terms", "updated", "sha256"];
+export const SOURCE_FIELDS: readonly ["by", "note", "terms", "updated", "sha256"] = ["by", "note", "terms", "updated", "sha256"];
+
+/** An optional field of a source that the option `require` of the gate can make necessary. */
+export type SourceField = (typeof SOURCE_FIELDS)[number];
 
 /** The options of the gate. */
 export interface GateOptions extends UseContext {
@@ -129,7 +129,7 @@ export function checkSources(sources: readonly Source[], options: GateOptions = 
   const at = options.at === undefined ? undefined : timeOf(options.at);
   if (options.at !== undefined && at === undefined) throw new RangeError(`checkSources: the date "${options.at}" of the gate is not a date YYYY-MM-DD.`);
   const maxAge = options.maxAgeDays ?? 365;
-  const unknown = (options.require ?? []).filter((field) => !SOURCE_FIELDS.includes(field));
+  const unknown = (options.require ?? []).filter((field) => !(SOURCE_FIELDS as readonly string[]).includes(field));
   if (unknown.length > 0) throw new RangeError(`checkSources: the option require has the unknown fields ${unknown.join(", ")}.`);
   const necessary = SOURCE_FIELDS.filter((field) => options.require?.includes(field) === true);
   const seen = new Set<SourceId>();
