@@ -1254,6 +1254,19 @@ const WATER: readonly CitedUnit[] = [
     source: "usarice-cook",
   },
   {
+    id: "tab.water.budget.rice-cup",
+    use: "fact",
+    text: "One cup of dry rice weighs approximately 7 ounces.",
+    source: "usarice-cook",
+  },
+  {
+    id: "tab.water.budget.gallon-weight",
+    use: "fact",
+    text: "Water weighs approximately 8.34 pounds for each gallon.",
+    source: "usgs-water-weight",
+    locator: "A million gallons of water weighs",
+  },
+  {
     id: "tab.water.budget.rice-lid",
     use: "summary",
     text: "Keep the lid on the pot while the rice cooks, so that the steam does not go out.",
@@ -1378,6 +1391,13 @@ const FOOD: readonly CitedUnit[] = [
     text: "In the US, the recommended daily amount of thiamin is 1.2 mg for an adult man and 1.1 mg for an adult woman.",
     source: "wikipedia-en",
     locator: "Thiamine, table of US dietary recommendations (revision 1385912513)",
+  },
+  {
+    id: "tab.food.weeks.protein",
+    use: "fact",
+    text: "For adults, the acceptable range of protein is 10 to 35% of the calories of each day.",
+    source: "dga-goals",
+    locator: "Appendix 1, Table A1-2, Daily Nutritional Goals, Ages 2 and Older: Protein, AMDR, ages 19 and older",
   },
   {
     id: "tab.food.weeks.sprouts",
@@ -1898,6 +1918,20 @@ const HEALTH: readonly CitedUnit[] = [
     locator: "Safety Announcement",
   },
   {
+    id: "tab.health.illness.loperamide-dose",
+    use: "fact",
+    text: "A loperamide caplet has 2 mg of loperamide HCl. Adults take 2 caplets after the first loose stool, then 1 caplet after each loose stool that follows. Do not take more than 4 caplets in 24 hours.",
+    source: "dailymed-loperamide",
+    locator: "Drug Facts: Active ingredient and Directions, adults and children 12 years and over",
+  },
+  {
+    id: "tab.health.illness.ibuprofen-dose",
+    use: "fact",
+    text: "An ibuprofen tablet has 200 mg. Adults take 1 tablet every 4 to 6 hours while symptoms continue. If 1 tablet does not help, take 2 tablets. Do not take more than 6 tablets in 24 hours, unless a doctor tells you.",
+    source: "fda-ibuprofen-label",
+    locator: "Drug Facts: Active ingredient and Directions, adults and children 12 years and over",
+  },
+  {
     id: "tab.health.illness.loperamide-heart",
     use: "fact",
     text: "Doses of loperamide much higher than the label can cause severe problems of the heart rhythm, and death.",
@@ -2008,6 +2042,27 @@ const HEALTH: readonly CitedUnit[] = [
     text: "A wound with a risk of infection often stays open, with dressings, for several days. A doctor can close it 3 to 5 days later.",
     source: "wikipedia-en",
     locator: "Wound, section Closure (revision 1386367819)",
+  },
+  {
+    id: "tab.health.delay.tourniquet-convert",
+    use: "fact",
+    text: "Change a tourniquet to a pressure dressing as soon as possible if 3 conditions are true. The person is not in shock. You can monitor the wound closely for bleeding. The limb is not cut off. Try to change it in less than 2 hours, if other means stop the bleeding.",
+    source: "tccc-guidelines",
+    locator: "Guidelines of 01 May 2026, Tactical Field Care, Tourniquets, item 2 (PDF page 8)",
+  },
+  {
+    id: "tab.health.delay.tourniquet-keep",
+    use: "fact",
+    text: "Do not remove a tourniquet after more than 6 hours, unless close monitoring and lab tests are available. With no medical help, keep the tourniquet on, and continue to monitor the person until a higher level of care.",
+    source: "tccc-guidelines",
+    locator: "Guidelines of 01 May 2026, Tactical Field Care, Tourniquets, item 2 (PDF page 8)",
+  },
+  {
+    id: "tab.health.delay.wound-check",
+    use: "summary",
+    text: "Examine a wound every 24 hours. Get medical care immediately if the wound becomes red, swollen or oozes, or if fever or more pain starts.",
+    source: "cdc-wound",
+    locator: "Wound care",
   },
   {
     id: "tab.health.delay.burn-wrap",
@@ -3702,7 +3757,7 @@ const APPENDICES: readonly CitedUnit[] = [
   {
     id: "tab.appendices.health-4.ors-babies",
     use: "summary",
-    text: "A baby younger than 2 years gets 1 teaspoon of ORS every 1 to 2 minutes. The total is one quarter to one half cup after each loose bowel movement.",
+    text: "A baby younger than 2 years gets 1 teaspoon of ORS every 1 to 2 minutes. The total is 1/4 to 1/2 cup after each loose bowel movement.",
     source: "wikipedia-en",
     locator: "Oral rehydration therapy, section Administration (revision 1386078379)",
   },
