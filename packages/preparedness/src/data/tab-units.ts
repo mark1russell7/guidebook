@@ -2044,6 +2044,27 @@ const HEALTH: readonly CitedUnit[] = [
     locator: "Wound, section Closure (revision 1386367819)",
   },
   {
+    id: "tab.health.delay.tourniquet-convert",
+    use: "fact",
+    text: "Change a tourniquet to a pressure dressing as soon as possible if 3 conditions are true. The person is not in shock. You can monitor the wound closely for bleeding. The limb is not cut off. Try to change it in less than 2 hours, if other means stop the bleeding.",
+    source: "tccc-guidelines",
+    locator: "Guidelines of 01 May 2026, Tactical Field Care, Tourniquets, item 2 (PDF page 8)",
+  },
+  {
+    id: "tab.health.delay.tourniquet-keep",
+    use: "fact",
+    text: "Do not remove a tourniquet after more than 6 hours, unless close monitoring and lab tests are available. With no medical help, keep the tourniquet on, and continue to monitor the person until a higher level of care.",
+    source: "tccc-guidelines",
+    locator: "Guidelines of 01 May 2026, Tactical Field Care, Tourniquets, item 2 (PDF page 8)",
+  },
+  {
+    id: "tab.health.delay.wound-check",
+    use: "summary",
+    text: "Examine a wound every 24 hours. Get medical care immediately if the wound becomes red, swollen or oozes, or if fever or more pain starts.",
+    source: "cdc-wound",
+    locator: "Wound care",
+  },
+  {
     id: "tab.health.delay.burn-wrap",
     use: "summary",
     text: "You can wrap a person with large burns in clean sheets until the person arrives at a hospital.",
