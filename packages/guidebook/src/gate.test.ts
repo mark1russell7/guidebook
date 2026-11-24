@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { DAY_MS, LICENSES, LICENSE_RULES, USES, assertGate, checkSources, checkUnits, creditOf, gate, isSha256, isWebAddress, layerOf, permits, timeOf } from "./index.ts";
+import { DAY_MS, LICENSES, LICENSE_RULES, SOURCE_FIELDS, USES, assertGate, checkSources, checkUnits, creditOf, gate, isSha256, isWebAddress, layerOf, permits, timeOf } from "./index.ts";
 import type { CitedUnit, License, Source } from "./index.ts";
 
 const source = (id: string, license: License, extra: Partial<Source> = {}): Source => ({
@@ -106,6 +106,32 @@ describe("checkSources", () => {
     ];
     expect([isSha256(hash), isSha256(hash.toUpperCase()), isSha256("")]).toEqual([true, false, false]);
     expect(checkSources(bad).map((finding) => `${finding.id}:${finding.code}`)).toEqual(["terms:bad-url", "form:bad-date", "late:updated-after-check", "upper:bad-sha256", "short:bad-sha256"]);
+  });
+
+  it("gives the error missing-field for each field of the option require that a source does not have", () => {
+    const hash = "ceea04ce1a7c13a95a170f3548ed3926ad6dd49599bd730fb58bc9c02711d16e";
+    const full = source("full", "cc0", { by: "Agency", terms: "https://example.org/terms", sha256: hash });
+    const require = ["sha256", "by", "terms"] as const;
+    expect(checkSources([full], { require })).toEqual([]);
+    // Without the option, the fields stay optional.
+    expect(checkSources([source("bare", "cc0")])).toEqual([]);
+    const bare = checkSources([source("bare", "cc0", { by: " " })], { require });
+    // The order of the findings is the order of SOURCE_FIELDS, not the order of the option.
+    expect(bare.map((finding) => [finding.code, finding.message.match(/field "(\w+)"/u)?.[1]])).toEqual([["missing-field", "by"], ["missing-field", "terms"], ["missing-field", "sha256"]]);
+    expect(checkSources([source("note", "cc0")], { require: ["note", "updated"] }).map((finding) => finding.code)).toEqual(["missing-field", "missing-field"]);
+    expect(SOURCE_FIELDS).toEqual(["by", "note", "terms", "updated", "sha256"]);
+    // A list from JSON can name a field that a source does not have.
+    expect(() => checkSources([], { require: ["licence" as "by"] })).toThrow(RangeError);
+  });
+
+  it("accepts only addresses with https: when the option https is true", () => {
+    const plain = source("plain", "cc0", { url: "http://example.org/plain" });
+    const terms = source("terms", "cc0", { terms: "http://example.org/terms" });
+    const upper = source("upper", "cc0", { url: "HTTPS://example.org/upper", terms: "https://example.org/terms" });
+    expect(checkSources([plain, terms, upper])).toEqual([]);
+    expect(checkSources([plain, terms, upper], { https: true }).map((finding) => `${finding.id}:${finding.code}`)).toEqual(["plain:bad-url", "terms:bad-url"]);
+    // A bad address gives one finding, not a second one for the option.
+    expect(checkSources([source("ftp", "cc0", { url: "ftp://example.org/ftp" })], { https: true }).map((finding) => finding.code)).toEqual(["bad-url"]);
   });
 });
 

@@ -19,7 +19,9 @@ LICENSE_RULES: build/index.d.ts#LICENSE_RULES
 type Layer: build/index.d.ts#Layer
 type License: build/index.d.ts#License
 type LicenseRule: build/index.d.ts#LicenseRule
+SOURCE_FIELDS: build/index.d.ts#SOURCE_FIELDS
 type Source: build/index.d.ts#Source
+type SourceField: build/index.d.ts#SourceField
 type SourceId: build/index.d.ts#SourceId
 USES: build/index.d.ts#USES
 type UnitUse: build/index.d.ts#UnitUse
@@ -53,7 +55,7 @@ interface CitedUnit {
 export declare const DAY_MS = 864e5;
 
 ### build/index.d.ts#FINDING_CODES
-export declare const FINDING_CODES: readonly ["duplicate-id", "empty-title", "empty-text", "bad-url", "bad-date", "unknown-license", "checked-in-future", "updated-after-check", "bad-sha256", "stale", "missing-source", "use-refused"];
+export declare const FINDING_CODES: readonly ["duplicate-id", "empty-title", "empty-text", "bad-url", "bad-date", "unknown-license", "checked-in-future", "updated-after-check", "bad-sha256", "missing-field", "stale", "missing-source", "use-refused"];
 
 ### build/index.d.ts#Finding
 interface Finding<C extends string = FindingCode, R extends string = "source" | "unit"> {
@@ -71,6 +73,8 @@ type FindingCode = (typeof FINDING_CODES)[number];
 interface GateOptions extends UseContext {
   readonly at?: IsoDate;
   readonly maxAgeDays?: number;
+  readonly require?: readonly SourceField[];
+  readonly https?: boolean;
 }
 
 ### build/index.d.ts#GateResult
@@ -107,6 +111,9 @@ interface LicenseRule {
   readonly real: boolean;
 }
 
+### build/index.d.ts#SOURCE_FIELDS
+export declare const SOURCE_FIELDS: readonly SourceField[];
+
 ### build/index.d.ts#Source
 interface Source {
   readonly id: SourceId;
@@ -120,6 +127,9 @@ interface Source {
   readonly updated?: IsoDate | undefined;
   readonly sha256?: string | undefined;
 }
+
+### build/index.d.ts#SourceField
+type SourceField = "by" | "note" | "terms" | "updated" | "sha256";
 
 ### build/index.d.ts#SourceId
 type SourceId = string;
