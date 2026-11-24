@@ -105,6 +105,18 @@ export const SOURCES: readonly Source[] = [
   { ...federal("niosh-ffr", "CDC NIOSH", "Filtering Facepiece Respirators", "https://www.cdc.gov/niosh/ppe/respirators/ffr.html"), checked: "2026-11-22" },
   { ...federal("usfa-smoke-alarms", "U.S. Fire Administration", "Smoke Alarms", "https://www.usfa.fema.gov/prevention/home-fires/prepare-for-fire/smoke-alarms/"), checked: "2026-11-22" },
   { id: "twdb-roof-runoff", title: "Rainwater Volumes from Roof Runoff", url: "https://www.twdb.texas.gov/innovativewater/rainwater/roofrunoff.asp", license: "all-rights-reserved", checked: "2026-11-22", by: "Texas Water Development Board" },
+  // The sources of the tab heat, read on 2026-11-22 and 2026-11-23. The pages of the state and of the weights conference give no license.
+  // The chapter of WHO gives CC BY-NC-SA 3.0 IGO. The gate does not know the IGO form, so the source keeps the strictest rule.
+  // The site of Product Safety Australia gives CC BY 4.0 for its own text.
+  { ...federal("cdc-heat-poster", "CDC", "Heat-Related Illnesses (poster CS280226)", "https://www.cdc.gov/extreme-heat/media/pdf/Heat_Related_Illness.pdf"), checked: "2026-11-22" },
+  { ...federal("cdc-heat-health", "CDC", "About Heat and Your Health", "https://www.cdc.gov/heat-health/about/index.html"), checked: "2026-11-22" },
+  { id: "who-compendium-12", title: "Compendium of WHO and other UN guidance on health and environment, 2024 update, chapter 12", url: "https://cdn.who.int/media/docs/default-source/who-compendium-on-health-and-environment/who_compendium_chapter12.pdf", license: "all-rights-reserved", checked: "2026-11-22", by: "World Health Organization" },
+  { ...federal("cdc-frostbite", "CDC", "Avoid, Spot and Treat Frostbite and Hypothermia", "https://www.cdc.gov/winter-weather/media/pdf/avoid-spot-treat-frostbite.pdf"), checked: "2026-11-22" },
+  { ...federal("nws-winter-during", "National Weather Service, NOAA", "What To Do If You're Caught in a Winter Storm", "https://www.weather.gov/safety/winter-during"), checked: "2026-11-22" },
+  { id: "utah-shelter-cold", title: "Sheltering at Home in the Cold", url: "https://beready.utah.gov/family-preparedness/12-areas-of-preparedness/shelter-clothing-fire/shelter-in-cold/", license: "all-rights-reserved", checked: "2026-11-22", by: "Be Ready Utah, State of Utah" },
+  { id: "accc-hot-water-bottles", title: "Hot water bottles guide", url: "https://www.productsafety.gov.au/consumers/be-safe-around-the-home/use-products-inside-the-home-safely/hot-water-bottles-guide", license: "cc-by-4.0", checked: "2026-11-22", by: "Product Safety Australia, ACCC" },
+  { ...federal("niosh-heat-illnesses", "CDC NIOSH", "Heat-related Illnesses", "https://www.cdc.gov/niosh/heat-stress/about/illnesses.html"), checked: "2026-11-22" },
+  { id: "ncwm-firewood", title: "Get what you pay for: how to protect yourself when buying firewood", url: "https://www.nist.gov/system/files/documents/pml/wmd/ncwm-firewood-facts.pdf", license: "all-rights-reserved", checked: "2026-11-23", by: "National Conference on Weights and Measures, on the site of NIST" },
   // The 72 hours guidance of SPEK, the Finnish National Rescue Association, with the Finnish government. The pages give no license.
   // Thus each step is a summary with a citation, not a quote.
   { id: "fi-72h-shelter", title: "Sheltering indoors", url: "https://72tuntia.fi/en/sheltering-indoors/", license: "all-rights-reserved", checked: "2026-11-22", by: "SPEK, 72 hours" },

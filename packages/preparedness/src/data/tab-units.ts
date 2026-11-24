@@ -458,5 +458,220 @@ const STAY: readonly CitedUnit[] = [
   },
 ];
 
+/** The units of the tab heat: the cold, the heat, the power, a winter with no heat, and the long term. */
+const HEAT: readonly CitedUnit[] = [
+  {
+    id: "tab.heat.cold.dress-outside",
+    use: "summary",
+    text: "Outside in the cold, wear a hat, mittens and a scarf over the face and mouth. Wear several layers of loose clothing.",
+    source: "cdc-winter-prevention",
+  },
+  {
+    id: "tab.heat.cold.lamps",
+    use: "summary",
+    text: "In a power outage, use battery lamps, not candles. Candles can start a fire.",
+    source: "cdc-power-protect",
+  },
+  {
+    id: "tab.heat.cold.skin-to-skin",
+    use: "summary",
+    text: "To warm a person with hypothermia, you can use skin-to-skin contact under loose, dry layers of blankets.",
+    source: "cdc-winter-prevention",
+  },
+  {
+    id: "tab.heat.cold.indoor-18c",
+    use: "fact",
+    text: "For temperate and colder climates, WHO guidance gives 18 °C (64 °F) as a safe indoor temperature in the cold season.",
+    source: "who-compendium-12",
+    locator: "Section 12.2, Housing",
+  },
+  {
+    id: "tab.heat.heat.water-bottle",
+    use: "summary",
+    text: "In hot weather, carry a bottle of water. Drink from it and fill it again through the day.",
+    source: "cdc-heat-health",
+  },
+  {
+    id: "tab.heat.heat.fan-90",
+    use: "fact",
+    text: "Use a fan only when the air of the room is below 90 °F in temperature. Above 90 °F, a fan can make the body hotter.",
+    source: "cdc-heat-health",
+  },
+  {
+    id: "tab.heat.heat.exhaustion-signs",
+    use: "fact",
+    text: "Signs of heat exhaustion are heavy sweat, and cold, pale and clammy skin. A fast and weak pulse, nausea, vomiting and dizziness are also signs.",
+    source: "cdc-heat-poster",
+  },
+  {
+    id: "tab.heat.heat.exhaustion-care",
+    use: "summary",
+    text: "For heat exhaustion, go to a cool place and loosen the clothes. Put cool wet cloths on the body, or take a cool bath. Sip water.",
+    source: "cdc-heat-poster",
+  },
+  {
+    id: "tab.heat.heat.exhaustion-help",
+    use: "summary",
+    text: "With heat exhaustion, get medical help at once when the person vomits. Also get help when the signs get worse or last more than 1 hour.",
+    source: "cdc-heat-poster",
+  },
+  {
+    id: "tab.heat.heat.stroke-signs",
+    use: "fact",
+    text: "Signs of heat stroke are a body temperature of 103 °F or more, and hot skin that is red, dry or damp. A fast and strong pulse and confusion are also signs.",
+    source: "cdc-heat-poster",
+  },
+  {
+    id: "tab.heat.heat.stroke-care",
+    use: "summary",
+    text: "Cool a person with heat stroke with cool cloths or a cool bath. Give the person no drink.",
+    source: "cdc-heat-poster",
+  },
+  {
+    id: "tab.heat.heat.stroke-shade",
+    use: "summary",
+    text: "Move a person with heat stroke to a cool place in the shade. Remove the outer clothing.",
+    source: "niosh-heat-illnesses",
+  },
+  {
+    id: "tab.heat.heat.stroke-bath",
+    use: "summary",
+    text: "Cool a person with heat stroke fast. Use cold water or an ice bath, if possible. Or wet the skin, and soak the clothing with cool water.",
+    source: "niosh-heat-illnesses",
+  },
+  {
+    id: "tab.heat.heat.stroke-air",
+    use: "summary",
+    text: "Move the air around a person with heat stroke, so that the person cools faster. Stay with the person.",
+    source: "niosh-heat-illnesses",
+  },
+  {
+    id: "tab.heat.power.idle-fuel",
+    use: "fact",
+    text: "An engine at idle uses 1/4 to 1/2 gallon of fuel each hour. The amount changes with the size of the engine.",
+    source: "fueleconomy-myths",
+  },
+  {
+    id: "tab.heat.power.car-heat",
+    use: "summary",
+    text: "In a stopped car in the cold, run the engine for heat approximately 10 minutes each hour.",
+    source: "nws-winter-during",
+  },
+  {
+    id: "tab.heat.power.car-exhaust",
+    use: "summary",
+    text: "While the engine of a stopped car runs, open a window a little. Clear snow from the exhaust pipe. This prevents carbon monoxide poisoning.",
+    source: "nws-winter-during",
+  },
+  {
+    id: "tab.heat.winter.door-cracks",
+    use: "summary",
+    text: "In a home with no heat, put towels or rags in the cracks under the doors.",
+    source: "nws-winter-during",
+  },
+  {
+    id: "tab.heat.winter.eat",
+    use: "fact",
+    text: "Eat in the cold. Food gives the body energy to make its own heat.",
+    source: "nws-winter-during",
+  },
+  {
+    id: "tab.heat.winter.plastic",
+    use: "summary",
+    text: "Put plastic sheeting over each window of the warm room, approximately 1 inch from the glass. Seal the drafts with duct tape.",
+    source: "utah-shelter-cold",
+  },
+  {
+    id: "tab.heat.winter.breathing-air",
+    use: "summary",
+    text: "In a warm room with sealed windows, let some air come in, so that the people have oxygen for breathing.",
+    source: "utah-shelter-cold",
+  },
+  {
+    id: "tab.heat.winter.no-alcohol",
+    use: "summary",
+    text: "Do not drink alcohol or caffeine in cold weather.",
+    source: "utah-shelter-cold",
+  },
+  {
+    id: "tab.heat.winter.nest",
+    use: "summary",
+    text: "In the warm room, make a small nest with small tents, blankets or couch cushions. The nest isolates and insulates the people.",
+    source: "utah-shelter-cold",
+  },
+  {
+    id: "tab.heat.winter.sleep-together",
+    use: "summary",
+    text: "At night, the people sleep together in the nest, in the same bed or sleeping bag when possible. Their body heat warms the nest.",
+    source: "utah-shelter-cold",
+  },
+  {
+    id: "tab.heat.winter.hot-meals",
+    use: "summary",
+    text: "In the cold, eat hot, simple meals when you can. They help to keep the body temperature.",
+    source: "utah-shelter-cold",
+  },
+  {
+    id: "tab.heat.winter.bottle-replace",
+    use: "summary",
+    text: "Replace each hot water bottle every year.",
+    source: "accc-hot-water-bottles",
+  },
+  {
+    id: "tab.heat.winter.bottle-boiling",
+    use: "summary",
+    text: "Do not fill a hot water bottle with boiling water. Boiling water burns badly, and it weakens the material of the bottle.",
+    source: "accc-hot-water-bottles",
+  },
+  {
+    id: "tab.heat.winter.bottle-plug",
+    use: "summary",
+    text: "Remove the extra air from a hot water bottle, and close the plug fully. Put a cover or a towel around the bottle.",
+    source: "accc-hot-water-bottles",
+  },
+  {
+    id: "tab.heat.winter.bottle-time",
+    use: "fact",
+    text: "Do not keep a hot water bottle on one area of skin for more than 20 minutes at a time.",
+    source: "accc-hot-water-bottles",
+  },
+  {
+    id: "tab.heat.winter.bottle-bed",
+    use: "summary",
+    text: "Use a hot water bottle only to warm a bed. Remove it before the person gets in.",
+    source: "accc-hot-water-bottles",
+  },
+  {
+    id: "tab.heat.winter.bottle-who",
+    use: "summary",
+    text: "Do not give a hot water bottle to a baby or a young child. A person with less feeling in the skin does not use one.",
+    source: "accc-hot-water-bottles",
+  },
+  {
+    id: "tab.heat.years.moisture-meter",
+    use: "summary",
+    text: "Test firewood with a wood moisture meter before you burn it.",
+    source: "epa-burnwise",
+  },
+  {
+    id: "tab.heat.years.cord",
+    use: "fact",
+    text: "A cord of firewood is 128 cubic feet. A stack 4 feet high, 4 feet deep and 8 feet long is a cord.",
+    source: "ncwm-firewood",
+  },
+  {
+    id: "tab.heat.years.frostbite-first",
+    use: "fact",
+    text: "Redness or pain of the skin can be the first sign of frostbite.",
+    source: "cdc-frostbite",
+  },
+  {
+    id: "tab.heat.years.frostbite-numb",
+    use: "fact",
+    text: "A person often does not feel frostbite, because the frozen skin is numb.",
+    source: "cdc-frostbite",
+  },
+];
+
 /** The cited units of the tabs of the binder. The units of the other tabs come in later changes. */
-export const TAB_UNITS: readonly CitedUnit[] = [...GO, ...FIRST_72H, ...STAY];
+export const TAB_UNITS: readonly CitedUnit[] = [...GO, ...FIRST_72H, ...STAY, ...HEAT];
