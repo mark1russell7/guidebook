@@ -5,6 +5,8 @@ import { checkTopics, printOrder } from "@mark1russell7/guidebook-topics";
 import { HORIZONS, PHASES, checkCoverage, checkSteps, planMatrix, stepsFor, chartOf, checkMasterGraph, checkRules, masterChartOf, walkAnswer, walkStart } from "@mark1russell7/guidebook-plans";
 import { Linter, loadConfig } from "@mark1russell7/ste-lint";
 import type { WalkState } from "@mark1russell7/guidebook-plans";
+import { evaluate, parse, space } from "@mark1russell7/vex";
+import { NumDomain } from "@mark1russell7/vex-domains";
 import { describe, expect, it } from "vitest";
 import { AREAS, BUNDLES, LINKS, CATALOG_TAB, GRAPH, HAZARDS, BUNDLE_LEVELS, CASES, CUTS, GAPS, MEDIA_UNITS, MEDIUM_GAPS, MEDIUM_LIVES, MEDIUM_LOSSES, MASTER, MORE_CASES, NEEDS, OPEN_CELLS, RULES, SOCIETY_KEY, SOURCES, START_TAB, STEPS, TAB_UNITS, TABS, TOPICS, TOPIC_UNITS } from "./index.ts";
 
@@ -131,6 +133,38 @@ describe("the step gate", () => {
   });
 
   const result = checkSteps(STEPS, SOURCES, { phases: PHASES, on: KEYS, gaps: GAPS, commercial: true });
+
+  /** This function examines a condition over the live keys: each key of the library, the keys of `stopped` stopped for `hours` hours. */
+  const holds = (when: string, on: string, stopped: readonly string[], hours?: number) => {
+    const program = parse(when);
+    if (!program.ok) return program;
+    const live = Object.fromEntries(KEYS.map((one) => [one, stopped.includes(one) ? { stopped: true, ...(hours === undefined ? {} : { hours }) } : { stopped: false }]));
+    return evaluate(program.value, { space: space.record(live), origin: on, domains: [NumDomain] });
+  };
+
+  it("gives each condition a true or false value over the live keys, with no key that the library does not have", () => {
+    const conditioned = STEPS.filter((step) => step.when !== undefined);
+    expect(conditioned.length).toBeGreaterThan(0);
+    for (const step of conditioned) {
+      for (const stopped of [[], KEYS]) {
+        const value = holds(step.when as string, step.on, stopped, 100);
+        expect(value.ok && typeof value.value === "boolean", `${step.id}: ${JSON.stringify(value)}`).toBe(true);
+      }
+    }
+  });
+
+  it("holds the medicine step of a power cut until the cut is more than one day old", () => {
+    const step = STEPS.find((one) => one.id === "power.grid.P2.medicine");
+    expect(holds(step?.when as string, "power.grid", ["power.grid"], 10)).toEqual({ ok: true, value: false });
+    expect(holds(step?.when as string, "power.grid", ["power.grid"], 30)).toEqual({ ok: true, value: true });
+    expect(holds(step?.when as string, "power.grid", [], 30)).toEqual({ ok: true, value: false });
+  });
+
+  it("gives the radio step only when the phone and the data networks both stop", () => {
+    const step = STEPS.find((one) => one.id === "civic.ai-collapse.P1.radio-info");
+    expect(holds(step?.when as string, "civic.ai-collapse", ["phone.network"])).toEqual({ ok: true, value: false });
+    expect(holds(step?.when as string, "civic.ai-collapse", ["phone.network", "network.access"])).toEqual({ ok: true, value: true });
+  });
 
   it("finds no finding over all the keys and the phases", () => {
     expect(result.findings).toEqual([]);
