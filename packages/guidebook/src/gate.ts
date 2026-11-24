@@ -1,9 +1,9 @@
 // The source gate: the checks of the sources and the cited units of a guidebook.
 // The gate gives each finding as data. A caller prints the findings, or stops with `assertGate`.
 
-import { LICENSE_RULES, LICENSES, permits } from "./license.ts";
-import type { Layer, License, UseContext } from "./license.ts";
-import type { CitedUnit, IsoDate, Source, SourceId } from "./source.ts";
+import { LICENSE_RULES, LICENSES, permits, USES } from "./license.ts";
+import type { Layer, License, Use, UseContext } from "./license.ts";
+import type { CitedUnit, IsoDate, Source } from "./source.ts";
 
 /** The codes of the findings of the gate. */
 export const FINDING_CODES = [
@@ -90,6 +90,18 @@ export function timeOf(date: string): number | undefined {
   return new Date(time).toISOString().slice(0, 10) === date ? time : undefined;
 }
 
+/**
+ * This function gives the fields of an item from JSON. Each field can have any type or be absent.
+ * `Object` boxes a primitive and gives an empty object for null, so a read of a field does not throw.
+ */
+function fields<T>(raw: unknown): { readonly [K in keyof T]?: unknown } {
+  return Object(raw) as { readonly [K in keyof T]?: unknown };
+}
+
+function isUse(value: unknown): value is Use {
+  return typeof value === "string" && (USES as readonly string[]).includes(value);
+}
+
 function isLicense(value: unknown): value is License {
   return typeof value === "string" && (LICENSES as readonly string[]).includes(value);
 }
@@ -120,6 +132,7 @@ export function isSha256(text: string): boolean {
  * It also examines the optional fields: the address `terms`, the date `updated` and the form of the hash `sha256`.
  * The options `require` and `https` add the rules of a dataset: the fields that each source must have, and addresses with `https:` only.
  * It throws a `RangeError` for a bad date of the gate or an unknown field in `require`.
+ * A source from JSON with a bad shape gives findings and not an error. A bad shape is a field of a wrong type, or an item that is not a record.
  */
 export function checkSources(sources: readonly Source[], options: GateOptions = {}): readonly Finding[] {
   const out: Finding[] = [];
@@ -132,59 +145,67 @@ export function checkSources(sources: readonly Source[], options: GateOptions = 
   const unknown = (options.require ?? []).filter((field) => !(SOURCE_FIELDS as readonly string[]).includes(field));
   if (unknown.length > 0) throw new RangeError(`checkSources: the option require has the unknown fields ${unknown.join(", ")}.`);
   const necessary = SOURCE_FIELDS.filter((field) => options.require?.includes(field) === true);
-  const seen = new Set<SourceId>();
-  for (const source of sources) {
-    if (seen.has(source.id)) error("duplicate-id", source.id, `Two sources have the id "${source.id}".`);
-    seen.add(source.id);
-    if (source.title.trim() === "") error("empty-title", source.id, `The source "${source.id}" has no title.`);
-    if (!isWebAddress(source.url)) error("bad-url", source.id, `The source "${source.id}" has the address "${source.url}". It needs an address with https: or http:.`);
-    else if (options.https === true && !isSecure(source.url)) error("bad-url", source.id, `The source "${source.id}" has the address "${source.url}". The gate accepts only an address with https:.`);
-    if (!isLicense(source.license)) error("unknown-license", source.id, `The source "${source.id}" has the unknown license "${String(source.license)}".`);
+  const seen = new Set<string>();
+  for (const raw of sources) {
+    const source = fields<Source>(raw);
+    const id = String(source.id);
+    if (seen.has(id)) error("duplicate-id", id, `Two sources have the id "${id}".`);
+    seen.add(id);
+    if (typeof source.title !== "string" || source.title.trim() === "") error("empty-title", id, `The source "${id}" has no title.`);
+    if (typeof source.url !== "string" || !isWebAddress(source.url)) error("bad-url", id, `The source "${id}" has the address "${String(source.url)}". It needs an address with https: or http:.`);
+    else if (options.https === true && !isSecure(source.url)) error("bad-url", id, `The source "${id}" has the address "${String(source.url)}". The gate accepts only an address with https:.`);
+    if (!isLicense(source.license)) error("unknown-license", id, `The source "${id}" has the unknown license "${String(source.license)}".`);
     for (const field of necessary) {
       const value: unknown = source[field];
-      if (typeof value !== "string" || value.trim() === "") error("missing-field", source.id, `The source "${source.id}" has no field "${field}". The gate makes it necessary.`);
+      if (typeof value !== "string" || value.trim() === "") error("missing-field", id, `The source "${id}" has no field "${field}". The gate makes it necessary.`);
     }
-    if (source.terms !== undefined && !isWebAddress(source.terms)) error("bad-url", source.id, `The source "${source.id}" has the terms address "${source.terms}". It needs an address with https: or http:.`);
+    if (source.terms !== undefined && (typeof source.terms !== "string" || !isWebAddress(source.terms))) error("bad-url", id, `The source "${id}" has the terms address "${String(source.terms)}". It needs an address with https: or http:.`);
     else if (source.terms !== undefined && options.https === true && !isSecure(source.terms)) {
-      error("bad-url", source.id, `The source "${source.id}" has the terms address "${source.terms}". The gate accepts only an address with https:.`);
+      error("bad-url", id, `The source "${id}" has the terms address "${String(source.terms)}". The gate accepts only an address with https:.`);
     }
-    if (source.sha256 !== undefined && !isSha256(source.sha256)) error("bad-sha256", source.id, `The hash of the source "${source.id}" is not 64 lowercase hexadecimal digits.`);
-    const checked = timeOf(source.checked);
-    const updated = source.updated === undefined ? undefined : timeOf(source.updated);
-    if (source.updated !== undefined && updated === undefined) error("bad-date", source.id, `The source "${source.id}" has the change date "${source.updated}". It needs a date YYYY-MM-DD.`);
-    if (updated !== undefined && checked !== undefined && updated > checked) error("updated-after-check", source.id, `The source "${source.id}" has a change date after its check date.`);
+    if (source.sha256 !== undefined && (typeof source.sha256 !== "string" || !isSha256(source.sha256))) error("bad-sha256", id, `The hash of the source "${id}" is not 64 lowercase hexadecimal digits.`);
+    const checked = typeof source.checked === "string" ? timeOf(source.checked) : undefined;
+    const updated = typeof source.updated === "string" ? timeOf(source.updated) : undefined;
+    if (source.updated !== undefined && updated === undefined) error("bad-date", id, `The source "${id}" has the change date "${String(source.updated)}". It needs a date YYYY-MM-DD.`);
+    if (updated !== undefined && checked !== undefined && updated > checked) error("updated-after-check", id, `The source "${id}" has a change date after its check date.`);
     if (checked === undefined) {
-      error("bad-date", source.id, `The source "${source.id}" has the check date "${source.checked}". It needs a date YYYY-MM-DD.`);
+      error("bad-date", id, `The source "${id}" has the check date "${String(source.checked)}". It needs a date YYYY-MM-DD.`);
     } else if (at !== undefined) {
-      if (checked > at) error("checked-in-future", source.id, `The source "${source.id}" has a check date after the date of the gate.`);
+      if (checked > at) error("checked-in-future", id, `The source "${id}" has a check date after the date of the gate.`);
       const days = (at - checked) / DAY_MS;
       if (days > maxAge) {
-        out.push({ level: "warning", code: "stale", record: "source", id: source.id, message: `The last check of the source "${source.id}" is ${days} days old. Read the source again.` });
+        out.push({ level: "warning", code: "stale", record: "source", id: id, message: `The last check of the source "${id}" is ${days} days old. Read the source again.` });
       }
     }
   }
   return out;
 }
 
-/** This function gives the findings of the units: duplicate ids, empty text, a missing source, and a use that the license refuses. */
+/**
+ * This function gives the findings of the units: duplicate ids, empty text, a missing source, and a use that the license refuses.
+ * A unit or a source from JSON with a bad shape gives findings and not an error.
+ */
 export function checkUnits(units: readonly CitedUnit[], sources: readonly Source[], options: UseContext = {}): readonly Finding[] {
   const out: Finding[] = [];
   const error = (code: FindingCode, id: string, message: string): void => {
     out.push({ level: "error", code, record: "unit", id, message });
   };
-  const byId = new Map(sources.map((source) => [source.id, source] as const));
+  const byId = new Map(sources.map((raw) => fields<Source>(raw)).map((source) => [source.id, source] as const));
   const seen = new Set<string>();
-  for (const unit of units) {
-    if (seen.has(unit.id)) error("duplicate-id", unit.id, `Two units have the id "${unit.id}".`);
-    seen.add(unit.id);
-    if (unit.text.trim() === "") error("empty-text", unit.id, `The unit "${unit.id}" has no text.`);
+  for (const raw of units) {
+    const unit = fields<CitedUnit>(raw);
+    const id = String(unit.id);
+    if (seen.has(id)) error("duplicate-id", id, `Two units have the id "${id}".`);
+    seen.add(id);
+    if (typeof unit.text !== "string" || unit.text.trim() === "") error("empty-text", id, `The unit "${id}" has no text.`);
     const source = byId.get(unit.source);
     if (source === undefined) {
-      error("missing-source", unit.id, `The unit "${unit.id}" cites the source "${unit.source}", but the list does not have it.`);
+      error("missing-source", id, `The unit "${id}" cites the source "${String(unit.source)}", but the list does not have it.`);
       continue;
     }
-    if (isLicense(source.license) && !permits(source.license, unit.use, options)) {
-      error("use-refused", unit.id, `The license "${source.license}" of the source "${source.id}" refuses the use "${unit.use}" of the unit "${unit.id}".`);
+    if (!isUse(unit.use)) error("use-refused", id, `The unit "${id}" has the unknown use "${String(unit.use)}". A use is ${USES.join(", ")}.`);
+    else if (isLicense(source.license) && !permits(source.license, unit.use, options)) {
+      error("use-refused", id, `The license "${source.license}" of the source "${String(source.id)}" refuses the use "${unit.use}" of the unit "${id}".`);
     }
   }
   return out;

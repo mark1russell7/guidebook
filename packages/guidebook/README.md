@@ -66,7 +66,9 @@ The gate gives each finding as data, with a level, a code, the record and a mess
 | `missing-field` | `error` | A source has no text in a field of the option `require`. |
 | `stale` | `warning` | The check is older than `maxAgeDays` (365 by default) before `at`. |
 | `missing-source` | `error` | A unit cites a source that is not in the list. |
-| `use-refused` | `error` | The license of the source refuses the use of the unit. |
+| `use-refused` | `error` | The license of the source refuses the use of the unit, or the use is not in `USES`. |
+
+Since 0.5.1, the gate does not throw for a source or a unit from JSON with a bad shape. A field of a wrong type gives the finding of that field. For example, a title that is not a text gives `empty-title`. An item that is not a record has no fields, so it gives the finding of each necessary field.
 
 A dataset adds its own rules with two options of `checkSources` and `gate`:
 
