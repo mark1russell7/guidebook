@@ -204,3 +204,33 @@ describe("timeOf and isWebAddress", () => {
     expect(isWebAddress("https://exa mple.org")).toBe(false);
   });
 });
+
+describe("the gate with a source or a unit from JSON with a bad shape", () => {
+  const bad: readonly unknown[] = [null, undefined, 0, "text", [], {}, true, Number.NaN];
+  const good = source("a", "cc-by-4.0");
+
+  it("does not throw for a bad value in place of a source, a unit, or each of their fields", () => {
+    for (const value of bad) {
+      expect(() => checkSources([value as Source])).not.toThrow();
+      expect(() => checkUnits([value as CitedUnit], [good])).not.toThrow();
+      expect(() => checkUnits([unit("u", "fact", "a")], [value as Source])).not.toThrow();
+      for (const field of ["id", "title", "url", "license", "checked", "updated", "terms", "sha256"])
+        expect(() => checkSources([{ ...good, [field]: value } as Source], { https: true, require: [...SOURCE_FIELDS] })).not.toThrow();
+      for (const field of ["id", "use", "text", "source"])
+        expect(() => checkUnits([{ ...unit("u", "fact", "a"), [field]: value } as CitedUnit], [good])).not.toThrow();
+    }
+  });
+
+  it("gives an error for a field of a wrong type", () => {
+    const codes = (findings: readonly { readonly code: string }[]): string[] => findings.map((finding) => finding.code);
+    expect(codes(checkSources([{ ...good, title: 5 } as unknown as Source]))).toEqual(["empty-title"]);
+    expect(codes(checkSources([{ ...good, url: 5 } as unknown as Source]))).toEqual(["bad-url"]);
+    expect(codes(checkSources([{ ...good, checked: 20261101 } as unknown as Source]))).toEqual(["bad-date"]);
+    expect(codes(checkSources([{ ...good, updated: null } as unknown as Source]))).toEqual(["bad-date"]);
+    expect(codes(checkSources([{ ...good, sha256: 5 } as unknown as Source]))).toEqual(["bad-sha256"]);
+    expect(codes(checkUnits([{ ...unit("u", "fact", "a"), text: null } as unknown as CitedUnit], [good]))).toEqual(["empty-text"]);
+    expect(codes(checkUnits([{ ...unit("u", "fact", "a"), use: "poem" } as unknown as CitedUnit], [good]))).toEqual(["use-refused"]);
+    // A source that is not a record has no title, address, license or check date.
+    expect(codes(checkSources([null as unknown as Source]))).toEqual(["empty-title", "bad-url", "unknown-license", "bad-date"]);
+  });
+});
