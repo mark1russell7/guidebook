@@ -14,6 +14,8 @@ export const FINDING_CODES = [
   "bad-date",
   "unknown-license",
   "checked-in-future",
+  "updated-after-check",
+  "bad-sha256",
   "stale",
   "missing-source",
   "use-refused",
@@ -86,7 +88,18 @@ export function isWebAddress(url: string): boolean {
   return WEB_ADDRESS.test(url);
 }
 
-/** This function gives the findings of the sources: duplicate ids, empty titles, bad addresses, bad dates, unknown licenses and old checks. */
+/** The form of a SHA-256 hash: 64 lowercase hexadecimal digits. */
+const SHA256 = /^[0-9a-f]{64}$/u;
+
+/** This function tells if a text is a SHA-256 hash in the form that the gate accepts: 64 lowercase hexadecimal digits. */
+export function isSha256(text: string): boolean {
+  return SHA256.test(text);
+}
+
+/**
+ * This function gives the findings of the sources: duplicate ids, empty titles, bad addresses, bad dates, unknown licenses and old checks.
+ * It also examines the optional fields: the address `terms`, the date `updated` and the form of the hash `sha256`.
+ */
 export function checkSources(sources: readonly Source[], options: GateOptions = {}): readonly Finding[] {
   const out: Finding[] = [];
   const error = (code: FindingCode, id: string, message: string): void => {
@@ -102,7 +115,12 @@ export function checkSources(sources: readonly Source[], options: GateOptions = 
     if (source.title.trim() === "") error("empty-title", source.id, `The source "${source.id}" has no title.`);
     if (!isWebAddress(source.url)) error("bad-url", source.id, `The source "${source.id}" has the address "${source.url}". It needs an address with https: or http:.`);
     if (!isLicense(source.license)) error("unknown-license", source.id, `The source "${source.id}" has the unknown license "${String(source.license)}".`);
+    if (source.terms !== undefined && !isWebAddress(source.terms)) error("bad-url", source.id, `The source "${source.id}" has the terms address "${source.terms}". It needs an address with https: or http:.`);
+    if (source.sha256 !== undefined && !isSha256(source.sha256)) error("bad-sha256", source.id, `The hash of the source "${source.id}" is not 64 lowercase hexadecimal digits.`);
     const checked = timeOf(source.checked);
+    const updated = source.updated === undefined ? undefined : timeOf(source.updated);
+    if (source.updated !== undefined && updated === undefined) error("bad-date", source.id, `The source "${source.id}" has the change date "${source.updated}". It needs a date YYYY-MM-DD.`);
+    if (updated !== undefined && checked !== undefined && updated > checked) error("updated-after-check", source.id, `The source "${source.id}" has a change date after its check date.`);
     if (checked === undefined) {
       error("bad-date", source.id, `The source "${source.id}" has the check date "${source.checked}". It needs a date YYYY-MM-DD.`);
     } else if (at !== undefined) {

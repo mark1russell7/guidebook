@@ -1,6 +1,6 @@
 // The catalog gate: the checks of the bundles and of their copies.
 
-import { LICENSES, isWebAddress, permits, timeOf } from "@mark1russell7/guidebook";
+import { LICENSES, isSha256, isWebAddress, permits, timeOf } from "@mark1russell7/guidebook";
 import type { Finding, License, Source, UseContext } from "@mark1russell7/guidebook";
 import { MEDIUM_KINDS } from "./records.ts";
 import type { Bundle, Copy, CopyRule, Link } from "./records.ts";
@@ -38,7 +38,6 @@ export interface CatalogOptions extends UseContext {
   readonly rules?: readonly CopyRule[];
 }
 
-const SHA256 = /^[0-9a-f]{64}$/;
 
 function isLicense(value: unknown): value is License {
   return typeof value === "string" && (LICENSES as readonly string[]).includes(value);
@@ -62,7 +61,7 @@ export function checkCatalog(bundles: readonly Bundle[], options: CatalogOptions
     seen.add(bundle.id);
     if (bundle.title.trim() === "") error("empty-title", bundle.id, `The bundle "${bundle.id}" has no title.`);
     if (!Number.isSafeInteger(bundle.bytes) || bundle.bytes <= 0) error("bad-bytes", bundle.id, `The bundle "${bundle.id}" has the size ${bundle.bytes}. It needs a whole number of bytes more than 0.`);
-    if (bundle.sha256 !== undefined && !SHA256.test(bundle.sha256)) error("bad-sha256", bundle.id, `The bundle "${bundle.id}" has a SHA-256 that is not 64 lower-case hexadecimal digits.`);
+    if (bundle.sha256 !== undefined && !isSha256(bundle.sha256)) error("bad-sha256", bundle.id, `The bundle "${bundle.id}" has a SHA-256 that is not 64 lower-case hexadecimal digits.`);
     if (bundle.url !== undefined && !isWebAddress(bundle.url)) error("bad-url", bundle.id, `The bundle "${bundle.id}" has the address "${bundle.url}". It needs an address with https: or http:.`);
     if (!isLicense(bundle.license)) {
       error("unknown-license", bundle.id, `The bundle "${bundle.id}" has the unknown license "${String(bundle.license)}".`);
@@ -121,7 +120,7 @@ export function checkCopies(copies: readonly Copy[], bundles: readonly Bundle[],
     seen.add(id);
     if (!known.has(copy.bundle)) error("missing-bundle", `The copy "${id}" names the unknown bundle "${copy.bundle}".`);
     if (!(MEDIUM_KINDS as readonly string[]).includes(copy.kind)) error("bad-kind", `The copy "${id}" has the unknown kind "${String(copy.kind)}".`);
-    if (copy.sha256 !== undefined && !SHA256.test(copy.sha256)) error("bad-sha256", `The copy "${id}" has a SHA-256 that is not 64 lower-case hexadecimal digits.`);
+    if (copy.sha256 !== undefined && !isSha256(copy.sha256)) error("bad-sha256", `The copy "${id}" has a SHA-256 that is not 64 lower-case hexadecimal digits.`);
     const checked = timeOf(copy.checked);
     if (checked === undefined) error("bad-date", `The copy "${id}" has the check date "${copy.checked}". It needs a date YYYY-MM-DD.`);
     else if (at !== undefined && checked > at) error("checked-in-future", `The copy "${id}" has a check date after the date of the check.`);

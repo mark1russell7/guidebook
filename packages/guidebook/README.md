@@ -12,7 +12,7 @@ The core names no topic. Each topic is an add-on package with its own records. E
 
 | Record | What it holds |
 | --- | --- |
-| `Source` | A page or a document: its `id`, `title`, `url`, `license`, the date `checked` of the last read, and the optional name `by` |
+| `Source` | A page or a document: its `id`, `title`, `url`, `license`, the date `checked` of the last read, and the optional name `by`. The optional `terms` is the page of the reuse terms, `updated` is the date of the last change that the source shows, and `sha256` is the hash of the file at the check. |
 | `CitedUnit` | A unit of text: its `id`, its `use`, its `text`, the `id` of its `source`, and an optional `locator` in the source |
 
 A unit has one of three uses:
@@ -61,6 +61,8 @@ The gate gives each finding as data, with a level, a code, the record and a mess
 | `bad-date` | `error` | The check date is not a real date `YYYY-MM-DD`. |
 | `unknown-license` | `error` | The license is not in `LICENSES`. |
 | `checked-in-future` | `error` | The check date is after the date `at` of the gate. |
+| `updated-after-check` | `error` | The change date `updated` is after the check date. |
+| `bad-sha256` | `error` | The hash `sha256` is not 64 lowercase hexadecimal digits. |
 | `stale` | `warning` | The check is older than `maxAgeDays` (365 by default) before `at`. |
 | `missing-source` | `error` | A unit cites a source that is not in the list. |
 | `use-refused` | `error` | The license of the source refuses the use of the unit. |
