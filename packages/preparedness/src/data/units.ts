@@ -348,7 +348,7 @@ const MEDICINE: readonly CitedUnit[] = [
   {
     id: "medicine.first-aid.shock-signs",
     use: "fact",
-    text: "The main signs of shock are fast, shallow breathing and a capillary refill of more than 2 seconds. Another sign is a person who cannot follow a simple command, such as \"Squeeze my hand\".",
+    text: "The main signs of shock are fast, shallow breathing and a capillary refill of more than 2 seconds. Another sign is a person who cannot follow a simple command, for example \"Squeeze my hand\".",
     source: "fema-cert-3",
     locator: "Treating for Shock",
   },

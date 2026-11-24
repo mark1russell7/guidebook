@@ -10,7 +10,7 @@ import { AREAS, BUNDLES, LINKS, CATALOG_TAB, GRAPH, HAZARDS, BUNDLE_LEVELS, CASE
 
 const ALL_CASES = [...CASES, ...MORE_CASES];
 const KEYS = [...ALL_CASES, ...CUTS, SOCIETY_KEY];
-const AT = "2026-11-23";
+const AT = "2026-11-24";
 const FULL = ["ready", "warned", "P0", "P1", "P2", "P3"] as const;
 
 describe("the source gate", () => {

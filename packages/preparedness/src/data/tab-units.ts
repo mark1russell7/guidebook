@@ -123,7 +123,7 @@ const FIRST_72H: readonly CitedUnit[] = [
   {
     id: "tab.first-72h.first-hour.choke-pregnant",
     use: "summary",
-    text: "For a pregnant or very obese person, give the thrusts on the lower half of the breastbone, not on its tip.",
+    text: "For a pregnant or very obese person, give the thrusts on the lower half of the breastbone. Do not push on its lowest tip.",
     source: "wikipedia-en",
     locator: "Abdominal thrusts, section Technique (revision 1386004704)",
   },
