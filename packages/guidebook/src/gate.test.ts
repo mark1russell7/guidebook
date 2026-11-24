@@ -14,12 +14,19 @@ const source = (id: string, license: License, extra: Partial<Source> = {}): Sour
 const unit = (id: string, use: CitedUnit["use"], src: string): CitedUnit => ({ id, use, text: `Text of ${id}.`, source: src });
 
 describe("permits", () => {
-  it("permits a summary and a fact of each real license", () => {
+  it("permits a summary and a fact of each real license that permits units", () => {
     for (const license of LICENSES) {
       if (license === "invented") continue;
-      expect(permits(license, "summary")).toBe(true);
-      expect(permits(license, "fact", { commercial: true })).toBe(true);
+      expect(permits(license, "summary")).toBe(LICENSE_RULES[license].units);
+      expect(permits(license, "fact", { commercial: true })).toBe(LICENSE_RULES[license].units);
     }
+  });
+
+  it("refuses each use of a link-only source", () => {
+    for (const use of USES) expect(permits("link-only", use)).toBe(false);
+    const units = [unit("a", "summary", "store"), unit("b", "fact", "store"), unit("c", "quote", "store")];
+    const findings = checkUnits(units, [source("store", "link-only", { note: "No AI ingestion (publisher, 2026-11-23)" })]);
+    expect(findings.map((finding) => `${finding.code} ${finding.id}`)).toEqual(["use-refused a", "use-refused b", "use-refused c"]);
   });
 
   it("follows the table for a quote and a bundle", () => {

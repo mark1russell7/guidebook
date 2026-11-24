@@ -1,12 +1,12 @@
 import { fileURLToPath } from "node:url";
 import { checkSources, checkUnits, permits } from "@mark1russell7/guidebook";
-import { bytesOf, checkCatalog, kiwixKeyOf } from "@mark1russell7/guidebook-library";
+import { bytesOf, checkCatalog, checkLinks, kiwixKeyOf } from "@mark1russell7/guidebook-library";
 import { checkTopics, printOrder } from "@mark1russell7/guidebook-topics";
 import { HORIZONS, PHASES, checkCoverage, checkSteps, planMatrix, stepsFor, chartOf, checkMasterGraph, checkRules, masterChartOf, walkAnswer, walkStart } from "@mark1russell7/guidebook-plans";
 import { Linter, loadConfig } from "@mark1russell7/ste-lint";
 import type { WalkState } from "@mark1russell7/guidebook-plans";
 import { describe, expect, it } from "vitest";
-import { AREAS, BUNDLES, CATALOG_TAB, GRAPH, HAZARDS, BUNDLE_LEVELS, CASES, CUTS, GAPS, MEDIA_UNITS, MEDIUM_GAPS, MEDIUM_LIVES, MEDIUM_LOSSES, MASTER, MORE_CASES, NEEDS, OPEN_CELLS, RULES, SOCIETY_KEY, SOURCES, START_TAB, STEPS, TAB_UNITS, TABS, TOPICS, TOPIC_UNITS } from "./index.ts";
+import { AREAS, BUNDLES, LINKS, CATALOG_TAB, GRAPH, HAZARDS, BUNDLE_LEVELS, CASES, CUTS, GAPS, MEDIA_UNITS, MEDIUM_GAPS, MEDIUM_LIVES, MEDIUM_LOSSES, MASTER, MORE_CASES, NEEDS, OPEN_CELLS, RULES, SOCIETY_KEY, SOURCES, START_TAB, STEPS, TAB_UNITS, TABS, TOPICS, TOPIC_UNITS } from "./index.ts";
 
 const ALL_CASES = [...CASES, ...MORE_CASES];
 const KEYS = [...ALL_CASES, ...CUTS, SOCIETY_KEY];
@@ -23,8 +23,8 @@ describe("the source gate", () => {
     expect(SOURCES.filter((source) => ofSteps.has(source.id) && !permits(source.license, "summary", { commercial: true }))).toEqual([]);
   });
 
-  it("uses each source in a step, a bundle or a unit", () => {
-    const cited = new Set([...STEPS.flatMap((step) => step.sources), ...BUNDLES.map((bundle) => bundle.source), ...MEDIA_UNITS.map((unit) => unit.source), ...TOPIC_UNITS.map((unit) => unit.source), ...TAB_UNITS.map((unit) => unit.source)]);
+  it("uses each source in a step, a bundle, a link or a unit", () => {
+    const cited = new Set([...STEPS.flatMap((step) => step.sources), ...BUNDLES.map((bundle) => bundle.source), ...LINKS.map((link) => link.source), ...MEDIA_UNITS.map((unit) => unit.source), ...TOPIC_UNITS.map((unit) => unit.source), ...TAB_UNITS.map((unit) => unit.source)]);
     expect(SOURCES.map((source) => source.id).filter((id) => !cited.has(id))).toEqual([]);
   });
 });
@@ -54,6 +54,17 @@ describe("the bundle catalog", () => {
 
   it("finds no finding in a commercial guidebook", () => {
     expect(checkCatalog(BUNDLES, { sources: SOURCES, rules, commercial: true })).toEqual([]);
+    expect(checkLinks(LINKS, { sources: SOURCES })).toEqual([]);
+  });
+
+  it("refuses each unit and each bundle of a link-only source, for example Hesperian", () => {
+    const linkOnly = SOURCES.filter((source) => source.license === "link-only");
+    expect(linkOnly.map((source) => source.id).sort()).toEqual(["hesperian-dentist", "hesperian-doctor"]);
+    for (const source of linkOnly) {
+      const units = (["quote", "summary", "fact"] as const).map((use) => ({ id: `${source.id}.${use}`, use, text: "A test text.", source: source.id }));
+      expect(checkUnits(units, SOURCES, { commercial: true }).map((finding) => finding.code)).toEqual(["use-refused", "use-refused", "use-refused"]);
+      expect(checkCatalog([{ id: source.id, title: source.title, bytes: 1, license: source.license, level: "shelf", source: source.id }], { sources: SOURCES, rules }).map((finding) => finding.code)).toEqual(["use-refused"]);
+    }
   });
 
   it("fits the pocket bundles on one flash drive of 32 GB", () => {

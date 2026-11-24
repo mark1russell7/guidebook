@@ -31,6 +31,19 @@ export interface Bundle {
 }
 
 /**
+ * A link of the catalog: a source with no file in the catalog, for example a source whose license permits only a link.
+ * A household gets its own copy from the address, for example a book that it buys from the publisher.
+ */
+export interface Link {
+  readonly id: string;
+  readonly title: string;
+  /** The `id` of the source of the link in the sources of the core. */
+  readonly source: SourceId;
+  /** The address of the page, with `https:` or `http:`. */
+  readonly url: string;
+}
+
+/**
  * The life of a medium at a quantile, for example the time to 5% failure of a disc.
  * A medium younger than `years` fails with a chance of `quantile` or less. Past `years`, the life gives no bound.
  */
