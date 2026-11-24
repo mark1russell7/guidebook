@@ -2274,7 +2274,7 @@ const APPENDICES: readonly CitedUnit[] = [
   {
     id: "tab.appendices.water-1.rain-roof",
     use: "fact",
-    text: "Chemicals for example asbestos, lead and copper can get into rainwater from roofing materials, gutters, pipes and storage materials. Bird droppings on the roof can also wash into it.",
+    text: "Chemicals, for example asbestos, lead and copper, can get into rainwater from roofing materials, gutters, pipes and storage materials. Bird droppings on the roof can also wash into it.",
     source: "cdc-rainwater",
     locator: "How germs and chemicals get into rainwater",
   },
@@ -2449,7 +2449,7 @@ const APPENDICES: readonly CitedUnit[] = [
   {
     id: "tab.appendices.water-3.iodine-avoid",
     use: "fact",
-    text: "If you are pregnant, have thyroid problems or react to iodine, do not drink water that iodine disinfected. No person must drink it for more than a few weeks at a time.",
+    text: "If you are pregnant, have thyroid problems or react to iodine, do not drink water that iodine disinfected. Do not drink it for more than a few weeks at a time.",
     source: "cdc-water",
     locator: "Who should avoid water disinfected with iodine",
   },
@@ -3072,7 +3072,7 @@ const APPENDICES: readonly CitedUnit[] = [
   {
     id: "tab.appendices.heat-4.mold-ppe",
     use: "fact",
-    text: "For mold cleanup, wear an N-95 respirator that fits, and goggles with no ventilation holes. Wear gloves of natural rubber, neoprene, nitrile, polyurethane or PVC when you use bleach or a strong cleaner.",
+    text: "For mold cleanup, the EPA suggests an N-95 respirator that fits, and goggles with no ventilation holes. Wear gloves of natural rubber, neoprene, nitrile, polyurethane or PVC when you use bleach or a strong cleaner.",
     source: "epa-mold",
     locator: "Cleanup, Gloves, goggles, N-95 respirator",
   },
