@@ -151,6 +151,14 @@ export const SOURCES: readonly Source[] = [
   { id: "nchfp-canned-safe", title: "Ensuring Safe Canned Foods", url: "https://nchfp.uga.edu/how/can/general-information/ensuring-safe-canned-foods/", license: "all-rights-reserved", checked: "2026-11-22", by: "National Center for Home Food Preservation, University of Georgia" },
   { id: "nchfp-canned-store", title: "Storing Home Canned Foods", url: "https://nchfp.uga.edu/how/can/general-information/storing-home-canned-foods/", license: "all-rights-reserved", checked: "2026-11-22", by: "National Center for Home Food Preservation, University of Georgia" },
   { id: "uconn-storm-trees", title: "Dealing with Storm Damaged Trees (2018)", url: "https://extension.uconn.edu/2018/05/18/dealing-with-storm-damaged-trees/", license: "all-rights-reserved", checked: "2026-11-22", by: "UConn Extension" },
+  // The sources of the tab water, read on 2026-11-22. The guide of NMSU and the Sphere Handbook let you copy them for education only.
+  // Other uses need a permission, so these sources keep the strictest rule. The pages of USA Rice and of the ILO card give "All rights reserved".
+  { ...federal("epa-disinfect-sheet", "U.S. Environmental Protection Agency, Office of Water", "Emergency Disinfection of Drinking Water (EPA 816-F-15-003, 2015)", "https://www.epa.gov/sites/default/files/2015-11/documents/epa816f15003.pdf"), checked: "2026-11-22" },
+  { ...federal("cdc-yellow-water", "CDC Yellow Book", "Water Disinfection for Travelers", "https://www.cdc.gov/yellow-book/hcp/preparing-international-travelers/water-disinfection-for-travelers.html"), checked: "2026-11-22" },
+  { id: "nmsu-m116", title: "Treating and Storing Water for Emergency Use (Guide M-116)", url: "https://pubs.nmsu.edu/_m/M116/index.html", license: "all-rights-reserved", checked: "2026-11-22", by: "New Mexico State University" },
+  { id: "sphere-2018", title: "The Sphere Handbook, fourth edition (2018)", url: "https://spherestandards.org/handbook/", license: "all-rights-reserved", checked: "2026-11-22", by: "Sphere Association" },
+  { id: "usarice-cook", title: "How to Cook Rice (Think Rice)", url: "https://www.usarice.com/thinkrice/how-to/how-to-cook-rice", license: "all-rights-reserved", checked: "2026-11-22", by: "USA Rice Federation" },
+  { id: "icsc-0638", title: "ICSC 0638: Calcium hypochlorite (International Chemical Safety Cards)", url: "https://chemicalsafety.ilo.org/dyn/icsc/showcard.display?p_card_id=0638", license: "all-rights-reserved", checked: "2026-11-22", by: "ILO and WHO" },
   // The 72 hours guidance of SPEK, the Finnish National Rescue Association, with the Finnish government. The pages give no license.
   // Thus each step is a summary with a citation, not a quote.
   { id: "fi-72h-shelter", title: "Sheltering indoors", url: "https://72tuntia.fi/en/sheltering-indoors/", license: "all-rights-reserved", checked: "2026-11-22", by: "SPEK, 72 hours" },
