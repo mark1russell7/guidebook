@@ -375,7 +375,7 @@ const STAY: readonly CitedUnit[] = [
   {
     id: "tab.stay.walls.asbestos-wet",
     use: "summary",
-    text: "In other Class II removal work, the OSHA rule asks to remove the material whole, with no cutting. Wet it with water and a wetting agent before and during the removal.",
+    text: "In Class II removal work, the OSHA rule asks to remove the material whole, with no cutting. Wet it with water and a wetting agent before and during the removal.",
     source: "osha-asbestos",
     locator: "Paragraph (g)(8)(v)",
   },
@@ -437,12 +437,6 @@ const STAY: readonly CitedUnit[] = [
     text: "With a door hardware release, the handle or the bar cuts the power and unlocks the door at once.",
     source: "icc-ibc-electric-locks",
     locator: "Section 1010.2.11",
-  },
-  {
-    id: "tab.stay.e-locks.smart-lock-battery",
-    use: "summary",
-    text: "The Yale Assure Lock SL YRD256 has no key. When its batteries are dead, hold a 9 V battery to its terminals.",
-    source: "yale-yrd256",
   },
   {
     id: "tab.stay.list.smoke-alarms",
