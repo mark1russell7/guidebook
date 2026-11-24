@@ -485,7 +485,7 @@ export const CASE_STEPS: readonly Step[] = [
     ["P1", "shower", "Shower with soap and shampoo, or wash uncovered skin at a sink. Do not use conditioner or scrub.", ["cdc-decon-info","cdc-self-decon"]],
     ["P1", "shelter-others", "Let people from outside shelter with you. Ask them to take off their outer clothes before they enter, then wash.", ["cdc-help-others","cdc-get-inside"]],
     ["P1", "wash-pets", "If a pet was outside, wash it with soap and water. Wear waterproof gloves and a dust mask if you can.", ["cdc-pets","ready-radiation"]],
-    ["P2", "safe-drinks", "Drink bottled or sealed drinks first. Water from the toilet tank, not the bowl, and the water heater is also safe.", ["cdc-food-water","ready-nd-flyer"], [DRINK]],
+    ["P2", "safe-drinks", "Drink bottled or sealed drinks first. The water of a toilet tank, not the bowl, and of a water heater has no radioactive material.", ["cdc-food-water","ready-nd-flyer"], [DRINK]],
     ["P2", "safe-food", "Eat food that was inside or sealed. Wipe containers from outside with a damp cloth before you open them.", ["cdc-food-water","ready-nd-flyer"], [FOOD]],
     ["P2", "keep-taking-medicine", "Continue to take your medicine. Wipe off any medicine container that was outside.", ["cdc-food-water","ready-nd-flyer"], [MEDICINE]],
     ["P2", "watch-symptoms", "Watch for nausea, vomiting or skin burns. Go out for medical care after 24 hours, or before for a danger to life.", ["cdc-prevention"]],
