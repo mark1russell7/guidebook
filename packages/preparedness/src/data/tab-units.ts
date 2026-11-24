@@ -2269,7 +2269,7 @@ const HEALTH: readonly CitedUnit[] = [
   },
 ];
 
-/** The units of the tab appendices: the water, the heat and the cold, the power, the health, the food, the safety of the people, and the radio. The sections group and tools add no unit. */
+/** The units of the tab appendices: water, heat and cold, power, health, food, safety and radio. The sections group and tools add no unit. */
 const APPENDICES: readonly CitedUnit[] = [
   {
     id: "tab.appendices.water-1.stock-per-day",
