@@ -117,6 +117,15 @@ export const SOURCES: readonly Source[] = [
   { id: "accc-hot-water-bottles", title: "Hot water bottles guide", url: "https://www.productsafety.gov.au/consumers/be-safe-around-the-home/use-products-inside-the-home-safely/hot-water-bottles-guide", license: "cc-by-4.0", checked: "2026-11-22", by: "Product Safety Australia, ACCC" },
   { ...federal("niosh-heat-illnesses", "CDC NIOSH", "Heat-related Illnesses", "https://www.cdc.gov/niosh/heat-stress/about/illnesses.html"), checked: "2026-11-22" },
   { id: "ncwm-firewood", title: "Get what you pay for: how to protect yourself when buying firewood", url: "https://www.nist.gov/system/files/documents/pml/wmd/ncwm-firewood-facts.pdf", license: "all-rights-reserved", checked: "2026-11-23", by: "National Conference on Weights and Measures, on the site of NIST" },
+  // The sources of the tab security, read on 2026-11-22. The locator of a unit of CISA names the sheet of the series that it uses.
+  // The pages of the State of Indiana and of the Toronto Police Service give "All rights reserved", so their units are a summary or a fact.
+  { ...federal("cisa-deescalation", "CISA", "De-escalation Series (Recognize, Assess, De-escalate, Report)", "https://www.cisa.gov/de-escalation-series"), checked: "2026-11-22" },
+  { ...federal("ready-active-shooter", "FEMA, Ready.gov", "Be Prepared for an Active Shooter (FEMA V-1000, 2018)", "https://www.ready.gov/sites/default/files/2020-03/active-shooter_information-sheet.pdf"), checked: "2026-11-22" },
+  { ...federal("ftc-fema-impersonators", "FTC Consumer Advice", "Spot and avoid FEMA impersonators", "https://consumer.ftc.gov/consumer-alerts/2025/07/spot-avoid-fema-impersonators"), checked: "2026-11-22" },
+  { ...federal("fema-disaster-fraud", "FEMA", "Disaster Fraud", "https://www.fema.gov/disaster-fraud"), checked: "2026-11-22" },
+  { ...federal("cdc-sleep-heart", "CDC", "About Sleep and Your Heart Health", "https://www.cdc.gov/heart-disease/about/sleep-and-heart-health.html"), checked: "2026-11-22" },
+  { id: "in-home-protection", title: "Get Prepared: Home Protection", url: "https://www.in.gov/dhs/get-prepared/general-safety/home-protection/", license: "all-rights-reserved", checked: "2026-11-22", by: "Indiana Department of Homeland Security" },
+  { id: "tps-street-robbery", title: "Street Robbery Safety", url: "https://www.tps.ca/crime-prevention/street-robbery-safety/", license: "all-rights-reserved", checked: "2026-11-22", by: "Toronto Police Service" },
   // The 72 hours guidance of SPEK, the Finnish National Rescue Association, with the Finnish government. The pages give no license.
   // Thus each step is a summary with a citation, not a quote.
   { id: "fi-72h-shelter", title: "Sheltering indoors", url: "https://72tuntia.fi/en/sheltering-indoors/", license: "all-rights-reserved", checked: "2026-11-22", by: "SPEK, 72 hours" },
