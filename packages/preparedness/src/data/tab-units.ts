@@ -1297,5 +1297,160 @@ const WATER: readonly CitedUnit[] = [
   },
 ];
 
+/** The units of the tab food: the need, the nutrients, safe beans and meat, the cooking of rice and the pantry times. */
+const FOOD: readonly CitedUnit[] = [
+  {
+    id: "tab.food.need.calories-activity",
+    use: "fact",
+    text: "An adult who sits most of the day needs 1,600 to 2,600 kcal each day. An active adult needs 2,000 to 3,000 kcal.",
+    source: "msd-calories",
+  },
+  {
+    id: "tab.food.weeks.protein",
+    use: "fact",
+    text: "For a healthy adult, protein gives 10% to 35% of the calories of each day.",
+    source: "mlp-protein",
+  },
+  {
+    id: "tab.food.weeks.vitamin-c",
+    use: "fact",
+    text: "An adult man needs 90 mg of vitamin C each day. An adult woman needs 75 mg.",
+    source: "mlp-vitamin-c",
+  },
+  {
+    id: "tab.food.weeks.scurvy",
+    use: "fact",
+    text: "Scurvy is a severe form of vitamin C deficiency.",
+    source: "mlp-vitamin-c",
+  },
+  {
+    id: "tab.food.weeks.thiamin",
+    use: "fact",
+    text: "An adult man needs 1.2 mg of thiamin each day. An adult woman needs 1.1 mg.",
+    source: "mlp-thiamin",
+  },
+  {
+    id: "tab.food.weeks.sprouts",
+    use: "fact",
+    text: "Raw or lightly cooked sprouts can carry bacteria that cause illness. During sprouting, a few bacteria on the seed can grow to high levels, also at home.",
+    source: "fda-produce",
+  },
+  {
+    id: "tab.food.weeks.kidney-toxin",
+    use: "fact",
+    text: "Under-cooked kidney beans contain a toxin. As few as 4 such beans can cause nausea, abdominal pain, diarrhea or vomiting.",
+    source: "illinois-kidney-beans",
+  },
+  {
+    id: "tab.food.weeks.kidney-boil",
+    use: "summary",
+    text: "Soak dry kidney beans for 5 hours or more. Then boil them hard in fresh water for 30 minutes.",
+    source: "illinois-kidney-beans",
+  },
+  {
+    id: "tab.food.weeks.kidney-slow-cooker",
+    use: "fact",
+    text: "Slow heat in a slow cooker can make raw kidney beans more toxic. A slow cooker often heats the beans to only 167 °F.",
+    source: "illinois-kidney-beans",
+  },
+  {
+    id: "tab.food.cooking.rice-yield",
+    use: "fact",
+    text: "One cup of dry rice gives approximately 3 cups of cooked rice.",
+    source: "purdue-rice",
+  },
+  {
+    id: "tab.food.cooking.rice-stove",
+    use: "summary",
+    text: "On a stove, bring the rice and the water to a boil. Then cover the pot tightly, and simmer white rice on low heat for 20 minutes.",
+    source: "usarice-cook",
+  },
+  {
+    id: "tab.food.cooking.propane-btu",
+    use: "fact",
+    text: "One gallon of propane gives 91,452 Btu of heat.",
+    source: "eia-btu",
+  },
+  {
+    id: "tab.food.months.rice-pasta",
+    use: "fact",
+    text: "White rice and dry pasta with no eggs keep 2 years in the pantry from the date of purchase.",
+    source: "foodkeeper",
+    locator: "Products 338 (Rice, white or wild) and 335 (Pasta, dry, without eggs)",
+  },
+  {
+    id: "tab.food.months.dry-beans",
+    use: "fact",
+    text: "Dried beans keep 1 to 2 years in the pantry from the date of purchase.",
+    source: "foodkeeper",
+    locator: "Product 333 (Beans, dried)",
+  },
+  {
+    id: "tab.food.months.oatmeal",
+    use: "fact",
+    text: "Cereal that you cook, for example oatmeal, keeps 12 months in the pantry from the date of purchase.",
+    source: "foodkeeper",
+    locator: "Product 375 (Cereal, cook before eating)",
+  },
+  {
+    id: "tab.food.months.white-flour",
+    use: "fact",
+    text: "White flour keeps 6 to 12 months in the pantry from the date of purchase.",
+    source: "foodkeeper",
+    locator: "Product 222 (Flour, white)",
+  },
+  {
+    id: "tab.food.months.peanut-butter",
+    use: "fact",
+    text: "Commercial peanut butter keeps 6 to 24 months in the pantry from the date of purchase. Peanut butter with hydrogenated fat or other stabilizers keeps 6 to 9 months.",
+    source: "foodkeeper",
+    locator: "Products 387 and 488 (Peanut butter)",
+  },
+  {
+    id: "tab.food.months.beans-sealed",
+    use: "fact",
+    text: "Dry beans in sealed cans or bags with the oxygen removed can keep for 10 years or more.",
+    source: "usu-dry-beans",
+  },
+  {
+    id: "tab.food.years.meat-color",
+    use: "summary",
+    text: "The color and the texture of food do not show that it is safely cooked, except for seafood. Use a food thermometer.",
+    source: "cdc-food-poisoning",
+  },
+  {
+    id: "tab.food.years.whole-cuts",
+    use: "fact",
+    text: "Cook whole cuts of beef, pork, veal and lamb to 145 °F. Then let the meat rest for 3 minutes.",
+    source: "cdc-food-poisoning",
+  },
+  {
+    id: "tab.food.years.fish",
+    use: "fact",
+    text: "Cook fish with fins to 145 °F, or until the flesh is opaque and separates easily with a fork.",
+    source: "cdc-food-poisoning",
+  },
+  {
+    id: "tab.food.years.ground-poultry",
+    use: "fact",
+    text: "Cook ground meat to 160 °F. Cook all poultry, also ground chicken and turkey, to 165 °F.",
+    source: "cdc-food-poisoning",
+  },
+  {
+    id: "tab.food.stay-go.rice-kcal",
+    use: "fact",
+    text: "Dry enriched white rice gives 365 kcal for each 100 g. That is 3,650 kcal for each kg.",
+    source: "fdc-sr-legacy",
+    locator: "FDC ID 168877 (Rice, white, long-grain, regular, raw, enriched), Energy",
+  },
+  {
+    id: "tab.food.stay-go.peanut-butter-kcal",
+    use: "fact",
+    text: "Smooth peanut butter gives 598 kcal for each 100 g. That is 5,980 kcal for each kg.",
+    source: "fdc-sr-legacy",
+    locator: "FDC ID 174266 (Peanut butter, smooth style, with salt), Energy",
+  },
+];
+
 /** The cited units of the tabs of the binder. The units of the other tabs come in later changes. */
-export const TAB_UNITS: readonly CitedUnit[] = [...GO, ...FIRST_72H, ...STAY, ...HEAT, ...SECURITY, ...GROUP, ...LONG_TERM, ...WATER];
+export const TAB_UNITS: readonly CitedUnit[] = [...GO, ...FIRST_72H, ...STAY, ...HEAT, ...SECURITY, ...GROUP, ...LONG_TERM, ...WATER, ...FOOD];
