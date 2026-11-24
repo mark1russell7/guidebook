@@ -93,8 +93,8 @@ export function stepsFor<P extends string>(library: readonly Step<P>[], on: read
 
 const union = <T>(a: readonly T[], b: readonly T[]): readonly T[] => [...new Set([...a, ...b])];
 
+/**
  * This function gives the steps that each key of `on` has. An example is a kit step that each case has.
- * This function gives the steps that each key of `on` has: a text that is a step of each key, for example a kit step of each case.
  * The sequence is the sequence of the library. Each text comes one time, as its first step.
  * A sheet for a group of cases prints these steps one time, and not again for each case.
  */
