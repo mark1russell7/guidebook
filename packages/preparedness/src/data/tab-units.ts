@@ -894,13 +894,13 @@ const SECURITY: readonly CitedUnit[] = [
   {
     id: "tab.security.robbery.documents",
     use: "summary",
-    text: "After a robbery, tell the banks and the government offices about each stolen document. Examples are a passport and a driver's licence.",
+    text: "After a robbery, tell the banks and the government offices about each stolen document. Examples are a passport and a driver's license.",
     source: "tps-street-robbery",
   },
   {
     id: "tab.security.robbery.force-law",
     use: "fact",
-    text: "Also as the victim of a crime, you are responsible in law for the force that you use.",
+    text: "A victim of a crime is also responsible in law for the force that the victim uses.",
     source: "tps-street-robbery",
   },
 ];
