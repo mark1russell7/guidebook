@@ -42,6 +42,8 @@ export const SOURCES: readonly Source[] = [
   { ...federal("usace-blue-roof", "U.S. Army Corps of Engineers", "Blue Roof Information", "https://www.usace.army.mil/Missions/Emergency-Operations/Blue-Roof-Information/"), checked: "2026-11-23" },
   { ...federal("nws-nwr-same", "National Weather Service", "NWR SAME", "https://www.weather.gov/nwr/nwrsame"), checked: "2026-11-23" },
   { ...federal("fcc-amateur", "Federal Communications Commission", "Amateur Radio Service", "https://www.fcc.gov/wireless/bureau-divisions/mobility-division/amateur-radio-service"), checked: "2026-11-23" },
+  { ...federal("niosh-lead", "NIOSH", "NIOSH Pocket Guide to Chemical Hazards: Lead", "https://www.cdc.gov/niosh/npg/npgd0368.html"), checked: "2026-11-23" },
+  { ...federal("niosh-naoh", "NIOSH", "NIOSH Pocket Guide to Chemical Hazards: Sodium hydroxide", "https://www.cdc.gov/niosh/npg/npgd0565.html"), checked: "2026-11-23" },
   { id: "mlp-bleeding", title: "Bleeding (MedlinePlus Medical Encyclopedia)", url: "https://medlineplus.gov/ency/article/000045.htm", license: "all-rights-reserved", checked: "2026-11-23", by: "A.D.A.M., Inc., for the U.S. National Library of Medicine" },
   { id: "mlp-dehydration", title: "Dehydration (MedlinePlus Medical Encyclopedia)", url: "https://medlineplus.gov/ency/article/000982.htm", license: "all-rights-reserved", checked: "2026-11-23", by: "A.D.A.M., Inc., for the U.S. National Library of Medicine" },
   federal("fda-drugs", "FDA", "Safe Drug Use After a Natural Disaster", "https://www.fda.gov/drugs/emergency-preparedness-drugs/safe-drug-use-after-natural-disaster"),
