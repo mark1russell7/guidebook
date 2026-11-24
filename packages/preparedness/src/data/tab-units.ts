@@ -1151,5 +1151,151 @@ const LONG_TERM: readonly CitedUnit[] = [
   },
 ];
 
+/** The units of the tab water: the boil height, the hidden water, the survival need, calcium hypochlorite, solar disinfection and the long-term need. */
+const WATER: readonly CitedUnit[] = [
+  {
+    id: "tab.water.first-72h.boil-altitude",
+    use: "fact",
+    text: "Bring water that is not safe to a rolling boil for 1 minute or more. Above 5,000 ft, boil it for 3 minutes.",
+    source: "epa-disinfect-sheet",
+    locator: "Boil water, if you do not have bottled water",
+  },
+  {
+    id: "tab.water.first-72h.hot-tap-metals",
+    use: "fact",
+    text: "Hot tap water can hold more copper and lead. These metals can come from water heaters and pipes.",
+    source: "cdc-yellow-water",
+    locator: "Field techniques, Heat",
+  },
+  {
+    id: "tab.water.first-72h.unsafe-sources",
+    use: "summary",
+    text: "Do not use the water of toilet tanks, toilet bowls, radiators, waterbeds, swimming pools or spas.",
+    source: "fema-477",
+    locator: "Hidden Water Sources in Your Home",
+  },
+  {
+    id: "tab.water.first-72h.survival-intake",
+    use: "fact",
+    text: "To survive, each person needs 2.5 to 3 L of water each day, to drink and in food. The need changes with the climate and the person.",
+    source: "sphere-2018",
+    locator: "Water supply standard 2.1, guidance note Needs",
+  },
+  {
+    id: "tab.water.budget.pipes",
+    use: "summary",
+    text: "To use the water in the pipes, open the highest tap of the home to let air in. Then take the water from the lowest tap.",
+    source: "fema-477",
+    locator: "Hidden Water Sources in Your Home",
+  },
+  {
+    id: "tab.water.budget.rice-ratio",
+    use: "fact",
+    text: "The general rule to cook rice is 2 parts of water to 1 part of dry rice, by volume.",
+    source: "usarice-cook",
+  },
+  {
+    id: "tab.water.budget.rice-pound",
+    use: "fact",
+    text: "One pound of dry rice is approximately 2 1/4 cups.",
+    source: "usarice-cook",
+  },
+  {
+    id: "tab.water.budget.rice-lid",
+    use: "summary",
+    text: "Keep the lid on the pot while the rice cooks, so that the steam does not go out.",
+    source: "usarice-cook",
+  },
+  {
+    id: "tab.water.months.hypochlorite-safety",
+    use: "summary",
+    text: "Make a chlorine solution from calcium hypochlorite in a room with a flow of air. Wear eye protection.",
+    source: "epa-disinfect-sheet",
+    locator: "Other Disinfection Methods, Granular calcium hypochlorite",
+  },
+  {
+    id: "tab.water.months.hypochlorite-stock",
+    use: "fact",
+    text: "Add 1 heaping teaspoon (approximately 1/4 oz) of high-test granular calcium hypochlorite to 2 gallons of water. Stir until it dissolves. This solution has approximately 500 mg/L of chlorine.",
+    source: "epa-disinfect-sheet",
+    locator: "Other Disinfection Methods, Granular calcium hypochlorite",
+  },
+  {
+    id: "tab.water.months.hypochlorite-dose",
+    use: "fact",
+    text: "To disinfect water, add 1 part of the calcium hypochlorite solution to 100 parts of water. This is approximately 1 pint of solution for 12.5 gallons of water.",
+    source: "epa-disinfect-sheet",
+    locator: "Other Disinfection Methods, Granular calcium hypochlorite",
+  },
+  {
+    id: "tab.water.months.hypochlorite-oxidizer",
+    use: "summary",
+    text: "Calcium hypochlorite is a very strong oxidizer. Obey its label for safe handling and storage.",
+    source: "epa-disinfect-sheet",
+    locator: "Other Disinfection Methods, Granular calcium hypochlorite",
+  },
+  {
+    id: "tab.water.months.hypochlorite-store",
+    use: "summary",
+    text: "Keep calcium hypochlorite well closed, and away from food.",
+    source: "icsc-0638",
+    locator: "Storage",
+  },
+  {
+    id: "tab.water.months.hypochlorite-fire",
+    use: "fact",
+    text: "Contact of calcium hypochlorite with acids or with material that burns can cause a fire or an explosion.",
+    source: "icsc-0638",
+    locator: "Fire and explosion",
+  },
+  {
+    id: "tab.water.months.bleach-weakens",
+    use: "fact",
+    text: "Household bleach has 3% to 8% sodium hypochlorite when it is made. Its strength decreases slowly in long storage.",
+    source: "wikipedia-en",
+    locator: "Sodium hypochlorite, section Packaging and sale (revision 1381214849)",
+  },
+  {
+    id: "tab.water.months.sodis-bottles",
+    use: "fact",
+    text: "For solar disinfection (SODIS), use clear plastic bottles of 0.3 to 2 L.",
+    source: "nmsu-m116",
+  },
+  {
+    id: "tab.water.months.sodis-time",
+    use: "summary",
+    text: "For solar disinfection, lay clear bottles of water on their side in the sun for 6 hours or more. Shake them from time to time.",
+    source: "cdc-yellow-water",
+    locator: "Ultraviolet irradiation, Solar irradiation",
+  },
+  {
+    id: "tab.water.months.sodis-cloudy-sky",
+    use: "fact",
+    text: "When the sky is cloudy, keep the bottles of solar disinfection in the sun for 2 days in a row.",
+    source: "cdc-yellow-water",
+    locator: "Ultraviolet irradiation, Solar irradiation",
+  },
+  {
+    id: "tab.water.months.sodis-cloudy-water",
+    use: "summary",
+    text: "Solar disinfection does not work well in cloudy water, because small particles can block the light. Filter cloudy water first.",
+    source: "cdc-water",
+  },
+  {
+    id: "tab.water.years.need-15l",
+    use: "fact",
+    text: "A minimum of 15 L of water for each person each day, to drink and for hygiene, is established practice. It is not a maximum.",
+    source: "sphere-2018",
+    locator: "Water supply standard 2.1, key indicators and guidance note Needs",
+  },
+  {
+    id: "tab.water.years.latrine-distance",
+    use: "fact",
+    text: "With no soil test, keep a latrine 30 m or more from water sources. Keep the bottom of the pit 1.5 m or more above the groundwater.",
+    source: "sphere-2018",
+    locator: "Excreta management standard 3.1, guidance note Distance from water sources",
+  },
+];
+
 /** The cited units of the tabs of the binder. The units of the other tabs come in later changes. */
-export const TAB_UNITS: readonly CitedUnit[] = [...GO, ...FIRST_72H, ...STAY, ...HEAT, ...SECURITY, ...GROUP, ...LONG_TERM];
+export const TAB_UNITS: readonly CitedUnit[] = [...GO, ...FIRST_72H, ...STAY, ...HEAT, ...SECURITY, ...GROUP, ...LONG_TERM, ...WATER];
