@@ -68,6 +68,7 @@ checkMasterChart: build/index.d.ts#checkMasterChart
 checkMasterGraph: build/index.d.ts#checkMasterGraph
 checkRules: build/index.d.ts#checkRules
 checkSteps: build/index.d.ts#checkSteps
+commonSteps: build/index.d.ts#commonSteps
 coverageOf: build/index.d.ts#coverageOf
 masterChartOf: build/index.d.ts#masterChartOf
 phaseIn: build/index.d.ts#phaseIn
@@ -415,6 +416,9 @@ export declare function checkRules<P extends string>(rules: readonly Rule<P>[], 
 
 ### build/index.d.ts#checkSteps
 export declare function checkSteps<P extends string>(steps: readonly Step<P>[], sources: readonly Source[], options: StepGateOptions<P>): GateResult<StepFinding>;
+
+### build/index.d.ts#commonSteps
+export declare function commonSteps<P extends string>(library: readonly Step<P>[], on: readonly string[]): readonly Step<P>[];
 
 ### build/index.d.ts#coverageOf
 export declare function coverageOf<P extends string>(steps: readonly Step<P>[], on: readonly string[], phases: readonly P[]): readonly KeyCoverage<P>[];
