@@ -148,6 +148,8 @@ export const CASE_STEPS: readonly Step[] = [
     ["ready", "windows", "Cover the windows with drapes or shades, and seal the doors and windows against air.", ["ready-heat"]],
     ["ready", "fans", "Do not use a fan as your main cooling. A fan does not decrease body temperature.", ["ready-heat"]],
     ["ready", "liheap", "If you cannot pay for cooling, ask the LIHEAP program for help.", ["ready-heat"]],
+    ["warned", "watch-cool-place", "With no air conditioning, find the nearest cooling shelter when a heat watch comes. Or stay with family that has it.", ["nws-heat-ww"]],
+    ["warned", "warning-indoors", "When a heat warning comes, stay inside in air conditioning as much as you can, also at night. Do not do outdoor activities.", ["nws-heat-ww"]],
     ["P0", "car", "Do not leave a person or a pet in a closed car on a warm day at any time.", ["ready-heat"]],
     ["P1", "cooling", "If you have no air conditioning, go to a cooling center. Take cool showers or baths.", ["ready-heat"]],
     ["P1", "fluids", "Wear loose, light clothes of a light color, and drink a lot of fluids.", ["ready-heat"], [DRINK]],

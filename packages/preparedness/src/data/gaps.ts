@@ -12,7 +12,6 @@ const NO_LONG_STEP = "The sources give no step for a cut of this length. The ste
 /** The marked gaps of the cases and the cuts. */
 export const GAPS: readonly Gap[] = [
   { on: "met.winter.storm", phase: "P3", why: "The source gives no step past the first days of the storm. The steps of the cuts apply." },
-  { on: "met.heat.extreme", phase: "warned", why: "The source gives no separate step for a heat warning. The steps of P0 and P1 apply." },
   { on: "met.heat.extreme", phase: "P3", why: "The source gives no step past the first days of the heat. The steps of P2 continue." },
   { on: "met.tornado", phase: "P3", why: "The source gives no step past the cleanup. The steps of the cuts apply." },
   { on: "geo.earthquake", phase: "warned", why: "An earthquake alert comes only seconds before the shaking. Do the steps of P0 immediately." },

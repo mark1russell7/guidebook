@@ -15,6 +15,7 @@ export const SOURCES: readonly Source[] = [
   federal("ready-hurricanes", "Ready.gov", "Hurricanes", "https://www.ready.gov/hurricanes"),
   federal("ready-floods", "Ready.gov", "Floods", "https://www.ready.gov/floods"),
   federal("ready-heat", "Ready.gov", "Extreme Heat", "https://www.ready.gov/heat"),
+  { ...federal("nws-heat-ww", "National Weather Service", "Understanding Heat Alerts", "https://www.weather.gov/safety/heat-ww"), checked: "2026-11-24" },
   federal("ready-tornadoes", "Ready.gov", "Tornadoes", "https://www.ready.gov/tornadoes"),
   federal("ready-earthquakes", "Ready.gov", "Earthquakes", "https://www.ready.gov/earthquakes"),
   federal("ready-fire", "Ready.gov", "Home Fires", "https://www.ready.gov/home-fires"),
