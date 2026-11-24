@@ -170,6 +170,17 @@ export const SOURCES: readonly Source[] = [
   { id: "purdue-rice", title: "All About Cooking Rice (2023)", url: "https://extension.purdue.edu/news/county/putnam/2023/09/all-about-cooking-rice.html", license: "all-rights-reserved", checked: "2026-11-22", by: "Purdue University Extension" },
   { ...federal("eia-btu", "U.S. Energy Information Administration", "British thermal units (Btu)", "https://www.eia.gov/energyexplained/units-and-calculators/british-thermal-units.php"), checked: "2026-11-22" },
   { ...federal("cdc-food-poisoning", "CDC", "Preventing Food Poisoning", "https://www.cdc.gov/food-safety/prevention/index.html"), checked: "2026-11-22" },
+  // The sources of the tab health, read on 2026-11-22. The page of the extension service gives only a copyright mark.
+  // The terms of use of WHO let you copy extracts only for study and a use with no commercial purpose. The site of the 988 Lifeline
+  // says that its network administrator owns most of its text. Thus these sources keep the strictest rule, and their units are a summary or a fact.
+  { ...federal("cdc-hands-faq", "CDC", "Hand Hygiene Frequently Asked Questions", "https://www.cdc.gov/clean-hands/faq/index.html"), checked: "2026-11-22" },
+  { id: "osu-em9334", title: "Survival Basics: Sanitation and Waste Management (EM 9334)", url: "https://extension.oregonstate.edu/catalog/pub/em9334", license: "all-rights-reserved", checked: "2026-11-22", by: "Oregon State University Extension Service" },
+  { ...federal("cdc-prescriptions", "CDC, Prepare Your Health", "Prescriptions", "https://www.cdc.gov/prepare-your-health/take-action/prescriptions.html"), checked: "2026-11-22" },
+  { ...federal("cdc-pinkbook-tetanus", "CDC", "Chapter 21: Tetanus (the Pink Book)", "https://www.cdc.gov/pinkbook/hcp/table-of-contents/chapter-21-tetanus.html"), checked: "2026-11-22" },
+  { id: "lifeline-988", title: "988 Suicide & Crisis Lifeline", url: "https://988lifeline.org/", license: "all-rights-reserved", checked: "2026-11-22", by: "988 Suicide & Crisis Lifeline" },
+  { id: "who-mental-emergencies", title: "Mental health in emergencies (fact sheet)", url: "https://www.who.int/news-room/fact-sheets/detail/mental-health-in-emergencies", license: "all-rights-reserved", checked: "2026-11-22", by: "World Health Organization" },
+  { id: "who-dead-bodies-risks", title: "Risks posed by dead bodies after disasters (2013)", url: "https://www.who.int/publications/m/item/risks-posed-by-dead-bodies-after-disasters", license: "all-rights-reserved", checked: "2026-11-22", by: "World Health Organization" },
+  { id: "who-dead-bodies-qa", title: "Emergencies: Management of dead bodies (questions and answers)", url: "https://www.who.int/news-room/questions-and-answers/item/emergencies-management-of-dead-bodies", license: "all-rights-reserved", checked: "2026-11-22", by: "World Health Organization" },
   // The 72 hours guidance of SPEK, the Finnish National Rescue Association, with the Finnish government. The pages give no license.
   // Thus each step is a summary with a citation, not a quote.
   { id: "fi-72h-shelter", title: "Sheltering indoors", url: "https://72tuntia.fi/en/sheltering-indoors/", license: "all-rights-reserved", checked: "2026-11-22", by: "SPEK, 72 hours" },
