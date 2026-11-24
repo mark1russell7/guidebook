@@ -80,8 +80,8 @@ describe("the topics", () => {
     expect(TOPIC_UNITS.filter((unit) => TOPICS.filter((topic) => topic.units.includes(unit.id)).length !== 1).map((unit) => unit.id)).toEqual([]);
   });
 
-  it("gives each topic of the 7 finished areas at least 3 units", () => {
-    expect(TOPICS.filter((topic) => ["water", "food", "medicine", "sanitation", "energy", "shelter", "tools"].includes(topic.area) && topic.units.length < 3).map((topic) => topic.id)).toEqual([]);
+  it("gives each topic of the 9 finished areas at least 3 units", () => {
+    expect(TOPICS.filter((topic) => ["water", "food", "medicine", "sanitation", "energy", "shelter", "tools", "farming", "communication"].includes(topic.area) && topic.units.length < 3).map((topic) => topic.id)).toEqual([]);
   });
 
   it("has 40 topics in 12 areas, each area with a topic", () => {
