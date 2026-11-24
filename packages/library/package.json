@@ -1,7 +1,7 @@
 {
   "$schema": "https://json.schemastore.org/package",
   "name": "@mark1russell7/guidebook-library",
-  "version": "0.2.3",
+  "version": "0.2.4",
   "description": "The library add-on of the guidebook: a catalog of offline bundles (size, license, version, checksum), the copies of each bundle on media, and the gaps of the copies of each level.",
   "keywords": [
     "guidebook",
