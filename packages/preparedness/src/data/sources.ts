@@ -295,4 +295,14 @@ export const SOURCES: readonly Source[] = [
   { ...federal("cpsc-generators", "U.S. Consumer Product Safety Commission", "Generators and Engine-Driven Tools", "https://www.cpsc.gov/Safety-Education/Safety-Guides/Carbon-Monoxide-Home/Generators-and-Engine-Driven-Tools"), checked: "2026-11-24" },
   { ...federal("cdc-yellow-heat-cold", "CDC Yellow Book", "Heat and Cold Illness in Travelers", "https://www.cdc.gov/yellow-book/hcp/environmental-hazards-risks/heat-and-cold-illness-in-travelers.html"), checked: "2026-11-24" },
   { ...federal("cdc-rainwater", "CDC", "Collecting Rainwater and Your Health: An Overview", "https://www.cdc.gov/drinking-water/about/collecting-rainwater-and-your-health-an-overview.html"), checked: "2026-11-24" },
+  // The sources of the appendices of the binder, part 2.
+  { ...federal("cdc-tetanus-about", "CDC", "About Tetanus", "https://www.cdc.gov/tetanus/about/index.html"), checked: "2026-11-24" },
+  { ...federal("cdc-tetanus-wounds", "CDC", "Clinical Guidance for Wound Management to Prevent Tetanus", "https://www.cdc.gov/tetanus/hcp/clinical-guidance/index.html"), checked: "2026-11-24" },
+  { ...federal("cdc-rabies", "CDC", "About Rabies", "https://www.cdc.gov/rabies/about/index.html"), checked: "2026-11-24" },
+  { ...federal("cdc-ticks", "CDC", "Preventing Tick Bites", "https://www.cdc.gov/ticks/prevention/index.html"), checked: "2026-11-24" },
+  { ...federal("cdc-cholera", "CDC", "Treating Cholera", "https://www.cdc.gov/cholera/treatment/index.html"), checked: "2026-11-24" },
+  { ...federal("fda-acetaminophen-use", "U.S. Food and Drug Administration", "Don't Overuse Acetaminophen", "https://www.fda.gov/consumers/consumer-updates/dont-overuse-acetaminophen"), checked: "2026-11-24" },
+  // The two reports of the Pacific Northwest National Laboratory are works of a contractor, not of the US government. They give a summary or a fact only.
+  { id: "pnnl-leadacid", title: "2020 Grid Energy Storage Technology Cost and Performance Assessment: Lead-Acid Batteries (DOE/PA-0204)", url: "https://www.pnnl.gov/sites/default/files/media/file/LeadAcid_Methodology.pdf", license: "all-rights-reserved", checked: "2026-11-24", by: "Pacific Northwest National Laboratory" },
+  { id: "pnnl-storage", title: "Native Renewables, Inc. Analysis of Small-Scale Storage Options (PNNL-33634)", url: "https://www.pnnl.gov/main/publications/external/technical_reports/PNNL-33634.pdf", license: "all-rights-reserved", checked: "2026-11-24", by: "Pacific Northwest National Laboratory" },
 ];
