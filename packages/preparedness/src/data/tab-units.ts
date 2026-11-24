@@ -1453,5 +1453,150 @@ const FOOD: readonly CitedUnit[] = [
   },
 ];
 
+/** The units of the tab health that are not medical care: clean hands, toilets, the supply of medicines, distress, vaccines and a death. */
+const HEALTH: readonly CitedUnit[] = [
+  {
+    id: "tab.health.hands.sanitizer-limits",
+    use: "fact",
+    text: "A hand sanitizer does not work well on hands that are dirty or greasy. It does not remove harmful chemicals.",
+    source: "cdc-hands-faq",
+    locator: "Hand sanitizer and wipes",
+  },
+  {
+    id: "tab.health.hands.water-only",
+    use: "summary",
+    text: "With water but no soap and no sanitizer, rub your hands together under the water. Dry them with a clean towel or in the air. This removes some germs, but less than soap.",
+    source: "cdc-hands-faq",
+    locator: "Using soap and water",
+  },
+  {
+    id: "tab.health.toilets.street-pipes",
+    use: "summary",
+    text: "After a disaster, do not use a toilet, also when the pipes of the home have no damage. The pipes in the street can be broken.",
+    source: "osu-em9334",
+  },
+  {
+    id: "tab.health.toilets.two-buckets",
+    use: "summary",
+    text: "For a toilet, use two 5-gallon buckets with lids. Mark one bucket for urine and one for feces. Waste that you keep apart is easier to store and to discard.",
+    source: "osu-em9334",
+  },
+  {
+    id: "tab.health.toilets.feces-bag",
+    use: "fact",
+    text: "Line the bucket for feces with a heavy plastic garbage bag of 13 gallons.",
+    source: "osu-em9334",
+  },
+  {
+    id: "tab.health.toilets.carbon",
+    use: "summary",
+    text: "After each use, cover the feces completely with approximately 1/2 cup of carbon material. Use wood shavings, sawdust, shredded paper, bark chips or peat moss.",
+    source: "osu-em9334",
+  },
+  {
+    id: "tab.health.toilets.bag-full",
+    use: "summary",
+    text: "Fill the bucket for feces to half or less. Put on disposable gloves. Close the bag tightly, and put it in a second bag.",
+    source: "osu-em9334",
+  },
+  {
+    id: "tab.health.toilets.bag-store",
+    use: "summary",
+    text: "Keep the bags of feces away from other garbage, and far from the food and the water. Keep them until the sanitary system works again.",
+    source: "osu-em9334",
+  },
+  {
+    id: "tab.health.toilets.urine",
+    use: "summary",
+    text: "Dilute the urine with water, and pour it on the ground. Use a different place each time.",
+    source: "osu-em9334",
+  },
+  {
+    id: "tab.health.toilets.latrine-rock",
+    use: "fact",
+    text: "In cracked rock or limestone, keep a latrine more than 30 m from water sources.",
+    source: "sphere-2018",
+    locator: "Excreta management standard 3.1, guidance note Distance from water sources",
+  },
+  {
+    id: "tab.health.medicines.emergency-supply",
+    use: "summary",
+    text: "Talk to your doctor or pharmacist about an emergency supply of your medicines.",
+    source: "cdc-prescriptions",
+    locator: "The Basics",
+  },
+  {
+    id: "tab.health.medicines.cold",
+    use: "summary",
+    text: "Keep a cooler and chemical ice packs for the medicines that must stay cold.",
+    source: "cdc-prescriptions",
+    locator: "The Basics",
+  },
+  {
+    id: "tab.health.mind.distress",
+    use: "fact",
+    text: "Almost all people feel distress after an emergency. It usually becomes less with time.",
+    source: "who-mental-emergencies",
+    locator: "Key facts",
+  },
+  {
+    id: "tab.health.mind.distress-signs",
+    use: "fact",
+    text: "The usual signs of distress are anxiety, sadness, hopelessness, sleep problems, fatigue, irritability, anger and aches.",
+    source: "who-mental-emergencies",
+    locator: "Prevalence",
+  },
+  {
+    id: "tab.health.mind.988",
+    use: "summary",
+    text: "For emotional distress, call or text 988. The 988 Lifeline is free and confidential, at all hours.",
+    source: "lifeline-988",
+  },
+  {
+    id: "tab.health.vaccines.tetanus",
+    use: "fact",
+    text: "An adult gets a booster dose of tetanus vaccine (Td or Tdap) each 10 years.",
+    source: "cdc-pinkbook-tetanus",
+    locator: "Tetanus Toxoid-containing Vaccine Schedule",
+  },
+  {
+    id: "tab.health.death.record",
+    use: "summary",
+    text: "Take photographs of each dead body. Write a description of its features, its clothes and its personal items.",
+    source: "who-dead-bodies-qa",
+  },
+  {
+    id: "tab.health.death.epidemic",
+    use: "fact",
+    text: "Dead bodies from a natural disaster usually do not cause an epidemic. The exception is a death from a highly infectious disease, for example cholera.",
+    source: "who-dead-bodies-qa",
+  },
+  {
+    id: "tab.health.death.grief",
+    use: "fact",
+    text: "Grief and a traditional burial of each person are important for the bereaved. In an epidemic, a traditional burial can be a health risk.",
+    source: "who-dead-bodies-qa",
+    locator: "What are the potential mental health issues for the bereaved?",
+  },
+  {
+    id: "tab.health.death.gloves",
+    use: "summary",
+    text: "Use each pair of gloves only once to touch a dead body. Wash your hands with soap after you touch the body and before you eat.",
+    source: "who-dead-bodies-risks",
+  },
+  {
+    id: "tab.health.death.grave",
+    use: "fact",
+    text: "Put a grave 30 m or more from each groundwater source of drinking water. Put the floor of the grave 1.5 m or more above the water table.",
+    source: "who-dead-bodies-risks",
+  },
+  {
+    id: "tab.health.death.surface-water",
+    use: "fact",
+    text: "Do not let surface water from a grave go into the places where people live.",
+    source: "who-dead-bodies-risks",
+  },
+];
+
 /** The cited units of the tabs of the binder. The units of the other tabs come in later changes. */
-export const TAB_UNITS: readonly CitedUnit[] = [...GO, ...FIRST_72H, ...STAY, ...HEAT, ...SECURITY, ...GROUP, ...LONG_TERM, ...WATER, ...FOOD];
+export const TAB_UNITS: readonly CitedUnit[] = [...GO, ...FIRST_72H, ...STAY, ...HEAT, ...SECURITY, ...GROUP, ...LONG_TERM, ...WATER, ...FOOD, ...HEALTH];
