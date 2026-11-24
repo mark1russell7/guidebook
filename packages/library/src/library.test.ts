@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import type { Source } from "@mark1russell7/guidebook";
-import { bytesOf, checkCatalog, checkCopies, checksDue, copyStates } from "./index.ts";
-import type { Bundle, Copy, CopyRule } from "./index.ts";
+import { bytesOf, checkCatalog, checkCopies, checkLinks, checksDue, copyStates } from "./index.ts";
+import type { Bundle, Copy, CopyRule, Link } from "./index.ts";
 
 const HASH_A = "a".repeat(64);
 const HASH_B = "b".repeat(64);
@@ -27,6 +27,22 @@ const copies: Copy[] = [
   { bundle: "med", medium: "usb-2", kind: "flash", place: "home", checked: "2025-01-01", version: "2026-10", sha256: HASH_A },
   { bundle: "all", medium: "hdd-1", kind: "hdd", place: "office", checked: "2026-06-01" },
 ];
+
+describe("checkLinks", () => {
+  it("passes a good link of a link-only source", () => {
+    const store: Source = { id: "store", title: "A book in a store", url: "https://example.org/book", license: "link-only", checked: "2026-11-01", note: "No AI ingestion (publisher, 2026-11-23)" };
+    const links: Link[] = [{ id: "book", title: "A book", source: "store", url: "https://example.org/book" }];
+    expect(checkLinks(links, { sources: [store] })).toEqual([]);
+  });
+
+  it("finds a duplicate id, an empty title, a bad address and an unknown source", () => {
+    const links: Link[] = [
+      { id: "x", title: "X", source: "nowhere", url: "https://example.org/x" },
+      { id: "x", title: " ", source: "nowhere", url: "ftp://example.org/x" },
+    ];
+    expect(checkLinks(links, { sources: [] }).map((finding) => `${finding.code} ${finding.record}`)).toEqual(["missing-source link", "duplicate-id link", "empty-title link", "bad-url link", "missing-source link"]);
+  });
+});
 
 describe("checkCatalog", () => {
   it("gives no finding for a correct catalog", () => {

@@ -13,6 +13,7 @@ The add-on names no topic. The bundles, the levels, the media and the places are
 | Record | What it holds |
 | --- | --- |
 | `Bundle` | One offline file, for example a Kiwix ZIM file: its `id`, `title`, `bytes`, `license`, `level` and `source`, and an optional `version`, `sha256` and `url` |
+| `Link` | An entry with no file, for a source that the guidebook can only link to: its `id`, `title`, `source` and `url` |
 | `Copy` | A copy of a bundle on one medium: the `bundle`, the `medium`, its `kind`, its `place`, the date `checked` of the last read, and an optional `version`, `sha256`, `life` and `written` date |
 | `MediumLife` | The life of a medium at a quantile: the `years` to the failure of the fraction `quantile`, and its `source` |
 | `CopyRule` | The copies that a level needs: the count of `copies`, of `kinds` of media and of `places`, and the days `everyDays` between two checks |
@@ -29,6 +30,8 @@ const copyFindings = checkCopies(copies, bundles, { at: "2026-11-21" });
 ```
 
 `checkCatalog` uses `permits(license, "bundle")` of the core. A bundle with a license that refuses an offline copy gets the error `use-refused`.
+
+A `Link` is an entry of the catalog with no file: an `id`, a `title`, a `source` and a `url`. Use it for a source with the license `link-only`. `checkLinks(links, { sources })` finds a duplicate `id`, an empty title, a bad address and an unknown source.
 
 | Code | When |
 | --- | --- |
