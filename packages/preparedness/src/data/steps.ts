@@ -2,22 +2,41 @@
 // The steps are full from `ready` to `P3`. `P4` and `P5` are an outline. Each cell with no step has a marked gap in `gaps.ts`.
 
 import type { Phase, Society, Step } from "@mark1russell7/guidebook-plans";
+import { app, key, lit, ref, serialize } from "@mark1russell7/vex";
+import type { Expr } from "@mark1russell7/vex";
 
 /** One row of a key: the phase, a short name, the action, the sources and the needs that the step protects. */
-/** The more fields of a row: the needs that the step protects, its reasoning, and the states of society that it is for. */
-type More = { readonly needs?: readonly string[]; readonly reasoning?: string; readonly society?: readonly Society[] };
+/** The more fields of a row: the needs that the step protects, its reasoning, the states of society that it is for, and its condition. */
+type More = { readonly needs?: readonly string[]; readonly reasoning?: string; readonly society?: readonly Society[]; readonly when?: string };
 type Row = readonly [phase: Phase, name: string, action: string, sources: readonly string[], more?: readonly string[] | More];
 
 /** This function makes the steps of a key from its rows. The order of a step is its position among the rows of its phase. */
 function stepsOf(on: string, rows: readonly Row[]): Step[] {
   const count = new Map<Phase, number>();
   return rows.map(([phase, name, action, sources, more = []]) => {
-    const { needs = [], reasoning, society } = Array.isArray(more) ? { needs: more as readonly string[] } : (more as More);
+    const { needs = [], reasoning, society, when } = Array.isArray(more) ? { needs: more as readonly string[] } : (more as More);
     const order = (count.get(phase) ?? 0) + 1;
     count.set(phase, order);
-    return { id: `${on}.${phase}.${name}`, on, phase, needs, do: action, order, sources, ...(reasoning === undefined ? {} : { reasoning }), ...(society === undefined ? {} : { society }) };
+    return { id: `${on}.${phase}.${name}`, on, phase, needs, do: action, order, sources, ...(reasoning === undefined ? {} : { reasoning }), ...(society === undefined ? {} : { society }), ...(when === undefined ? {} : { when }) };
   });
 }
+
+/**
+ * This function gives the JSON form of a condition `when`: a Vex program over the live keys.
+ * Each live key has the field `stopped`, and a stopped key with a known start has the field `hours`.
+ * A step gets a `when` only if the live keys decide its condition. A condition that a person sees (a smell, the weather) gets no `when`.
+ */
+function condition(expr: Expr): string {
+  const text = serialize(expr);
+  if (!text.ok) throw new Error("the condition does not serialize");
+  return text.value;
+}
+
+/** The expression that is true when the live key `part` is stopped. */
+const stopped = (part: string): Expr => ref(["stopped"], [key(part)]);
+
+/** The expression that is true when the live key `part` is stopped for more than `hours` hours. */
+const stoppedOver = (part: string, hours: number): Expr => app("and", stopped(part), app("gt", ref(["hours"], [key(part)]), lit(hours)));
 
 const DRINK = "hydration.drink";
 const FOOD = "food.energy";
@@ -311,7 +330,7 @@ export const CASE_STEPS: readonly Step[] = [
     ["P0", "friend-account", "If a message from the account of a friend seems strange, ask the friend in a different way.", ["fi-72h-cyber"]],
     ["P0", "no-send", "Do not send money, gift cards or cryptocurrency to a person that you know only online or by phone.", ["ic3-genai"]],
     ["P1", "sources", "Get news from more than one source: the phone alerts, the radio, the television and the persons near you.", ["ready-alerts"], { reasoning: "Each source can stop or be wrong. A fact that two sources agree on is more certain." }],
-    ["P1", "radio-info", "If the phone and data networks stop, get the news from the public radio on batteries.", ["fi-72h-info"]],
+    ["P1", "radio-info", "If the phone and data networks stop, get the news from the public radio on batteries.", ["fi-72h-info"], { when: condition(app("and", stopped("phone.network"), stopped("network.access"))) }],
     ["P1", "phone-lines", "Use the phone only when necessary, so that the lines stay open.", ["fi-72h-shelter"]],
     ["P1", "who-says", "Before you believe a report, find who wrote it, and find a second source that agrees.", ["fi-72h-info"]],
     ["P1", "no-rumours", "Do not pass on a report that does not seem true.", ["fi-72h-info"]],
@@ -627,7 +646,7 @@ export const CUT_STEPS: readonly Step[] = [
     ["P2", "food-40", "Discard food that is at 40 °F or higher for two hours or more.", ["ready-power"], [FOOD]],
     ["P2", "extreme", "If the heat or the cold is extreme, go to a community place that has power.", ["ready-power"]],
     ["P2", "refuel", "Let a generator cool before you add fuel.", ["ready-power"]],
-    ["P2", "medicine", "After more than one day with no power, discard refrigerated medicine, unless its label tells otherwise.", ["ready-power"], [MEDICINE]],
+    ["P2", "medicine", "After more than one day with no power, discard refrigerated medicine, unless its label tells otherwise.", ["ready-power"], { needs: [MEDICINE], when: condition(stoppedOver("power.grid", 24)) }],
     ["P3", "doubt", "Discard food with an unusual odor, color or texture. When in doubt, throw it out.", ["ready-power"], [FOOD]],
     ["P3", "lifesaving", "If a refrigerated medicine keeps you alive and you have no replacement, use it until you get a new supply.", ["fda-drugs"], [MEDICINE]],
     ["P3", "few-loads", "Use the stored power only for light, the radio, the phones and medical devices.", [], { needs: [POWER], reasoning: "Heat and cooking empty stored power fast. Small loads make it last for weeks.", society: NONE }],
