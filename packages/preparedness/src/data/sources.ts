@@ -279,4 +279,13 @@ export const SOURCES: readonly Source[] = [
   // The stop rules of CPR with no emergency team. The pages give no license, so the steps give a summary only.
   { id: "mra-cpr", title: "On the CPR Debate", url: "https://mra.org/on-the-cpr-debate/", license: "all-rights-reserved", checked: "2026-11-22", by: "Mountain Rescue Association" },
   { id: "naemsp-wilderness", title: "Wilderness EMS Systems", url: "https://naemsp.org/wp-content/uploads/2025/07/2025_75_Wilderness.pdf", license: "all-rights-reserved", checked: "2026-11-22", by: "National Association of EMS Physicians" },
+  // The medicine statements of the tab health and the tab first-72h.
+  { ...federal("cdc-sepsis", "CDC", "About Sepsis", "https://www.cdc.gov/sepsis/about/index.html"), checked: "2026-11-24" },
+  { ...federal("fda-acetaminophen", "U.S. Food and Drug Administration", "Acetaminophen", "https://www.fda.gov/drugs/safe-use-over-counter-pain-relievers-and-fever-reducers/acetaminophen"), checked: "2026-11-24" },
+  { ...federal("fda-loperamide", "U.S. Food and Drug Administration", "FDA limits packaging for anti-diarrhea medicine loperamide (Imodium) to encourage safe use (2018)", "https://www.fda.gov/files/FDA-limits-packaging-for-anti-diarrhea-medicine-loperamide-(Imodium)-to-encourage-safe-use_PDF.pdf"), checked: "2026-11-24" },
+  { ...federal("fda-naloxone-otc", "U.S. Food and Drug Administration", "FDA Approves First Over-the-Counter Naloxone Nasal Spray (2023)", "https://www.fda.gov/news-events/press-announcements/fda-approves-first-over-counter-naloxone-nasal-spray"), checked: "2026-11-24" },
+  { ...federal("nhlbi-cardiac-arrest", "National Heart, Lung, and Blood Institute", "Cardiac Arrest: Treatment", "https://www.nhlbi.nih.gov/health/cardiac-arrest/treatment"), checked: "2026-11-24" },
+  { ...federal("fema-cert-2019", "FEMA", "CERT Basic Training Participant Manual (August 2019)", "https://www.ready.gov/sites/default/files/2019.CERT_.Basic_.PM_FINAL_508c.pdf"), checked: "2026-11-24" },
+  { ...federal("dhs-stb-tourniquet", "U.S. Department of Homeland Security", "Stop the Bleed: Applying a Tourniquet (2018)", "https://www.dhs.gov/sites/default/files/publications/STB_Applying_Tourniquet_08-06-2018_0.pdf"), checked: "2026-11-24" },
+  { ...federal("cdc-hear-her", "CDC (Hear Her campaign)", "Urgent Maternal Warning Signs and Symptoms", "https://www.cdc.gov/hearher/maternal-warning-signs/index.html"), checked: "2026-11-24" },
 ];
