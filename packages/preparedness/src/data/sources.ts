@@ -151,7 +151,6 @@ export const SOURCES: readonly Source[] = [
   { id: "nchfp-canned-safe", title: "Ensuring Safe Canned Foods", url: "https://nchfp.uga.edu/how/can/general-information/ensuring-safe-canned-foods/", license: "all-rights-reserved", checked: "2026-11-22", by: "National Center for Home Food Preservation, University of Georgia" },
   { id: "nchfp-canned-store", title: "Storing Home Canned Foods", url: "https://nchfp.uga.edu/how/can/general-information/storing-home-canned-foods/", license: "all-rights-reserved", checked: "2026-11-22", by: "National Center for Home Food Preservation, University of Georgia" },
   { id: "uconn-storm-trees", title: "Dealing with Storm Damaged Trees (2018)", url: "https://extension.uconn.edu/2018/05/18/dealing-with-storm-damaged-trees/", license: "all-rights-reserved", checked: "2026-11-22", by: "UConn Extension" },
-  { id: "victron-lfp", title: "Lithium Smart battery manual: technical data", url: "https://www.victronenergy.com/media/pg/Lithium_Battery_Smart/en/technical-data.html", license: "all-rights-reserved", checked: "2026-11-22", by: "Victron Energy" },
   // The 72 hours guidance of SPEK, the Finnish National Rescue Association, with the Finnish government. The pages give no license.
   // Thus each step is a summary with a citation, not a quote.
   { id: "fi-72h-shelter", title: "Sheltering indoors", url: "https://72tuntia.fi/en/sheltering-indoors/", license: "all-rights-reserved", checked: "2026-11-22", by: "SPEK, 72 hours" },

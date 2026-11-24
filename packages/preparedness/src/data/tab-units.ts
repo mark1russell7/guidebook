@@ -1063,7 +1063,7 @@ const LONG_TERM: readonly CitedUnit[] = [
   {
     id: "tab.long-term.water.home-use",
     use: "fact",
-    text: "In good times, a person in the US uses on average 82 gallons of water each day at home.",
+    text: "In normal times, a person in the US uses on average 82 gallons of water each day at home.",
     source: "epa-watersense-stats",
   },
   {
@@ -1148,13 +1148,6 @@ const LONG_TERM: readonly CitedUnit[] = [
     text: "A household septic system needs an inspection at least every 3 years. The tank usually needs a pump-out every 3 to 5 years.",
     source: "epa-septic-care",
     locator: "Inspect and Pump Frequently",
-  },
-  {
-    id: "tab.long-term.power.lfp-charge",
-    use: "fact",
-    text: "Do not charge a lithium iron phosphate battery below the limit of its manual. One maker gives +5 °C (41 °F).",
-    source: "victron-lfp",
-    locator: "Operating conditions",
   },
 ];
 
