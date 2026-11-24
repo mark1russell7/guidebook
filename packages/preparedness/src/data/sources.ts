@@ -138,6 +138,19 @@ export const SOURCES: readonly Source[] = [
   { ...federal("cfr-47-97-509", "Federal Communications Commission, in the CFR at govinfo.gov", "47 CFR 97.509, Administering VE requirements (2024 edition)", "https://www.govinfo.gov/content/pkg/CFR-2024-title47-vol5/xml/CFR-2024-title47-vol5-sec97-509.xml"), checked: "2026-11-22" },
   { ...federal("cfr-47-1-1102", "Federal Communications Commission, in the CFR at govinfo.gov", "47 CFR 1.1102, Schedule of charges for the wireless telecommunications services (2024 edition)", "https://www.govinfo.gov/content/pkg/CFR-2024-title47-vol1/xml/CFR-2024-title47-vol1-sec1-1102.xml"), checked: "2026-11-22" },
   { id: "meshtastic-intro", title: "Introduction (Meshtastic documentation)", url: "https://meshtastic.org/docs/introduction", license: "all-rights-reserved", checked: "2026-11-22", by: "Meshtastic contributors" },
+  // The sources of the tab long-term, read on 2026-11-22. The pages of the universities and of the battery maker give "All rights reserved" or only a copyright mark.
+  // Thus their units are a summary or a fact.
+  { ...federal("epa-watersense-stats", "U.S. Environmental Protection Agency, WaterSense", "Statistics and Facts", "https://www.epa.gov/watersense/statistics-and-facts"), checked: "2026-11-22" },
+  { ...federal("epa-well-testing", "U.S. Environmental Protection Agency", "Protect Your Home's Water", "https://www.epa.gov/privatewells/protect-your-homes-water"), checked: "2026-11-22" },
+  { ...federal("epa-well-contaminants", "U.S. Environmental Protection Agency", "Potential Well Water Contaminants and Their Impacts", "https://www.epa.gov/privatewells/potential-well-water-contaminants-and-their-impacts"), checked: "2026-11-22" },
+  { ...federal("epa-septic-care", "U.S. Environmental Protection Agency", "How to Care for Your Septic System", "https://www.epa.gov/septic/how-care-your-septic-system"), checked: "2026-11-22" },
+  { ...federal("usda-hardiness", "USDA Agricultural Research Service", "USDA Plant Hardiness Zone Map", "https://planthardiness.ars.usda.gov/"), checked: "2026-11-22" },
+  { ...federal("osha-felling-hazards", "OSHA", "Logging eTool: Manual Operations, Felling, Potential Hazards", "https://www.osha.gov/etools/logging/manual-operations/felling/hazards"), checked: "2026-11-22" },
+  { ...federal("osha-felling-retreat", "OSHA", "Logging eTool: Manual Operations, Felling, Retreat Path", "https://www.osha.gov/etools/logging/manual-operations/felling/retreat-path"), checked: "2026-11-22" },
+  { ...federal("osha-1910-266", "OSHA", "29 CFR 1910.266, Logging Operations", "https://www.osha.gov/laws-regs/regulations/standardnumber/1910/1910.266"), checked: "2026-11-22" },
+  { id: "nchfp-canned-safe", title: "Ensuring Safe Canned Foods", url: "https://nchfp.uga.edu/how/can/general-information/ensuring-safe-canned-foods/", license: "all-rights-reserved", checked: "2026-11-22", by: "National Center for Home Food Preservation, University of Georgia" },
+  { id: "nchfp-canned-store", title: "Storing Home Canned Foods", url: "https://nchfp.uga.edu/how/can/general-information/storing-home-canned-foods/", license: "all-rights-reserved", checked: "2026-11-22", by: "National Center for Home Food Preservation, University of Georgia" },
+  { id: "uconn-storm-trees", title: "Dealing with Storm Damaged Trees (2018)", url: "https://extension.uconn.edu/2018/05/18/dealing-with-storm-damaged-trees/", license: "all-rights-reserved", checked: "2026-11-22", by: "UConn Extension" },
   // The 72 hours guidance of SPEK, the Finnish National Rescue Association, with the Finnish government. The pages give no license.
   // Thus each step is a summary with a citation, not a quote.
   { id: "fi-72h-shelter", title: "Sheltering indoors", url: "https://72tuntia.fi/en/sheltering-indoors/", license: "all-rights-reserved", checked: "2026-11-22", by: "SPEK, 72 hours" },
