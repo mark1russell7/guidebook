@@ -19,6 +19,11 @@ LICENSE_RULES: build/index.d.ts#LICENSE_RULES
 type Layer: build/index.d.ts#Layer
 type License: build/index.d.ts#License
 type LicenseRule: build/index.d.ts#LicenseRule
+QUOTE_CODES: build/index.d.ts#QUOTE_CODES
+type QuoteCheck: build/index.d.ts#QuoteCheck
+type QuoteCode: build/index.d.ts#QuoteCode
+type QuoteFinding: build/index.d.ts#QuoteFinding
+type QuoteResult: build/index.d.ts#QuoteResult
 SOURCE_FIELDS: build/index.d.ts#SOURCE_FIELDS
 type Source: build/index.d.ts#Source
 type SourceField: build/index.d.ts#SourceField
@@ -28,6 +33,7 @@ type UnitUse: build/index.d.ts#UnitUse
 type Use: build/index.d.ts#Use
 type UseContext: build/index.d.ts#UseContext
 assertGate: build/index.d.ts#assertGate
+checkQuotes: build/index.d.ts#checkQuotes
 checkSources: build/index.d.ts#checkSources
 checkUnits: build/index.d.ts#checkUnits
 creditOf: build/index.d.ts#creditOf
@@ -35,6 +41,7 @@ gate: build/index.d.ts#gate
 isSha256: build/index.d.ts#isSha256
 isWebAddress: build/index.d.ts#isWebAddress
 layerOf: build/index.d.ts#layerOf
+markChecked: build/index.d.ts#markChecked
 permits: build/index.d.ts#permits
 resultOf: build/index.d.ts#resultOf
 throwOnErrors: build/index.d.ts#throwOnErrors
@@ -49,6 +56,7 @@ interface CitedUnit {
   readonly text: string;
   readonly source: SourceId;
   readonly locator?: string;
+  readonly checked?: IsoDate;
 }
 
 ### build/index.d.ts#DAY_MS
@@ -111,6 +119,28 @@ interface LicenseRule {
   readonly real: boolean;
 }
 
+### build/index.d.ts#QUOTE_CODES
+export declare const QUOTE_CODES: readonly ["quote-not-found", "quote-no-read"];
+
+### build/index.d.ts#QuoteCheck
+interface QuoteCheck {
+  readonly unit: string;
+  readonly source: SourceId;
+  readonly status: "found" | "not-found" | "no-read";
+  readonly span?: PassageSpan;
+}
+
+### build/index.d.ts#QuoteCode
+type QuoteCode = (typeof QUOTE_CODES)[number];
+
+### build/index.d.ts#QuoteFinding
+type QuoteFinding = Finding<QuoteCode, "unit">;
+
+### build/index.d.ts#QuoteResult
+interface QuoteResult extends GateResult<QuoteFinding> {
+  readonly checks: readonly QuoteCheck[];
+}
+
 ### build/index.d.ts#SOURCE_FIELDS
 export declare const SOURCE_FIELDS: readonly ["by", "note", "terms", "updated", "sha256"];
 
@@ -152,6 +182,9 @@ interface UseContext {
 ### build/index.d.ts#assertGate
 export declare function assertGate(units: readonly CitedUnit[], sources: readonly Source[], options?: GateOptions): void;
 
+### build/index.d.ts#checkQuotes
+export declare function checkQuotes(units: readonly CitedUnit[], texts: ReadonlyMap<SourceId, string>): QuoteResult;
+
 ### build/index.d.ts#checkSources
 export declare function checkSources(sources: readonly Source[], options?: GateOptions): readonly Finding[];
 
@@ -172,6 +205,9 @@ export declare function isWebAddress(url: string): boolean;
 
 ### build/index.d.ts#layerOf
 export declare function layerOf(unit: CitedUnit, source: Source): Layer;
+
+### build/index.d.ts#markChecked
+export declare function markChecked<U extends CitedUnit>(units: readonly U[], checks: readonly QuoteCheck[], at: IsoDate): readonly U[];
 
 ### build/index.d.ts#permits
 export declare function permits(license: License, use: Use, context?: UseContext): boolean;

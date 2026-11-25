@@ -43,6 +43,8 @@ export interface CitedUnit {
   readonly source: SourceId;
   /** The place of the text in the source, for example a section or a page. */
   readonly locator?: string;
+  /** The date of the last quote check that found the text in the source. Only a quote has it. `markChecked` sets it. */
+  readonly checked?: IsoDate;
 }
 
 /**
