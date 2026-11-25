@@ -198,6 +198,9 @@ export function checkUnits(units: readonly CitedUnit[], sources: readonly Source
     if (seen.has(id)) error("duplicate-id", id, `Two units have the id "${id}".`);
     seen.add(id);
     if (typeof unit.text !== "string" || unit.text.trim() === "") error("empty-text", id, `The unit "${id}" has no text.`);
+    if (unit.checked !== undefined && (typeof unit.checked !== "string" || timeOf(unit.checked) === undefined)) {
+      error("bad-date", id, `The unit "${id}" has the check date "${String(unit.checked)}". It needs a date YYYY-MM-DD.`);
+    }
     const source = byId.get(unit.source);
     if (source === undefined) {
       error("missing-source", id, `The unit "${id}" cites the source "${String(unit.source)}", but the list does not have it.`);

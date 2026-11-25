@@ -1,7 +1,7 @@
 {
   "$schema": "https://json.schemastore.org/package",
   "name": "@mark1russell7/guidebook-topics",
-  "version": "0.1.6",
+  "version": "0.1.7",
   "description": "The topics add-on of the guidebook: topics as a graph of prerequisites, the graph gate (no cycle, no unknown topic, unit or bundle) and the print order. The add-on names no topic.",
   "keywords": [
     "guidebook",

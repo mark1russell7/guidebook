@@ -13,7 +13,7 @@ The core names no topic. Each topic is an add-on package with its own records. E
 | Record | What it holds |
 | --- | --- |
 | `Source` | A page or a document: its `id`, `title`, `url`, `license`, the date `checked` of the last read, and the optional name `by`. The optional `terms` is the page of the reuse terms, `updated` is the date of the last change that the source shows, and `sha256` is the hash of the file at the check. |
-| `CitedUnit` | A unit of text: its `id`, its `use`, its `text`, the `id` of its `source`, and an optional `locator` in the source |
+| `CitedUnit` | A unit of text: its `id`, its `use`, its `text`, the `id` of its `source`, and an optional `locator` in the source. A quote can have the date `checked` of the last quote check that found it. |
 
 A unit has one of three uses:
 
@@ -68,6 +68,8 @@ The gate gives each finding as data, with a level, a code, the record and a mess
 | `missing-source` | `error` | A unit cites a source that is not in the list. |
 | `use-refused` | `error` | The license of the source refuses the use of the unit, or the use is not in `USES`. |
 
+A unit with a date `checked` that is not a real date `YYYY-MM-DD` gets `bad-date` too. Since 0.5.2.
+
 Since 0.5.1, the gate does not throw for a source or a unit from JSON with a bad shape. A field of a wrong type gives the finding of that field. For example, a title that is not a text gives `empty-title`. An item that is not a record has no fields, so it gives the finding of each necessary field.
 
 A dataset adds its own rules with two options of `checkSources` and `gate`:
@@ -81,8 +83,29 @@ checkSources(sources, { require: ["by", "terms"], https: true });
 
 `layerOf(unit, source)` gives the layer of a printed unit. A share-alike quote prints in its own layer, so the rest of the guidebook keeps its own license.
 
+## The quote check
+
+Since 0.5.2, `checkQuotes(units, texts)` compares each quote with the text of its source. The check is pure: a job reads the texts.
+
+- The comparison uses `findPassage` of `@mark1russell7/text/passage`. The case, the quote marks, the dashes and the white space are not significant.
+- A quote that the text does not hold gets the error `quote-not-found`.
+- A source with no text gets the warning `quote-no-read` for each of its quotes. A job that cannot read a source thus does not fail.
+- Each check gives its status: `found` with its `span` in the text, `not-found` or `no-read`.
+- `markChecked(units, checks, at)` sets the date `checked` on each quote that the check found.
+
+```ts
+import { checkQuotes, markChecked } from "@mark1russell7/guidebook";
+
+const units = [{ id: "cool", use: "quote", text: "Store the water in a cool, dark place.", source: "store" }] as const;
+const texts = new Map([["store", "Store the water\nin a cool, dark place."]]);
+
+const result = checkQuotes(units, texts);
+result.ok; // true
+markChecked(units, result.checks, "2026-11-24")[0]?.checked; // "2026-11-24"
+```
+
 ## Limits
 
-- The gate does not compare a quote with the text of its source. A job that reads the source does that, and then sets `checked`.
+- The quote check finds the words of a quote, not their meaning. A quote out of its context passes.
 - The table holds the licenses of the first sources. A new license goes into `LICENSES` and `LICENSE_RULES` in a pull request.
 - The rules are a reading of the license texts. They are not legal advice.
