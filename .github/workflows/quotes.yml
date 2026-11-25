@@ -1,27 +1,53 @@
-# The live quote check (scripts/check-quotes.ts). It reads the source of each quote one time each week, through the page
-# store of polite-crawler. It fails when the text of a source does not hold its quote. A source that it cannot read
-# gives a warning, not a failure. The log gives the record of each quote that it found, with the new date `checked`.
+# The live quote check (scripts/check-quotes.ts). It reads the source of each quote through the page store of
+# polite-crawler. It fails when the text of a source does not hold its quote. A source that it cannot read gives a
+# warning, not a failure. The log gives the record of each quote that it found, with the new date `checked`.
+# It runs each week, and on each pull request that changes the data or the check.
+# This file is a gate with paths (CI.md): the job changes gives the match, and the job Quotes OK gives the result.
 name: Quotes
 
 on:
   pull_request:
+  push:
+    branches: [main]
     paths:
-      - "packages/preparedness/src/data/**"
-      - "packages/guidebook/src/quote.ts"
-      - "scripts/check-quotes.ts"
-      - ".github/workflows/quotes.yml"
+      - packages/preparedness/src/data/**
+      - packages/guidebook/src/quote.ts
+      - scripts/check-quotes.ts
+      - .github/workflows/quotes.yml
   schedule:
-    - cron: "41 7 * * 4"
+    - cron: "49 7 * * 4"
+  # A person starts a run on a branch with no pull request: gh workflow run quotes.yml --ref <branch>
   workflow_dispatch:
 
 permissions: {}
 
+# A newer push cancels the run of a pull request. Each commit of main has its own group, so its run ends with a result.
 concurrency:
-  group: quotes
-  cancel-in-progress: false
+  group: quotes-${{ github.event_name == 'pull_request' && github.ref || github.sha }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
+  changes:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: read
+      pull-requests: read
+    outputs:
+      match: ${{ steps.changes.outputs.match }}
+    steps:
+      - id: changes
+        uses: mark1russell7/template/.github/actions/changes@734075fad8c45edf8417b0e9412574ca6c2ef7b4 # main
+        with:
+          paths: |
+            packages/preparedness/src/data/**
+            packages/guidebook/src/quote.ts
+            scripts/check-quotes.ts
+            .github/workflows/quotes.yml
+
   check:
+    needs: changes
+    if: needs.changes.outputs.match == 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 15
     permissions:
@@ -37,3 +63,15 @@ jobs:
           cache: pnpm
       - run: pnpm install --frozen-lockfile
       - run: node scripts/check-quotes.ts
+
+  quotes-ok:
+    name: Quotes OK
+    if: ${{ !cancelled() }}
+    needs: [changes, check]
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    permissions: {}
+    steps:
+      - uses: mark1russell7/template/.github/actions/gate-summary@734075fad8c45edf8417b0e9412574ca6c2ef7b4 # main
+        with:
+          needs: ${{ toJSON(needs) }}
