@@ -8,6 +8,7 @@ import type { WalkState } from "@mark1russell7/guidebook-plans";
 import { evaluate, parse, space } from "@mark1russell7/vex";
 import { NumDomain } from "@mark1russell7/vex-domains";
 import { describe, expect, it } from "vitest";
+import { STEP_PERSONS } from "./data/persons.ts";
 import { STEP_USES } from "./data/uses.ts";
 import { AREAS, BUNDLES, LINKS, CATALOG_TAB, GRAPH, HAZARDS, BUNDLE_LEVELS, CASES, CUTS, GAPS, MEDIA_UNITS, MEDIUM_GAPS, MEDIUM_LIVES, MEDIUM_LOSSES, MASTER, MORE_CASES, NEEDS, OPEN_CELLS, RULES, SOCIETY_KEY, SOURCES, START_TAB, STEPS, TAB_UNITS, TABS, TOPICS, TOPIC_UNITS } from "./index.ts";
 
@@ -430,5 +431,19 @@ describe("the items of the steps", () => {
       expect(new Set(items).size).toBe(items.length);
       for (const item of items) expect(item).toMatch(/^[a-z-]+\.[a-z0-9-]+$/);
     }
+  });
+});
+
+describe("the persons of the steps", () => {
+  it("joins each key of the table of persons to a step, and gives each step its groups", () => {
+    const ids = new Set(STEPS.map((step) => step.id));
+    expect(Object.keys(STEP_PERSONS).filter((id) => !ids.has(id))).toEqual([]);
+    for (const step of STEPS) expect(step.persons).toEqual(STEP_PERSONS[step.id]);
+  });
+
+  it("gives a group to each step whose action names infants, baby formula, children, older adults or pregnancy", () => {
+    const names = /(infants?|baby|child|children|older adults|pregnant|pregnancy)/iu;
+    const unnamed = STEPS.filter((step) => names.test(step.do) && step.persons === undefined).map((step) => step.id);
+    expect(unnamed).toEqual([]);
   });
 });

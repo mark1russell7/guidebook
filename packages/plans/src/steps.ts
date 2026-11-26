@@ -4,6 +4,7 @@ import { checkUnits, resultOf } from "@mark1russell7/guidebook";
 import type { CitedUnit, Finding, GateResult, Source, SourceId, UseContext } from "@mark1russell7/guidebook";
 import type { Phase } from "./ladder.ts";
 import type { Society } from "./master.ts";
+import { PERSON_GROUPS, type PersonGroup } from "./persons.ts";
 
 /**
  * One action of a plan. A step belongs to a key and to a phase.
@@ -36,6 +37,8 @@ export interface Step<P extends string = Phase> {
   readonly reasoning?: string;
   /** The states of society that the step is for. No `society` means each state. */
   readonly society?: readonly Society[];
+  /** The groups of persons that the step protects, for example infants. No `persons` means that the step names no group. */
+  readonly persons?: readonly PersonGroup[];
 }
 
 /** A marked gap: a key and a phase that have no step on purpose, with the reason. */
@@ -152,6 +155,7 @@ export const STEP_FINDING_CODES = [
   "gap-with-steps",
   "duplicate-gap",
   "empty-reason",
+  "unknown-person-group",
 ] as const;
 
 /** A code of a finding of the step gate. */
@@ -176,7 +180,7 @@ export function unitsOf<P extends string>(steps: readonly Step<P>[]): readonly C
 }
 
 /**
- * This function applies the step gate. It examines the ids, the text, the sources, the phases and the order of each step.
+ * This function applies the step gate. It examines the ids, the text, the sources, the phases, the order and the groups of persons of each step.
  * It examines the sources with the source gate: the text of a step is a summary of each of its sources.
  * With `on`, it also finds each cell of the matrix that has no step and no marked gap.
  */
@@ -197,6 +201,7 @@ export function checkSteps<P extends string>(steps: readonly Step<P>[], sources:
       if (step.reasoning === undefined) error("no-source", "step", step.id, `The step "${step.id}" cites no source and gives no reasoning.`);
       else if (/[0-9]/.test(step.do)) error("number-without-source", "step", step.id, `The step "${step.id}" has a number, so it needs a source.`);
     }
+    for (const group of step.persons ?? []) if (!(PERSON_GROUPS as readonly string[]).includes(group)) error("unknown-person-group", "step", step.id, `The step "${step.id}" has the unknown group of persons "${group}".`);
     if (!phases.has(step.phase)) error("unknown-phase", "step", step.id, `The step "${step.id}" has the unknown phase "${step.phase}".`);
     if (!Number.isInteger(step.order) || step.order < 1) error("bad-order", "step", step.id, `The step "${step.id}" has the order ${String(step.order)}. It needs an integer from 1.`);
     const cell = `${step.on}\u0000${step.phase}\u0000${String(step.order)}`;
