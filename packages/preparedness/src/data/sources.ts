@@ -13,10 +13,10 @@ const federal = (id: string, by: string, title: string, url: string): Source => 
 export const SOURCES: readonly Source[] = [
   federal("ready-winter", "Ready.gov", "Winter Weather", "https://www.ready.gov/winter-weather"),
   federal("ready-hurricanes", "Ready.gov", "Hurricanes", "https://www.ready.gov/hurricanes"),
-  federal("ready-floods", "Ready.gov", "Floods", "https://www.ready.gov/floods"),
+  { ...federal("ready-floods", "Ready.gov", "Floods", "https://www.ready.gov/floods"), checked: "2026-11-26" },
   federal("ready-heat", "Ready.gov", "Extreme Heat", "https://www.ready.gov/heat"),
   { ...federal("nws-heat-ww", "National Weather Service", "Understanding Heat Alerts", "https://www.weather.gov/safety/heat-ww"), checked: "2026-11-24" },
-  federal("ready-tornadoes", "Ready.gov", "Tornadoes", "https://www.ready.gov/tornadoes"),
+  { ...federal("ready-tornadoes", "Ready.gov", "Tornadoes", "https://www.ready.gov/tornadoes"), checked: "2026-11-26" },
   federal("ready-earthquakes", "Ready.gov", "Earthquakes", "https://www.ready.gov/earthquakes"),
   federal("ready-fire", "Ready.gov", "Home Fires", "https://www.ready.gov/home-fires"),
   { ...federal("ready-escape-plan", "Ready.gov", "Home Fire Escape Plan", "https://www.ready.gov/home-fire-escape-plan"), checked: "2026-11-24" },
