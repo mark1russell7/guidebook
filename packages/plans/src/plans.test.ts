@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import type { Source } from "@mark1russell7/guidebook";
-import { HORIZONS, LADDER, PHASES, PHASE_BOUNDS, RULE_KINDS, GRAPH_SCHEMA, chartOf, checkMasterChart, checkMasterGraph, masterChartOf, walkAnswer, walkBack, walkEnd, walkStart, checkCoverage, checkRules, checkSteps, commonSteps, coverageOf, phaseIn, phaseOf, phasesOf, planMatrix, stepsFor } from "./index.ts";
-import type { ChartNode, Ladder, MasterGraph, Rule, Step, Tab } from "./index.ts";
+import { HORIZONS, LADDER, PERSON_GROUPS, PHASES, PHASE_BOUNDS, RULE_KINDS, GRAPH_SCHEMA, chartOf, checkMasterChart, checkMasterGraph, masterChartOf, walkAnswer, walkBack, walkEnd, walkStart, checkCoverage, checkRules, checkSteps, commonSteps, coverageOf, phaseIn, phaseOf, phasesOf, personGroups, planMatrix, stepsFor } from "./index.ts";
+import type { ChartNode, Ladder, MasterGraph, PersonGroup, Rule, Step, Tab } from "./index.ts";
 
 const MIN = 60;
 const HOUR = 3600;
@@ -152,6 +152,11 @@ describe("checkSteps", () => {
       "m:missing-source",
       "f:use-refused",
     ]);
+  });
+
+  it("finds a step with an unknown group of persons, and passes the known groups", () => {
+    const steps = [{ ...step("g", "a", "P0", 1), persons: [...PERSON_GROUPS] }, { ...step("u", "a", "P0", 2), persons: ["elders" as PersonGroup] }];
+    expect(checkSteps(steps, sources, { phases }).findings.map((f) => `${f.id}:${f.code}`)).toEqual(["u:unknown-person-group"]);
   });
 
   it("permits an invented source in a fixture", () => {
@@ -490,5 +495,25 @@ describe("strategy steps and the state of society", () => {
     expect(ids()).toEqual(["all", "none", "works"]);
     expect(ids("none")).toEqual(["all", "none"]);
     expect(ids("partly")).toEqual(["all", "works"]);
+  });
+});
+
+describe("personGroups", () => {
+  it("gives the groups of a person by its age and its stage", () => {
+    expect(personGroups({ ageMonths: 0 })).toEqual(["infant"]);
+    expect(personGroups({ ageMonths: 11 })).toEqual(["infant"]);
+    expect(personGroups({ ageMonths: 12 })).toEqual(["child"]);
+    expect(personGroups({ ageMonths: 215 })).toEqual(["child"]);
+    expect(personGroups({ ageMonths: 216 })).toEqual([]);
+    expect(personGroups({ ageMonths: 779 })).toEqual([]);
+    expect(personGroups({ ageMonths: 780 })).toEqual(["older-adult"]);
+    expect(personGroups({ ageMonths: 360, stage: "pregnancy-2" })).toEqual(["pregnant"]);
+    expect(personGroups({ ageMonths: 204, stage: "pregnancy-1" })).toEqual(["child", "pregnant"]);
+    expect(personGroups({ ageMonths: 360, stage: "lactation-1" })).toEqual([]);
+  });
+
+  it("refuses an age that is not a whole number of months of 0 or more", () => {
+    expect(() => personGroups({ ageMonths: -1 })).toThrow(RangeError);
+    expect(() => personGroups({ ageMonths: 1.5 })).toThrow(RangeError);
   });
 });
