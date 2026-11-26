@@ -31,9 +31,12 @@ type MasterFinding: build/index.d.ts#MasterFinding
 type MasterFindingCode: build/index.d.ts#MasterFindingCode
 type MasterGateOptions: build/index.d.ts#MasterGateOptions
 type MasterGraph: build/index.d.ts#MasterGraph
+PERSON_GROUPS: build/index.d.ts#PERSON_GROUPS
 PHASES: build/index.d.ts#PHASES
 PHASE_BOUNDS: build/index.d.ts#PHASE_BOUNDS
 PHASE_TITLES: build/index.d.ts#PHASE_TITLES
+type PersonFacts: build/index.d.ts#PersonFacts
+type PersonGroup: build/index.d.ts#PersonGroup
 type Phase: build/index.d.ts#Phase
 type PlacedNode: build/index.d.ts#PlacedNode
 type QuestionNode: build/index.d.ts#QuestionNode
@@ -71,6 +74,7 @@ checkSteps: build/index.d.ts#checkSteps
 commonSteps: build/index.d.ts#commonSteps
 coverageOf: build/index.d.ts#coverageOf
 masterChartOf: build/index.d.ts#masterChartOf
+personGroups: build/index.d.ts#personGroups
 phaseIn: build/index.d.ts#phaseIn
 phaseOf: build/index.d.ts#phaseOf
 phasesOf: build/index.d.ts#phasesOf
@@ -236,6 +240,9 @@ interface MasterGraph<P extends string = Phase> {
   readonly index?: readonly IndexEntry[];
 }
 
+### build/index.d.ts#PERSON_GROUPS
+export declare const PERSON_GROUPS: readonly ["infant", "child", "older-adult", "pregnant"];
+
 ### build/index.d.ts#PHASES
 export declare const PHASES: readonly ["ready", "warned", "P0", "P1", "P2", "P3", "P4", "P5"];
 
@@ -244,6 +251,15 @@ export declare const PHASE_BOUNDS: readonly number[];
 
 ### build/index.d.ts#PHASE_TITLES
 export declare const PHASE_TITLES: Readonly<Record<Phase, string>>;
+
+### build/index.d.ts#PersonFacts
+interface PersonFacts {
+  readonly ageMonths: number;
+  readonly stage?: string | undefined;
+}
+
+### build/index.d.ts#PersonGroup
+type PersonGroup = (typeof PERSON_GROUPS)[number];
 
 ### build/index.d.ts#Phase
 type Phase = (typeof PHASES)[number];
@@ -315,7 +331,7 @@ export declare const SOCIETY_STATES: readonly ["works", "partly", "none"];
 export declare const SOCIETY_TITLES: Readonly<Record<Society, string>>;
 
 ### build/index.d.ts#STEP_FINDING_CODES
-export declare const STEP_FINDING_CODES: readonly ["duplicate-id", "empty-text", "no-source", "number-without-source", "empty-reasoning", "missing-source", "use-refused", "unknown-phase", "bad-order", "duplicate-order", "unmarked-gap", "gap-with-steps", "duplicate-gap", "empty-reason"];
+export declare const STEP_FINDING_CODES: readonly ["duplicate-id", "empty-text", "no-source", "number-without-source", "empty-reasoning", "missing-source", "use-refused", "unknown-phase", "bad-order", "duplicate-order", "unmarked-gap", "gap-with-steps", "duplicate-gap", "empty-reason", "unknown-person-group"];
 
 ### build/index.d.ts#SignalNode
 interface SignalNode {
@@ -342,6 +358,7 @@ interface Step<P extends string = Phase> {
   readonly sources: readonly SourceId[];
   readonly reasoning?: string;
   readonly society?: readonly Society[];
+  readonly persons?: readonly PersonGroup[];
 }
 
 ### build/index.d.ts#StepFinding
@@ -425,6 +442,9 @@ export declare function coverageOf<P extends string>(steps: readonly Step<P>[], 
 
 ### build/index.d.ts#masterChartOf
 export declare function masterChartOf<P extends string>(nodes: readonly ChartNode[], tabs: readonly Tab<P>[]): MasterChart<P>;
+
+### build/index.d.ts#personGroups
+export declare function personGroups(person: PersonFacts): PersonGroup[];
 
 ### build/index.d.ts#phaseIn
 export declare function phaseIn<P extends string>(ladder: Ladder<P>, seconds: number, warned?: boolean): P;

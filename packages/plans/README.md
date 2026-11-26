@@ -42,7 +42,8 @@ Many cases stop the same service. So most steps belong to a cut, and each case t
 | `Gap` | A key and a phase that have no step on purpose, with the reason `why` |
 | `stepsFor(library, on, phases)` | The steps of the keys in the phases, by key, then by phase, then by order. A step comes one time, and steps with the same text are one step. |
 | `planMatrix(library, gaps, on, phases)` | One row for each key, with one cell for each phase: its steps, or its marked gap |
-| `checkSteps(steps, sources, options)` | The step gate |
+| `checkSteps(steps, sources, options)` | The step gate. It also finds a step with an unknown group of persons. |
+| `personGroups(person)` | The groups of `PERSON_GROUPS` of one person, from its age in months and its stage. A step with the field `persons` protects these groups. |
 | `checkCoverage(steps, options)` | The coverage gate: each key has steps in each phase |
 | `coverageOf(steps, on, phases)` | The phases with steps and the phases with no step, for each key |
 
