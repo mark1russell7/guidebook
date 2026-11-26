@@ -8,6 +8,7 @@ import type { WalkState } from "@mark1russell7/guidebook-plans";
 import { evaluate, parse, space } from "@mark1russell7/vex";
 import { NumDomain } from "@mark1russell7/vex-domains";
 import { describe, expect, it } from "vitest";
+import { STEP_USES } from "./data/uses.ts";
 import { AREAS, BUNDLES, LINKS, CATALOG_TAB, GRAPH, HAZARDS, BUNDLE_LEVELS, CASES, CUTS, GAPS, MEDIA_UNITS, MEDIUM_GAPS, MEDIUM_LIVES, MEDIUM_LOSSES, MASTER, MORE_CASES, NEEDS, OPEN_CELLS, RULES, SOCIETY_KEY, SOURCES, START_TAB, STEPS, TAB_UNITS, TABS, TOPICS, TOPIC_UNITS } from "./index.ts";
 
 const ALL_CASES = [...CASES, ...MORE_CASES];
@@ -414,5 +415,20 @@ describe("the master chart", () => {
     // The catalog has no end of its own: the ends with a card send the reader to it.
     expect(masterChartOf(MASTER, TABS).tabs.map((tab) => tab.id)).toEqual(tabs.filter((tab) => tab.id !== CATALOG_TAB).map((tab) => tab.id));
     expect(MASTER.some((node) => node.kind === "goto" && node.card === true)).toBe(true);
+  });
+});
+
+describe("the items of the steps", () => {
+  it("joins each key of the table of uses to a step, and gives each step its items", () => {
+    const ids = new Set(STEPS.map((step) => step.id));
+    expect(Object.keys(STEP_USES).filter((id) => !ids.has(id))).toEqual([]);
+    for (const step of STEPS) expect(step.uses).toEqual(STEP_USES[step.id]);
+  });
+
+  it("gives each item as an id of the form <kind>.<name>, with no duplicate in a step", () => {
+    for (const items of Object.values(STEP_USES)) {
+      expect(new Set(items).size).toBe(items.length);
+      for (const item of items) expect(item).toMatch(/^[a-z-]+\.[a-z0-9-]+$/);
+    }
   });
 });

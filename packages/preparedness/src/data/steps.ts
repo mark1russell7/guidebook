@@ -4,20 +4,26 @@
 import type { Phase, Society, Step } from "@mark1russell7/guidebook-plans";
 import { app, key, lit, ref, serialize } from "@mark1russell7/vex";
 import type { Expr } from "@mark1russell7/vex";
+import { STEP_USES } from "./uses.ts";
 
 /** One row of a key: the phase, a short name, the action, the sources and the needs that the step protects. */
 /** The more fields of a row: the needs that the step protects, its reasoning, the states of society that it is for, and its condition. */
 type More = { readonly needs?: readonly string[]; readonly reasoning?: string; readonly society?: readonly Society[]; readonly when?: string };
 type Row = readonly [phase: Phase, name: string, action: string, sources: readonly string[], more?: readonly string[] | More];
 
-/** This function makes the steps of a key from its rows. The order of a step is its position among the rows of its phase. */
+/**
+ * This function makes the steps of a key from its rows. The order of a step is its position among the rows of its phase.
+ * The items that a step uses come from `STEP_USES`, by the id of the step.
+ */
 function stepsOf(on: string, rows: readonly Row[]): Step[] {
   const count = new Map<Phase, number>();
   return rows.map(([phase, name, action, sources, more = []]) => {
     const { needs = [], reasoning, society, when } = Array.isArray(more) ? { needs: more as readonly string[] } : (more as More);
     const order = (count.get(phase) ?? 0) + 1;
     count.set(phase, order);
-    return { id: `${on}.${phase}.${name}`, on, phase, needs, do: action, order, sources, ...(reasoning === undefined ? {} : { reasoning }), ...(society === undefined ? {} : { society }), ...(when === undefined ? {} : { when }) };
+    const id = `${on}.${phase}.${name}`;
+    const uses = STEP_USES[id];
+    return { id, on, phase, needs, do: action, ...(uses === undefined ? {} : { uses }), order, sources, ...(reasoning === undefined ? {} : { reasoning }), ...(society === undefined ? {} : { society }), ...(when === undefined ? {} : { when }) };
   });
 }
 
