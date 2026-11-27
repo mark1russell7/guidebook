@@ -59,7 +59,7 @@
   },
   "devDependencies": {
     "@mark1russell7/cue": "^2.0.0",
-    "@mark1russell7/ste-lint": "^0.6.0",
+    "@mark1russell7/ste-lint": "^0.7.0",
     "@mark1russell7/vex-domains": "^0.20.2",
     "@types/node": "^26.6.5",
     "@vitest/coverage-v8": "^5.0.3",
