@@ -1,7 +1,7 @@
 {
   "$schema": "https://json.schemastore.org/package",
   "name": "@mark1russell7/guidebook-plans",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "description": "The plans add-on of the guidebook: a time ladder of phases, steps keyed by a case or a cut and a phase, the steps query, the matrix of a library with its marked gaps, and the step gate.",
   "keywords": [
     "guidebook",
