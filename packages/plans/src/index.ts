@@ -4,7 +4,7 @@
 export { LADDER, PHASES, PHASE_BOUNDS, PHASE_TITLES, SECONDS_PER_DAY, phaseIn, phaseOf, phasesOf } from "./ladder.ts";
 export type { Ladder, Phase } from "./ladder.ts";
 export { STEP_FINDING_CODES, checkSteps, commonSteps, planMatrix, stepsFor, unitsOf } from "./steps.ts";
-export type { Cell, Gap, Step, StepFinding, StepFindingCode, StepGateOptions, StepsForOptions } from "./steps.ts";
+export type { Averted, Cell, Gap, Step, StepFinding, StepFindingCode, StepGateOptions, StepsForOptions } from "./steps.ts";
 export { PERSON_GROUPS, personGroups } from "./persons.ts";
 export type { PersonFacts, PersonGroup } from "./persons.ts";
 export { COVERAGE_FINDING_CODES, HORIZONS, checkCoverage, coverageOf } from "./coverage.ts";

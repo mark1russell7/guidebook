@@ -7,6 +7,23 @@ import type { Society } from "./master.ts";
 import { PERSON_GROUPS, type PersonGroup } from "./persons.ts";
 
 /**
+ * The share of the harm of one cause that a step averts, with its interval and its source.
+ * The share is of the harm of the cause when the step is not in place. A plan multiplies it by the harm of the cause.
+ */
+export interface Averted {
+  /** The id of the cause, for example `co-poisoning`. */
+  readonly cause: string;
+  /** The estimate of the share, from 0 to 1. */
+  readonly value: number;
+  /** The low end of the interval of the share. */
+  readonly low: number;
+  /** The high end of the interval of the share. */
+  readonly high: number;
+  /** The source of the share. The share is a fact of the source. */
+  readonly source: SourceId;
+}
+
+/**
  * One action of a plan. A step belongs to a key and to a phase.
  * A key names a case (a kind of event) or a cut (a service that an event stops). A plan of a case is its own steps and the steps of its cuts.
  */
@@ -39,6 +56,8 @@ export interface Step<P extends string = Phase> {
   readonly society?: readonly Society[];
   /** The groups of persons that the step protects, for example infants. No `persons` means that the step names no group. */
   readonly persons?: readonly PersonGroup[];
+  /** The share of the harm of each cause that the step averts. No `averts` means that no source gives a share. */
+  readonly averts?: readonly Averted[];
 }
 
 /** A marked gap: a key and a phase that have no step on purpose, with the reason. */
@@ -116,10 +135,14 @@ export function commonSteps<P extends string>(library: readonly Step<P>[], on: r
   return [...first].filter(([text]) => keysOf.get(text)?.size === keys.size).map(([, step]) => step);
 }
 
-/** This function gives one step for two steps with the same text. It keeps the first, with the sources, needs and states of society of both. */
+/**
+ * This function gives one step for two steps with the same text. It keeps the first, with the sources, needs and states of society of both.
+ * It also keeps the averted shares of both. For a cause that both steps have, it keeps the share of the first step.
+ */
 function mergeSteps<P extends string>(first: Step<P>, second: Step<P>): Step<P> {
   const { society, ...rest } = first;
-  const merged = { ...rest, sources: union(first.sources, second.sources), needs: union(first.needs, second.needs) };
+  const averts = [...(first.averts ?? []), ...(second.averts ?? []).filter((share) => !(first.averts ?? []).some((one) => one.cause === share.cause))];
+  const merged = { ...rest, sources: union(first.sources, second.sources), needs: union(first.needs, second.needs), ...(averts.length === 0 ? {} : { averts }) };
   return society === undefined || second.society === undefined ? merged : { ...merged, society: union(society, second.society) };
 }
 
@@ -156,6 +179,7 @@ export const STEP_FINDING_CODES = [
   "duplicate-gap",
   "empty-reason",
   "unknown-person-group",
+  "bad-averted-share",
 ] as const;
 
 /** A code of a finding of the step gate. */
@@ -174,13 +198,17 @@ export interface StepGateOptions<P extends string> extends UseContext {
   readonly gaps?: readonly Gap<P>[];
 }
 
-/** This function gives one summary unit for each source of each step, so the source gate examines the steps. */
+/** This function gives one summary unit for each source of each step, and one fact unit for each averted share. The source gate examines these units. */
 export function unitsOf<P extends string>(steps: readonly Step<P>[]): readonly CitedUnit[] {
-  return steps.flatMap((step) => step.sources.map((source) => ({ id: `${step.id}@${source}`, use: "summary" as const, text: step.do, source })));
+  return steps.flatMap((step) => [
+    ...step.sources.map((source) => ({ id: `${step.id}@${source}`, use: "summary" as const, text: step.do, source })),
+    // An averted share is a value with a citation: a fact of its source.
+    ...(step.averts ?? []).map((share) => ({ id: `${step.id}#${share.cause}@${share.source}`, use: "fact" as const, text: `${share.cause}: ${String(share.value)}`, source: share.source })),
+  ]);
 }
 
 /**
- * This function applies the step gate. It examines the ids, the text, the sources, the phases, the order and the groups of persons of each step.
+ * This function applies the step gate. It examines the ids, the text, the sources, the phases, the order, the groups of persons and the averted shares.
  * It examines the sources with the source gate: the text of a step is a summary of each of its sources.
  * With `on`, it also finds each cell of the matrix that has no step and no marked gap.
  */
@@ -201,6 +229,14 @@ export function checkSteps<P extends string>(steps: readonly Step<P>[], sources:
       if (step.reasoning === undefined) error("no-source", "step", step.id, `The step "${step.id}" cites no source and gives no reasoning.`);
       else if (/[0-9]/.test(step.do)) error("number-without-source", "step", step.id, `The step "${step.id}" has a number, so it needs a source.`);
     }
+    const causes = new Set<string>();
+    for (const share of step.averts ?? []) {
+      const valid = [share.low, share.value, share.high].every((x) => Number.isFinite(x) && x >= 0 && x <= 1) && share.low <= share.value && share.value <= share.high;
+      if (share.cause.trim() === "" || causes.has(share.cause) || !valid) {
+        error("bad-averted-share", "step", step.id, `The step "${step.id}" has a bad averted share of the cause "${share.cause}". Each cause comes one time, with 0 <= low <= value <= high <= 1.`);
+      }
+      causes.add(share.cause);
+    }
     for (const group of step.persons ?? []) if (!(PERSON_GROUPS as readonly string[]).includes(group)) error("unknown-person-group", "step", step.id, `The step "${step.id}" has the unknown group of persons "${group}".`);
     if (!phases.has(step.phase)) error("unknown-phase", "step", step.id, `The step "${step.id}" has the unknown phase "${step.phase}".`);
     if (!Number.isInteger(step.order) || step.order < 1) error("bad-order", "step", step.id, `The step "${step.id}" has the order ${String(step.order)}. It needs an integer from 1.`);
@@ -211,7 +247,7 @@ export function checkSteps<P extends string>(steps: readonly Step<P>[], sources:
   }
   for (const finding of checkUnits(unitsOf(steps), sources, options)) {
     if (finding.code !== "missing-source" && finding.code !== "use-refused") continue;
-    const id = finding.id.slice(0, finding.id.lastIndexOf("@"));
+    const id = finding.id.slice(0, finding.id.lastIndexOf("@")).split("#")[0] ?? finding.id;
     out.push({ level: finding.level, code: finding.code, record: "step", id, message: finding.message.replace(`unit "${finding.id}"`, `step "${id}"`) });
   }
   out.push(...checkGaps(steps, options));

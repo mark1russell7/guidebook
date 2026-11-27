@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import type { Source } from "@mark1russell7/guidebook";
 import { HORIZONS, LADDER, PERSON_GROUPS, PHASES, PHASE_BOUNDS, RULE_KINDS, GRAPH_SCHEMA, chartOf, checkMasterChart, checkMasterGraph, masterChartOf, walkAnswer, walkBack, walkEnd, walkStart, checkCoverage, checkRules, checkSteps, commonSteps, coverageOf, phaseIn, phaseOf, phasesOf, personGroups, planMatrix, stepsFor } from "./index.ts";
-import type { ChartNode, Ladder, MasterGraph, PersonGroup, Rule, Step, Tab } from "./index.ts";
+import type { Averted, ChartNode, Ladder, MasterGraph, PersonGroup, Rule, Step, Tab } from "./index.ts";
 
 const MIN = 60;
 const HOUR = 3600;
@@ -102,6 +102,14 @@ describe("stepsFor", () => {
     expect(stepsFor([first, all], ["a", "c"], ["P1"])[0]?.society).toBeUndefined();
   });
 
+  it("keeps the averted shares of two steps with the same text, and the share of the first step for a cause of both", () => {
+    const share = (cause: string, value: number): Averted => ({ cause, value, low: value, high: value, source: "pd" });
+    const first: Step = { ...step("a-go", "a", "P1", 1), do: "Go now.", averts: [share("x", 0.5)] };
+    const second: Step = { ...step("b-go", "b", "P1", 1), do: "Go now.", averts: [share("x", 0.2), share("y", 0.3)] };
+    expect(stepsFor([first, second], ["a", "b"], ["P1"])[0]?.averts).toEqual([share("x", 0.5), share("y", 0.3)]);
+    expect(stepsFor([step("a1", "a", "P1", 1)], ["a"], ["P1"])[0]?.averts).toBeUndefined();
+  });
+
   it("gives nothing for a key or a phase with no step", () => {
     expect(stepsFor(library, ["z"], ["P0"])).toEqual([]);
     expect(stepsFor(library, ["a"], [])).toEqual([]);
@@ -157,6 +165,25 @@ describe("checkSteps", () => {
   it("finds a step with an unknown group of persons, and passes the known groups", () => {
     const steps = [{ ...step("g", "a", "P0", 1), persons: [...PERSON_GROUPS] }, { ...step("u", "a", "P0", 2), persons: ["elders" as PersonGroup] }];
     expect(checkSteps(steps, sources, { phases }).findings.map((f) => `${f.id}:${f.code}`)).toEqual(["u:unknown-person-group"]);
+  });
+
+  it("finds a bad averted share, and examines the source of each share", () => {
+    const share = (cause: string, low: number, value: number, high: number, source = "pd"): Averted => ({ cause, value, low, high, source });
+    const steps = [
+      { ...step("good", "a", "P0", 1), averts: [share("x", 0.4, 0.5, 0.6), share("y", 0, 0, 1)] },
+      { ...step("order", "a", "P0", 2), averts: [share("x", 0.6, 0.5, 0.7)] },
+      { ...step("range", "a", "P0", 3), averts: [share("x", 0.5, 0.9, 1.2)] },
+      { ...step("twice", "a", "P0", 4), averts: [share("x", 0.1, 0.2, 0.3), share("x", 0.1, 0.2, 0.3)] },
+      { ...step("empty", "a", "P0", 5), averts: [share(" ", 0.1, 0.2, 0.3)] },
+      { ...step("lost", "a", "P0", 6), averts: [share("x", 0.1, 0.2, 0.3, "nowhere")] },
+    ];
+    expect(checkSteps(steps, sources, { phases }).findings.map((f) => `${f.id}:${f.code}`)).toEqual([
+      "order:bad-averted-share",
+      "range:bad-averted-share",
+      "twice:bad-averted-share",
+      "empty:bad-averted-share",
+      "lost:missing-source",
+    ]);
   });
 
   it("permits an invented source in a fixture", () => {
