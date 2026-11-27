@@ -8,6 +8,7 @@ import type { WalkState } from "@mark1russell7/guidebook-plans";
 import { evaluate, parse, space } from "@mark1russell7/vex";
 import { NumDomain } from "@mark1russell7/vex-domains";
 import { describe, expect, it } from "vitest";
+import { STEP_AVERTS } from "./data/averts.ts";
 import { STEP_PERSONS } from "./data/persons.ts";
 import { STEP_USES } from "./data/uses.ts";
 import { AREAS, BUNDLES, LINKS, CATALOG_TAB, GRAPH, HAZARDS, BUNDLE_LEVELS, CASES, CUTS, GAPS, MEDIA_UNITS, MEDIUM_GAPS, MEDIUM_LIVES, MEDIUM_LOSSES, MASTER, MORE_CASES, NEEDS, OPEN_CELLS, RULES, SOCIETY_KEY, SOURCES, START_TAB, STEPS, TAB_UNITS, TABS, TOPICS, TOPIC_UNITS } from "./index.ts";
@@ -27,8 +28,8 @@ describe("the source gate", () => {
     expect(SOURCES.filter((source) => ofSteps.has(source.id) && !permits(source.license, "summary", { commercial: true }))).toEqual([]);
   });
 
-  it("uses each source in a step, a bundle, a link or a unit", () => {
-    const cited = new Set([...STEPS.flatMap((step) => step.sources), ...BUNDLES.map((bundle) => bundle.source), ...LINKS.map((link) => link.source), ...MEDIA_UNITS.map((unit) => unit.source), ...TOPIC_UNITS.map((unit) => unit.source), ...TAB_UNITS.map((unit) => unit.source)]);
+  it("uses each source in a step, an averted share, a bundle, a link or a unit", () => {
+    const cited = new Set([...STEPS.flatMap((step) => step.sources), ...STEPS.flatMap((step) => (step.averts ?? []).map((share) => share.source)), ...BUNDLES.map((bundle) => bundle.source), ...LINKS.map((link) => link.source), ...MEDIA_UNITS.map((unit) => unit.source), ...TOPIC_UNITS.map((unit) => unit.source), ...TAB_UNITS.map((unit) => unit.source)]);
     expect(SOURCES.map((source) => source.id).filter((id) => !cited.has(id))).toEqual([]);
   });
 });
@@ -445,5 +446,19 @@ describe("the persons of the steps", () => {
     const names = /(infants?|baby|child|children|older adults|pregnant|pregnancy)/iu;
     const unnamed = STEPS.filter((step) => names.test(step.do) && step.persons === undefined).map((step) => step.id);
     expect(unnamed).toEqual([]);
+  });
+});
+
+describe("the averted shares of the steps", () => {
+  it("joins each key of the table of averted shares to a step, and gives each step its shares", () => {
+    const ids = new Set(STEPS.map((step) => step.id));
+    expect(Object.keys(STEP_AVERTS).filter((id) => !ids.has(id))).toEqual([]);
+    for (const step of STEPS) expect(step.averts).toEqual(STEP_AVERTS[step.id]);
+  });
+
+  it("cites a known source for each share", () => {
+    const known = new Set(SOURCES.map((source) => source.id));
+    const lost = Object.values(STEP_AVERTS).flat().filter((share) => !known.has(share.source));
+    expect(lost).toEqual([]);
   });
 });

@@ -4,6 +4,7 @@
 import type { Phase, Society, Step } from "@mark1russell7/guidebook-plans";
 import { app, key, lit, ref, serialize } from "@mark1russell7/vex";
 import type { Expr } from "@mark1russell7/vex";
+import { STEP_AVERTS } from "./averts.ts";
 import { STEP_PERSONS } from "./persons.ts";
 import { STEP_USES } from "./uses.ts";
 
@@ -14,7 +15,8 @@ type Row = readonly [phase: Phase, name: string, action: string, sources: readon
 
 /**
  * This function makes the steps of a key from its rows. The order of a step is its position among the rows of its phase.
- * The items that a step uses come from `STEP_USES`, and its groups of persons come from `STEP_PERSONS`, by the id of the step.
+ * The items that a step uses come from `STEP_USES`, by the id of the step.
+ * Its groups of persons come from `STEP_PERSONS`, and its averted shares come from `STEP_AVERTS`.
  */
 function stepsOf(on: string, rows: readonly Row[]): Step[] {
   const count = new Map<Phase, number>();
@@ -25,7 +27,8 @@ function stepsOf(on: string, rows: readonly Row[]): Step[] {
     const id = `${on}.${phase}.${name}`;
     const uses = STEP_USES[id];
     const persons = STEP_PERSONS[id];
-    return { id, on, phase, needs, do: action, ...(uses === undefined ? {} : { uses }), ...(persons === undefined ? {} : { persons }), order, sources, ...(reasoning === undefined ? {} : { reasoning }), ...(society === undefined ? {} : { society }), ...(when === undefined ? {} : { when }) };
+    const averts = STEP_AVERTS[id];
+    return { id, on, phase, needs, do: action, ...(uses === undefined ? {} : { uses }), ...(persons === undefined ? {} : { persons }), ...(averts === undefined ? {} : { averts }), order, sources, ...(reasoning === undefined ? {} : { reasoning }), ...(society === undefined ? {} : { society }), ...(when === undefined ? {} : { when }) };
   });
 }
 

@@ -6,6 +6,7 @@
 
 ## . (build/index.d.ts): names
 
+type Averted: build/index.d.ts#Averted
 COVERAGE_FINDING_CODES: build/index.d.ts#COVERAGE_FINDING_CODES
 type Cell: build/index.d.ts#Cell
 type ChartAnswer: build/index.d.ts#ChartAnswer
@@ -87,6 +88,15 @@ walkEnd: build/index.d.ts#walkEnd
 walkStart: build/index.d.ts#walkStart
 
 ## Declarations
+
+### build/index.d.ts#Averted
+interface Averted {
+  readonly cause: string;
+  readonly value: number;
+  readonly low: number;
+  readonly high: number;
+  readonly source: SourceId;
+}
 
 ### build/index.d.ts#COVERAGE_FINDING_CODES
 export declare const COVERAGE_FINDING_CODES: readonly ["no-step", "marked-gap"];
@@ -331,7 +341,7 @@ export declare const SOCIETY_STATES: readonly ["works", "partly", "none"];
 export declare const SOCIETY_TITLES: Readonly<Record<Society, string>>;
 
 ### build/index.d.ts#STEP_FINDING_CODES
-export declare const STEP_FINDING_CODES: readonly ["duplicate-id", "empty-text", "no-source", "number-without-source", "empty-reasoning", "missing-source", "use-refused", "unknown-phase", "bad-order", "duplicate-order", "unmarked-gap", "gap-with-steps", "duplicate-gap", "empty-reason", "unknown-person-group"];
+export declare const STEP_FINDING_CODES: readonly ["duplicate-id", "empty-text", "no-source", "number-without-source", "empty-reasoning", "missing-source", "use-refused", "unknown-phase", "bad-order", "duplicate-order", "unmarked-gap", "gap-with-steps", "duplicate-gap", "empty-reason", "unknown-person-group", "bad-averted-share"];
 
 ### build/index.d.ts#SignalNode
 interface SignalNode {
@@ -359,6 +369,7 @@ interface Step<P extends string = Phase> {
   readonly reasoning?: string;
   readonly society?: readonly Society[];
   readonly persons?: readonly PersonGroup[];
+  readonly averts?: readonly Averted[];
 }
 
 ### build/index.d.ts#StepFinding
